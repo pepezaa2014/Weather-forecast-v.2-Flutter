@@ -3,6 +3,7 @@ import 'package:weather_v2_pepe/app/const/app_constant.dart';
 import 'package:weather_v2_pepe/app/core/dio_client.dart';
 import 'package:weather_v2_pepe/app/core/handle_exceptions.dart';
 import 'package:weather_v2_pepe/app/core/routers/future_weather_router.dart';
+import 'package:weather_v2_pepe/app/data/models/future_weather_model.dart';
 
 import 'package:weather_v2_pepe/app/data/models/weather_model.dart';
 
@@ -11,7 +12,7 @@ class FutureWeatherAPI {
 
   FutureWeatherAPI(this._dioClient);
 
-  Future<Weather> getWeatherLatLon({
+  Future<FutureWeather> getWeatherLatLon({
     required double lat,
     required double lon,
   }) async {
@@ -25,7 +26,7 @@ class FutureWeatherAPI {
         },
       );
 
-      return Weather.fromJson(response.data);
+      return FutureWeather.fromJson(response.data);
     } catch (e) {
       throw HandleExceptions.handleError(e);
     }

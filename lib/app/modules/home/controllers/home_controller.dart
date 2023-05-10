@@ -1,9 +1,13 @@
 import 'package:get/get.dart';
 import 'package:geolocator/geolocator.dart';
+import 'package:weather_v2_pepe/app/core/api/air_pollution_api.dart';
 import 'package:weather_v2_pepe/app/core/api/future_weather_api.dart';
 import 'package:weather_v2_pepe/app/core/api/weather_api.dart';
+import 'package:weather_v2_pepe/app/data/models/air_pollution_model.dart';
 import 'package:weather_v2_pepe/app/data/models/app_error_model.dart';
+import 'package:weather_v2_pepe/app/data/models/future_weather_model.dart';
 import 'package:weather_v2_pepe/app/data/models/weather_model.dart';
+
 import 'package:weather_v2_pepe/app/extensions/bool_extension.dart';
 import 'package:weather_v2_pepe/app/routes/app_pages.dart';
 import 'package:weather_v2_pepe/app/utils/show_alert.dart';
@@ -11,8 +15,11 @@ import 'package:weather_v2_pepe/app/utils/show_alert.dart';
 class HomeController extends GetxController {
   final WeatherAPI _weatherAPI = Get.find();
   final FutureWeatherAPI _futureWeatherAPI = Get.find();
+  final AirPollutionAPI _airPollution = Get.find();
 
   late final Rxn<Weather> weather = Rxn();
+  late final Rxn<FutureWeather> futureWeather = Rxn();
+  late final Rxn<AirPollution> airPollution = Rxn();
 
   final isLoadingGetWeather = false.obs;
 
@@ -79,6 +86,10 @@ class HomeController extends GetxController {
       lat: location.latitude,
       lon: location.longitude,
     );
+    _getAirPollution(
+      lat: location.latitude,
+      lon: location.longitude,
+    );
   }
 
   void _getWeatherLatLon({
@@ -113,7 +124,28 @@ class HomeController extends GetxController {
         lon: lon,
       );
       isLoadingGetWeather(false);
-      weather.value = result;
+      futureWeather.value = result;
+    } catch (error) {
+      isLoadingGetWeather(false);
+      showAlert(
+        title: 'Error',
+        message: (error as AppError).message,
+      );
+    }
+  }
+
+  void _getAirPollution({
+    required double lat,
+    required double lon,
+  }) async {
+    try {
+      isLoadingGetWeather(true);
+      final result = await _airPollution.getWeatherLatLon(
+        lat: lat,
+        lon: lon,
+      );
+      isLoadingGetWeather(false);
+      airPollution.value = result;
     } catch (error) {
       isLoadingGetWeather(false);
       showAlert(

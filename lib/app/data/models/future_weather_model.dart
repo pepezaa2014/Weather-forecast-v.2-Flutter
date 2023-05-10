@@ -1,5 +1,6 @@
 import 'package:get/get_utils/get_utils.dart';
 import 'package:weather_v2_pepe/app/const/weather_icon_extension.dart';
+import 'package:weather_v2_pepe/app/data/models/weather_model.dart';
 
 class FutureWeather {
   String? cod;
@@ -100,15 +101,15 @@ class Main {
   }
 }
 
-class Weather {
+class FutureWeatherDetail {
   int? id;
   String? main;
   String? description;
   String? icon;
 
-  Weather({this.id, this.main, this.description, this.icon});
+  FutureWeatherDetail({this.id, this.main, this.description, this.icon});
 
-  Weather.fromJson(Map<String, dynamic> json) {
+  FutureWeatherDetail.fromJson(Map<String, dynamic> json) {
     id = json['id'];
     main = json['main'];
     description = json['description'];
@@ -166,7 +167,7 @@ class Sys {
   }
 }
 
-extension WeatherIconExtension on Weather {
+extension WeatherIconExtension on FutureWeatherDetail {
   WeatherIcon? get weatherIcon {
     return WeatherIcon.values.firstWhereOrNull((e) => e.keyValue == icon);
   }
