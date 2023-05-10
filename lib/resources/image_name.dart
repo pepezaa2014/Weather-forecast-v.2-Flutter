@@ -5,6 +5,7 @@ class ImageName {
 
   static const String barometer = 'assets/images/barometer.png';
   static const String humidity = 'assets/images/humidity.png';
+  static const String navigationBar = 'assets/images/navigation-bar.png';
   static const String sunrise = 'assets/images/sunrise.png';
   static const String sunset = 'assets/images/sunset.png';
   static const String weather01d = 'assets/images/weather_01d.png';

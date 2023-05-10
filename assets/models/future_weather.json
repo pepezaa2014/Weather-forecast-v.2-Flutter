@@ -1,0 +1,83 @@
+{
+    "cod": "200",
+    "message": 0,
+    "cnt": 40,
+    "list": [
+        {
+            "dt": 1683720000,
+            "main": {
+                "temp": 304.13,
+                "feels_like": 308.99,
+                "temp_min": 297.99,
+                "temp_max": 304.13,
+                "pressure": 994,
+                "sea_level": 994,
+                "grnd_level": 971,
+                "humidity": 64,
+                "temp_kf": 6.14
+            },
+            "weather": [
+                {
+                    "id": 500,
+                    "main": "Rain",
+                    "description": "light rain",
+                    "icon": "10n"
+                }
+            ],
+            "clouds": {
+                "all": 35
+            },
+            "wind": {
+                "speed": 1.76,
+                "deg": 50,
+                "gust": 4.64
+            },
+            "visibility": 10000,
+            "pop": 0.66,
+            "rain": {
+                "3h": 2.06
+            },
+            "sys": {
+                "pod": "n"
+            },
+            "dt_txt": "2023-05-10 12:00:00"
+        },
+        {
+            "dt": 1683730800,
+            "main": {
+                "temp": 300.57,
+                "feels_like": 303.16,
+                "temp_min": 297.26,
+                "temp_max": 300.57,
+                "pressure": 1003,
+                "sea_level": 1003,
+                "grnd_level": 974,
+                "humidity": 74,
+                "temp_kf": 3.31
+            },
+            "weather": [
+                {
+                    "id": 500,
+                    "main": "Rain",
+                    "description": "light rain",
+                    "icon": "10n"
+                }
+            ],
+            "clouds": {
+                "all": 71
+            },
+            "wind": {
+                "speed": 1.17,
+                "deg": 6,
+                "gust": 2.17
+            },
+            "visibility": 10000,
+            "pop": 0.68,
+            "rain": {
+                "3h": 0.95
+            },
+            "sys": {
+                "pod": "n"
+            },
+            "dt_txt": "2023-05-10 15:00:00"
+        }]}

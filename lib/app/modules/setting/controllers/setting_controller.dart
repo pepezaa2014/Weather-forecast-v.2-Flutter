@@ -1,9 +1,8 @@
 import 'package:get/get.dart';
 
 class SettingController extends GetxController {
-  //TODO: Implement SettingController
+  final RxInt currentSelection = 0.obs;
 
-  final count = 0.obs;
   @override
   void onInit() {
     super.onInit();
@@ -18,6 +17,4 @@ class SettingController extends GetxController {
   void onClose() {
     super.onClose();
   }
-
-  void increment() => count.value++;
 }

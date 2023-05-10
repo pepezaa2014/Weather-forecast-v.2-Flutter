@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:weather_v2_pepe/app/const/app_colors.dart';
 import 'package:weather_v2_pepe/app/data/models/weather_model.dart';
 import 'package:intl/intl.dart';
+import 'package:weather_v2_pepe/resources/resources.dart';
 
 class Details extends StatelessWidget {
   Details({
@@ -21,79 +22,76 @@ class Details extends StatelessWidget {
     final timeFormat = DateFormat('h:mm a');
     final sunriseTimeString = timeFormat.format(sunriseTime);
     final sunsetTimeString = timeFormat.format(sunsetTime);
-    return Container(
-      color: Colors.teal,
-      child: Column(
-        children: [
-          // Row(
-          //   children: [
-          //     _item(
-          //       head: 'AQI',
-          //       description: description,
-          //     ),
-          //   ],
-          // ),
-          Padding(
-            padding: const EdgeInsets.all(8),
-            child: Row(
-              children: [
-                Expanded(
-                  child: _itemTime(
-                    head: 'Sunrise',
-                    description: sunriseTimeString,
-                  ),
+    return Column(
+      children: [
+        // Row(
+        //   children: [
+        //     _item(
+        //       head: 'AQI',
+        //       description: description,
+        //     ),
+        //   ],
+        // ),
+        Padding(
+          padding: const EdgeInsets.all(16),
+          child: Row(
+            children: [
+              Expanded(
+                child: _itemTime(
+                  head: 'Sunrise',
+                  description: sunriseTimeString,
                 ),
-                Expanded(
-                  child: _itemTime(
-                    head: 'Sunset',
-                    description: sunsetTimeString,
-                  ),
+              ),
+              Expanded(
+                child: _itemTime(
+                  head: 'Sunset',
+                  description: sunsetTimeString,
                 ),
-              ],
-            ),
+              ),
+            ],
           ),
-          Padding(
-            padding: const EdgeInsets.all(8),
-            child: Row(
-              children: [
-                Expanded(
-                  child: _itemWind(
-                    head: 'Wind',
-                    description: weather_info?.wind?.speed.toString() ?? '',
-                    degree: weather_info?.wind?.deg.toString() ?? '',
-                  ),
+        ),
+        Padding(
+          padding: const EdgeInsets.all(16),
+          child: Row(
+            children: [
+              Expanded(
+                child: _itemWind(
+                  head: 'Wind',
+                  description: weather_info?.wind?.speed.toString() ?? '',
+                  degree: (weather_info?.wind?.deg as num).toDouble(),
                 ),
-                Expanded(
-                  child: _itemPressure(
-                    head: 'Pressure',
-                    description: weather_info?.main?.pressure.toString() ?? '',
-                  ),
+              ),
+              Expanded(
+                child: _itemPressure(
+                  head: 'Pressure',
+                  description: weather_info?.main?.pressure.toString() ?? '',
                 ),
-              ],
-            ),
+              ),
+            ],
           ),
-          Padding(
-            padding: const EdgeInsets.all(8),
-            child: Row(
-              children: [
-                Expanded(
-                  child: _itemVisible(
-                    head: 'Visibility',
-                    description: weather_info?.visibility?.toString() ?? '-',
-                  ),
+        ),
+        Padding(
+          padding: const EdgeInsets.all(16),
+          child: Row(
+            children: [
+              Expanded(
+                child: _itemVisible(
+                  head: 'Visibility',
+                  description: weather_info?.visibility?.toString() ?? '-',
                 ),
-                Expanded(
-                  child: _item(
-                    head: 'Humidity',
-                    description: weather_info?.main?.humidity?.toString() ?? '',
-                    unit: '%',
-                  ),
+              ),
+              Expanded(
+                child: _item(
+                  head: 'Humidity',
+                  description: weather_info?.main?.humidity?.toString() ?? '',
+                  unit: '%',
                 ),
-              ],
-            ),
+              ),
+            ],
           ),
-        ],
-      ),
+        ),
+      ],
     );
   }
 
@@ -235,7 +233,7 @@ class Details extends StatelessWidget {
   _itemWind({
     required String head,
     required String description,
-    required String degree,
+    required double degree,
     String? unitWind,
   }) {
     return Column(
@@ -249,12 +247,25 @@ class Details extends StatelessWidget {
             color: AppColors.thirdaryNight,
           ),
         ),
-        Text(
-          description + (unitWind ?? ''),
-          style: const TextStyle(
-            fontSize: 16,
-            color: AppColors.primaryNight,
-          ),
+        Row(
+          children: [
+            Text(
+              description + (unitWind ?? ''),
+              style: const TextStyle(
+                fontSize: 16,
+                color: AppColors.primaryNight,
+              ),
+            ),
+            Transform.rotate(
+              angle: degree * 3.14 / 180,
+              child: Image.asset(
+                ImageName.navigationBar,
+                width: 20,
+                height: 20,
+                color: AppColors.primaryNight,
+              ),
+            ),
+          ],
         ),
       ],
     );
