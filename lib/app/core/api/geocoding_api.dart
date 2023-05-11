@@ -19,7 +19,7 @@ class GeocodingAPI {
         GeocodingRouter.getAirPollution,
         queryParameters: {
           'q': city,
-          'limit': AppConstant.minLimit,
+          'limit': AppConstant.limitGeocoding,
           'appid': AppConstant.appId,
         },
       );
