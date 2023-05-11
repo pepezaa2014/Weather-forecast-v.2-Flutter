@@ -87,10 +87,10 @@ class HomeController extends GetxController {
       lat: location.latitude,
       lon: location.longitude,
     );
-    // _getAirPollution(
-    //   lat: location.latitude,
-    //   lon: location.longitude,
-    // );
+    _getAirPollution(
+      lat: location.latitude,
+      lon: location.longitude,
+    );
   }
 
   void _getWeatherLatLon({

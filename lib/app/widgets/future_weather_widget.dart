@@ -34,7 +34,7 @@ class FutureWeatherWidget extends StatelessWidget {
                 date: futureWeather?.list?[index].dtTxt ?? '',
                 description: futureWeather?.list?[index].weather
                         ?.firstWhereOrNull((element) => true)
-                        ?.description ??
+                        ?.main ??
                     '',
                 iconName: futureWeather?.list?[index].weather
                         ?.firstWhereOrNull((element) => true)

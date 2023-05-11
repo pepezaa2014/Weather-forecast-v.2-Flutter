@@ -1,3 +1,6 @@
+import 'package:get/get_utils/get_utils.dart';
+import 'package:weather_v2_pepe/app/const/aqi_extension.dart';
+
 class AirPollution {
   List<double>? coord;
   List<AirPollutionData>? list;
@@ -33,12 +36,12 @@ class AirPollutionData {
 }
 
 class MainData {
-  late double aqi;
+  late int aqi;
 
   MainData({required this.aqi});
 
   MainData.fromJson(Map<String, dynamic> json) {
-    aqi = (json['aqi'] as num).toDouble();
+    aqi = json['aqi'];
   }
 }
 
@@ -72,5 +75,11 @@ class ComponentsData {
     pm2_5 = (json['pm2_5'] as num).toDouble();
     pm10 = (json['pm10'] as num).toDouble();
     nh3 = (json['nh3'] as num).toDouble();
+  }
+}
+
+extension AQIExtension on MainData {
+  AQI? get airQuality {
+    return AQI.values.firstWhereOrNull((e) => e.keyValue == aqi);
   }
 }

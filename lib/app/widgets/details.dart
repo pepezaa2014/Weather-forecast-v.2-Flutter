@@ -1,16 +1,21 @@
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 import 'package:weather_v2_pepe/app/const/app_colors.dart';
+import 'package:weather_v2_pepe/app/data/models/air_pollution_model.dart';
 import 'package:weather_v2_pepe/app/data/models/weather_model.dart';
 import 'package:intl/intl.dart';
+import 'package:weather_v2_pepe/app/const/aqi_extension.dart';
 import 'package:weather_v2_pepe/resources/resources.dart';
 
 class Details extends StatelessWidget {
   Details({
     super.key,
     required this.weather_info,
+    required this.pollution_info,
   });
 
   final Weather? weather_info;
+  final AirPollution? pollution_info;
 
   @override
   Widget build(BuildContext context) {
@@ -24,14 +29,37 @@ class Details extends StatelessWidget {
     final sunsetTimeString = timeFormat.format(sunsetTime);
     return Column(
       children: [
-        // Row(
-        //   children: [
-        //     _item(
-        //       head: 'AQI',
-        //       description: description,
-        //     ),
-        //   ],
-        // ),
+        Padding(
+          padding: const EdgeInsets.all(16),
+          child: Row(
+            children: [
+              Expanded(
+                child: _item(
+                  head: 'AQI',
+                  description: pollution_info?.list
+                          ?.firstWhereOrNull((element) => true)
+                          ?.main
+                          .airQuality
+                          ?.detail
+                          .toString() ??
+                      '-',
+                ),
+              ),
+              Expanded(
+                child: _item(
+                  head: 'PM2.5',
+                  description: pollution_info?.list
+                          ?.firstWhereOrNull((element) => true)
+                          ?.components
+                          .pm2_5
+                          .toStringAsFixed(2) ??
+                      '-',
+                  unit: ' μg/m3',
+                ),
+              ),
+            ],
+          ),
+        ),
         Padding(
           padding: const EdgeInsets.all(16),
           child: Row(

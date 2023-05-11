@@ -60,24 +60,13 @@ class HomeView extends GetView<HomeController> {
                     location_now: 'Current Location',
                     unit: 'C',
                   ),
-                  // Text(
-                  //   controller.futureWeather.value?.list?[2].main?.feelsLike
-                  //           ?.toString() ??
-                  //       'asdasds',
-                  //   style: TextStyle(color: Colors.black),
-                  // ),
                   FutureWeatherWidget(
                     futureWeather: controller.futureWeather.value,
                   ),
-                  // Text(
-                  //   controller.futureWeather.value?.list?[1].main?.feelsLike
-                  //           ?.toString() ??
-                  //       'asdasds',
-                  //   style: TextStyle(color: Colors.black),
-                  // ),
-                  // Details(
-                  //   weather_info: controller.weather.value,
-                  // ),
+                  Details(
+                    weather_info: controller.weather.value,
+                    pollution_info: controller.airPollution.value,
+                  ),
                 ],
               ),
             );
