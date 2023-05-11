@@ -4,6 +4,7 @@ import 'package:get/get.dart';
 import 'package:weather_v2_pepe/app/const/app_colors.dart';
 import 'package:weather_v2_pepe/app/utils/loading_indicator.dart';
 import 'package:weather_v2_pepe/app/widgets/details.dart';
+import 'package:weather_v2_pepe/app/widgets/future_weather_widget.dart';
 import 'package:weather_v2_pepe/app/widgets/top_view.dart';
 
 import '../controllers/home_controller.dart';
@@ -59,9 +60,24 @@ class HomeView extends GetView<HomeController> {
                     location_now: 'Current Location',
                     unit: 'C',
                   ),
-                  Details(
-                    weather_info: controller.weather.value,
+                  // Text(
+                  //   controller.futureWeather.value?.list?[2].main?.feelsLike
+                  //           ?.toString() ??
+                  //       'asdasds',
+                  //   style: TextStyle(color: Colors.black),
+                  // ),
+                  FutureWeatherWidget(
+                    futureWeather: controller.futureWeather.value,
                   ),
+                  // Text(
+                  //   controller.futureWeather.value?.list?[1].main?.feelsLike
+                  //           ?.toString() ??
+                  //       'asdasds',
+                  //   style: TextStyle(color: Colors.black),
+                  // ),
+                  // Details(
+                  //   weather_info: controller.weather.value,
+                  // ),
                 ],
               ),
             );

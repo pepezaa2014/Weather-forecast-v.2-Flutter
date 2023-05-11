@@ -1,6 +1,5 @@
 import 'package:get/get_utils/get_utils.dart';
 import 'package:weather_v2_pepe/app/const/weather_icon_extension.dart';
-import 'package:weather_v2_pepe/app/data/models/weather_model.dart';
 
 class FutureWeather {
   String? cod;
