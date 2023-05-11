@@ -2,7 +2,12 @@ import 'package:dio/dio.dart';
 import 'package:weather_v2_pepe/app/const/app_constant.dart';
 import 'package:weather_v2_pepe/app/core/dio_client.dart';
 import 'package:weather_v2_pepe/app/core/handle_exceptions.dart';
+import 'package:weather_v2_pepe/app/core/routers/air_pollution_router.dart';
+import 'package:weather_v2_pepe/app/core/routers/future_weather_router.dart';
+import 'package:weather_v2_pepe/app/core/routers/geocoding_router.dart';
 import 'package:weather_v2_pepe/app/core/routers/weather_router.dart';
+import 'package:weather_v2_pepe/app/data/models/air_pollution_model.dart';
+import 'package:weather_v2_pepe/app/data/models/future_weather_model.dart';
 
 import 'package:weather_v2_pepe/app/data/models/weather_model.dart';
 

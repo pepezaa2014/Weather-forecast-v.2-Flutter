@@ -2,6 +2,7 @@ import 'package:get/get.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:weather_v2_pepe/app/core/api/air_pollution_api.dart';
 import 'package:weather_v2_pepe/app/core/api/future_weather_api.dart';
+
 import 'package:weather_v2_pepe/app/core/api/weather_api.dart';
 import 'package:weather_v2_pepe/app/data/models/air_pollution_model.dart';
 import 'package:weather_v2_pepe/app/data/models/app_error_model.dart';
@@ -15,7 +16,7 @@ import 'package:weather_v2_pepe/app/utils/show_alert.dart';
 class HomeController extends GetxController {
   final WeatherAPI _weatherAPI = Get.find();
   final FutureWeatherAPI _futureWeatherAPI = Get.find();
-  final AirPollutionAPI _airPollution = Get.find();
+  final AirPollutionAPI _airPollutionAPI = Get.find();
 
   late final Rxn<Weather> weather = Rxn();
   late final Rxn<FutureWeather> futureWeather = Rxn();
@@ -86,10 +87,10 @@ class HomeController extends GetxController {
       lat: location.latitude,
       lon: location.longitude,
     );
-    _getAirPollution(
-      lat: location.latitude,
-      lon: location.longitude,
-    );
+    // _getAirPollution(
+    //   lat: location.latitude,
+    //   lon: location.longitude,
+    // );
   }
 
   void _getWeatherLatLon({
@@ -140,7 +141,7 @@ class HomeController extends GetxController {
   }) async {
     try {
       isLoadingGetWeather(true);
-      final result = await _airPollution.getWeatherLatLon(
+      final result = await _airPollutionAPI.getWeatherLatLon(
         lat: lat,
         lon: lon,
       );

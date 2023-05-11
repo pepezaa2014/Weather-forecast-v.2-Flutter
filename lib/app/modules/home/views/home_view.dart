@@ -27,6 +27,7 @@ class HomeView extends GetView<HomeController> {
 
   _appbar() {
     return AppBar(
+      automaticallyImplyLeading: false,
       title: const Text(
         'Weather',
       ),

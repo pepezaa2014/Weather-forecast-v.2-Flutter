@@ -80,9 +80,10 @@ class SettingView extends GetView<SettingController> {
                                 ),
                               ),
                             },
-                            groupValue: controller.currentSelection.value,
+                            groupValue: controller.currentSelectionTemp.value,
                             onValueChanged: (value) {
-                              controller.currentSelection.value = value as int;
+                              controller.currentSelectionTemp.value =
+                                  value as int;
                             },
                           );
                         },
@@ -139,9 +140,10 @@ class SettingView extends GetView<SettingController> {
                                 ),
                               ),
                             },
-                            groupValue: controller.currentSelection.value,
+                            groupValue: controller.currentSelectionwind.value,
                             onValueChanged: (value) {
-                              controller.currentSelection.value = value as int;
+                              controller.currentSelectionwind.value =
+                                  value as int;
                             },
                           );
                         },
@@ -191,9 +193,11 @@ class SettingView extends GetView<SettingController> {
                                 ),
                               ),
                             },
-                            groupValue: controller.currentSelection.value,
+                            groupValue:
+                                controller.currentSelectionPressure.value,
                             onValueChanged: (value) {
-                              controller.currentSelection.value = value as int;
+                              controller.currentSelectionPressure.value =
+                                  value as int;
                             },
                           );
                         },
@@ -243,9 +247,11 @@ class SettingView extends GetView<SettingController> {
                                 ),
                               ),
                             },
-                            groupValue: controller.currentSelection.value,
+                            groupValue:
+                                controller.currentSelectionPrecipitation.value,
                             onValueChanged: (value) {
-                              controller.currentSelection.value = value as int;
+                              controller.currentSelectionPrecipitation.value =
+                                  value as int;
                             },
                           );
                         },
@@ -295,9 +301,11 @@ class SettingView extends GetView<SettingController> {
                                 ),
                               ),
                             },
-                            groupValue: controller.currentSelection.value,
+                            groupValue:
+                                controller.currentSelectionDistance.value,
                             onValueChanged: (value) {
-                              controller.currentSelection.value = value as int;
+                              controller.currentSelectionDistance.value =
+                                  value as int;
                             },
                           );
                         },
@@ -347,9 +355,10 @@ class SettingView extends GetView<SettingController> {
                                 ),
                               ),
                             },
-                            groupValue: controller.currentSelection.value,
+                            groupValue: controller.currentSelectionTime.value,
                             onValueChanged: (value) {
-                              controller.currentSelection.value = value as int;
+                              controller.currentSelectionTime.value =
+                                  value as int;
                             },
                           );
                         },

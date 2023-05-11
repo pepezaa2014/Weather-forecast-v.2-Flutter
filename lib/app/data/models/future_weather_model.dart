@@ -26,7 +26,7 @@ class FutureWeather {
 class FutureWeatherData {
   int? dt;
   Main? main;
-  List<Weather>? weather;
+  List<FutureWeatherDetail>? weather;
   Clouds? clouds;
   Wind? wind;
   int? visibility;
@@ -35,31 +35,32 @@ class FutureWeatherData {
   Sys? sys;
   String? dtTxt;
 
-  FutureWeatherData(
-      {this.dt,
-      this.main,
-      this.weather,
-      this.clouds,
-      this.wind,
-      this.visibility,
-      this.pop,
-      this.rain,
-      this.sys,
-      this.dtTxt});
+  FutureWeatherData({
+    this.dt,
+    this.main,
+    this.weather,
+    this.clouds,
+    this.wind,
+    this.visibility,
+    this.pop,
+    this.rain,
+    this.sys,
+    this.dtTxt,
+  });
 
   FutureWeatherData.fromJson(Map<String, dynamic> json) {
     dt = json['dt'];
     main = json['main'] != null ? Main?.fromJson(json['main']) : null;
     if (json['weather'] != null) {
-      weather = <Weather>[];
+      weather = <FutureWeatherDetail>[];
       json['weather'].forEach((v) {
-        weather?.add(Weather.fromJson(v));
+        weather?.add(FutureWeatherDetail.fromJson(v));
       });
     }
     clouds = json['clouds'] != null ? Clouds?.fromJson(json['clouds']) : null;
     wind = json['wind'] != null ? Wind?.fromJson(json['wind']) : null;
     visibility = json['visibility'];
-    pop = json['pop'];
+    pop = (json['pop'] as num).toDouble();
     rain = json['rain'] != null ? Rain?.fromJson(json['rain']) : null;
     sys = json['sys'] != null ? Sys?.fromJson(json['sys']) : null;
     dtTxt = json['dt_txt'];
@@ -89,15 +90,15 @@ class Main {
       this.tempKf});
 
   Main.fromJson(Map<String, dynamic> json) {
-    temp = json['temp'];
-    feelsLike = json['feels_like'];
-    tempMin = json['temp_min'];
-    tempMax = json['temp_max'];
+    temp = (json['temp'] as num).toDouble();
+    feelsLike = (json['feels_like'] as num).toDouble();
+    tempMin = (json['temp_min'] as num).toDouble();
+    tempMax = (json['temp_max'] as num).toDouble();
     pressure = json['pressure'];
     seaLevel = json['sea_level'];
     grndLevel = json['grnd_level'];
     humidity = json['humidity'];
-    tempKf = json['temp_kf'];
+    tempKf = (json['temp_kf'] as num).toDouble();
   }
 }
 
@@ -125,12 +126,6 @@ class Clouds {
   Clouds.fromJson(Map<String, dynamic> json) {
     all = json['all'];
   }
-
-  Map<String, dynamic> toJson() {
-    final data = <String, dynamic>{};
-    data['all'] = all;
-    return data;
-  }
 }
 
 class Wind {
@@ -141,9 +136,9 @@ class Wind {
   Wind({this.speed, this.deg, this.gust});
 
   Wind.fromJson(Map<String, dynamic> json) {
-    speed = json['speed'];
+    speed = (json['speed'] as num).toDouble();
     deg = json['deg'];
-    gust = json['gust'];
+    gust = (json['gust'] as num).toDouble();
   }
 }
 
@@ -153,7 +148,7 @@ class Rain {
   Rain({this.d3h});
 
   Rain.fromJson(Map<String, dynamic> json) {
-    d3h = json['3h'];
+    d3h = (json['3h'] as num).toDouble();
   }
 }
 
