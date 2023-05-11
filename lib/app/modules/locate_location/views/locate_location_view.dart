@@ -43,10 +43,17 @@ class LocateLocationView extends GetView<LocateLocationController> {
             child: TextField(
               cursorColor: AppColors.primaryNight,
               controller: controller.searchTextCityController,
+              style: const TextStyle(
+                color: AppColors.primaryNight,
+              ),
               decoration: InputDecoration(
+                filled: true,
+                fillColor: AppColors.secondaryBox,
                 prefixIcon: const Icon(Icons.search),
-                contentPadding:
-                    const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
+                contentPadding: const EdgeInsets.symmetric(
+                  horizontal: 16,
+                  vertical: 12,
+                ),
                 border: OutlineInputBorder(
                   borderRadius: BorderRadius.circular(8),
                   borderSide: const BorderSide(

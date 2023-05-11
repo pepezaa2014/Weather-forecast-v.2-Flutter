@@ -51,21 +51,25 @@ class HomeView extends GetView<HomeController> {
         color: AppColors.backgroundColor,
         child: Obx(
           () {
+            final currentWeather = controller.weather.value;
+            final futureWeather = controller.futureWeather.value;
+            final airPollution = controller.airPollution.value;
+
             return SingleChildScrollView(
               physics: const ClampingScrollPhysics(),
               child: Column(
                 children: [
                   TopView(
-                    weather_info: controller.weather.value,
+                    weather_info: currentWeather,
                     location_now: 'Current Location',
                     unit: 'C',
                   ),
                   FutureWeatherWidget(
-                    futureWeather: controller.futureWeather.value,
+                    futureWeather: futureWeather,
                   ),
                   Details(
-                    weather_info: controller.weather.value,
-                    pollution_info: controller.airPollution.value,
+                    weather_info: currentWeather,
+                    pollution_info: airPollution,
                   ),
                 ],
               ),
