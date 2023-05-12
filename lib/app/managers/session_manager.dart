@@ -16,11 +16,6 @@ class SessionManager {
   final RxInt timeFormat = 0.obs;
 
   void loadSession() {
-    // final resultFavoriteCity = _getStorage.read(AppConstant.favoriteCity);
-    // if (resultFavoriteCity is List) {
-    //   favorites.value = resultFavoriteCity.whereType<int>().toList();
-    // }
-
     if (_getStorage.read(AppConstant.temperature) == null) {
       _getStorage.write(AppConstant.temperature, 0);
     }
@@ -52,11 +47,6 @@ class SessionManager {
     distance.value = _getStorage.read(AppConstant.distance);
     timeFormat.value = _getStorage.read(AppConstant.timeFormat);
   }
-
-  // void setFavoriteCity(int cityId) {
-  //   favorites.add(cityId);
-  //   _getStorage.write(AppConstant.favoriteCity, favorites.value);
-  // }
 
   void setChangeTemperature(int index) {
     temperature.value = index;

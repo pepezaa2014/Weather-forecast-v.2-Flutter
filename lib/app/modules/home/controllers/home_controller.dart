@@ -10,10 +10,13 @@ import 'package:weather_v2_pepe/app/data/models/future_weather_model.dart';
 import 'package:weather_v2_pepe/app/data/models/weather_model.dart';
 
 import 'package:weather_v2_pepe/app/extensions/bool_extension.dart';
+import 'package:weather_v2_pepe/app/managers/session_manager.dart';
 import 'package:weather_v2_pepe/app/routes/app_pages.dart';
 import 'package:weather_v2_pepe/app/utils/show_alert.dart';
 
 class HomeController extends GetxController {
+  final SessionManager _sessionManager = Get.find();
+
   final WeatherAPI _weatherAPI = Get.find();
   final FutureWeatherAPI _futureWeatherAPI = Get.find();
   final AirPollutionAPI _airPollutionAPI = Get.find();
@@ -23,6 +26,12 @@ class HomeController extends GetxController {
   late final Rxn<AirPollution> airPollution = Rxn();
 
   final isLoadingGetWeather = false.obs;
+  late final RxInt temperatureUnit;
+  late final RxInt windUnit;
+  late final RxInt pressureUnit;
+  late final RxInt precipitationUnit;
+  late final RxInt distanceUnit;
+  late final RxInt timeUnit;
 
   RxBool get isLoading {
     return [
@@ -33,6 +42,12 @@ class HomeController extends GetxController {
   @override
   void onInit() {
     super.onInit();
+    temperatureUnit = _sessionManager.temperature;
+    windUnit = _sessionManager.wind;
+    pressureUnit = _sessionManager.pressure;
+    precipitationUnit = _sessionManager.precipitataion;
+    distanceUnit = _sessionManager.distance;
+    timeUnit = _sessionManager.timeFormat;
   }
 
   @override

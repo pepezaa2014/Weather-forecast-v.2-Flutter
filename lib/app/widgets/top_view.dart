@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:weather_v2_pepe/app/const/app_colors.dart';
+import 'package:weather_v2_pepe/app/const/temperature_extension.dart';
 import 'package:weather_v2_pepe/app/const/weather_icon_extension.dart';
 import 'package:weather_v2_pepe/app/data/models/weather_model.dart';
 import 'package:collection/collection.dart';
@@ -10,34 +11,11 @@ class TopView extends StatelessWidget {
     required this.weather_info,
     required this.location_now,
     required this.unit,
-  })  : convertTempMain = _convertTemperature(unit, weather_info?.main?.temp),
-        convertTempMin = _convertTemperature(unit, weather_info?.main?.tempMin),
-        convertTempMax = _convertTemperature(unit, weather_info?.main?.tempMax),
-        convertFeelTemp =
-            _convertTemperature(unit, weather_info?.main?.feelsLike);
+  });
 
   final Weather? weather_info;
   final String? location_now;
-  final String? unit;
-  late final double convertTempMain;
-  late final double convertTempMin;
-  late final double convertTempMax;
-  late final double convertFeelTemp;
-
-  static double _convertTemperature(
-    String? unit,
-    double? temp,
-  ) {
-    if (unit?.toLowerCase() == '°c') {
-      return (temp ?? 0) - 273;
-    } else if (unit?.toLowerCase() == '°f') {
-      return 1.8 * ((temp ?? 0) - 273) + 32;
-    } else if (unit?.toLowerCase() == 'k') {
-      return temp ?? 0;
-    } else {
-      return 0;
-    }
-  }
+  final Temperature? unit;
 
   @override
   Widget build(BuildContext context) {
@@ -63,7 +41,7 @@ class TopView extends StatelessWidget {
                 ),
               ),
               Text(
-                location_now ?? 'Current Location',
+                location_now ?? '',
                 style: const TextStyle(
                   fontSize: 14,
                   color: AppColors.thirdaryNight,
@@ -123,7 +101,7 @@ class TopView extends StatelessWidget {
                 ],
               ),
               Text(
-                '${convertTempMin.toStringAsFixed(0)} $unit',
+                '${unit?.convertTemp(weather_info?.main?.temp ?? 0.0).toStringAsFixed(0) ?? ''} ${unit?.tempName ?? ''}',
                 style: const TextStyle(
                   fontSize: 40,
                   color: AppColors.primaryNight,
@@ -131,14 +109,14 @@ class TopView extends StatelessWidget {
                 ),
               ),
               Text(
-                'H: ${convertTempMain.toStringAsFixed(0)}$unit  L: ${convertTempMax.toStringAsFixed(0)}$unit',
+                'H:${unit?.convertTemp(weather_info?.main?.tempMax ?? 0.0).toStringAsFixed(0) ?? ''} ${unit?.tempName ?? ''} L:${unit?.convertTemp(weather_info?.main?.tempMin ?? 0.0).toStringAsFixed(0) ?? ''} ${unit?.tempName ?? ''}',
                 style: const TextStyle(
                   fontSize: 16,
                   color: AppColors.primaryNight,
                 ),
               ),
               Text(
-                'Feels like ${convertFeelTemp.toStringAsFixed(0)} $unit',
+                'Feels like ${unit?.convertTemp(weather_info?.main?.feelsLike ?? 0.0).toStringAsFixed(0) ?? ''} ${unit?.tempName ?? ''}',
                 style: const TextStyle(
                   fontSize: 14,
                   color: AppColors.thirdaryNight,

@@ -2,6 +2,12 @@ import 'package:flutter/material.dart';
 
 import 'package:get/get.dart';
 import 'package:weather_v2_pepe/app/const/app_colors.dart';
+import 'package:weather_v2_pepe/app/const/distance_extension.dart';
+import 'package:weather_v2_pepe/app/const/precipitation_extension.dart';
+import 'package:weather_v2_pepe/app/const/pressure_extension.dart';
+import 'package:weather_v2_pepe/app/const/temperature_extension.dart';
+import 'package:weather_v2_pepe/app/const/time_extension.dart';
+import 'package:weather_v2_pepe/app/const/wind_speed_extension.dart';
 import 'package:weather_v2_pepe/app/utils/loading_indicator.dart';
 import 'package:weather_v2_pepe/app/widgets/details.dart';
 import 'package:weather_v2_pepe/app/widgets/future_weather_widget.dart';
@@ -68,14 +74,28 @@ class HomeView extends GetView<HomeController> {
                     TopView(
                       weather_info: currentWeather,
                       location_now: 'Current Location',
-                      unit: '°C',
+                      unit: Temperature.values.firstWhereOrNull((e) =>
+                          e.keyValue == controller.temperatureUnit.value),
                     ),
                     FutureWeatherWidget(
                       futureWeather: futureWeather,
+                      timeUnit: Time.values.firstWhereOrNull(
+                          (e) => e.keyValue == controller.timeUnit.value),
                     ),
                     Details(
                       weather_info: currentWeather,
                       pollution_info: airPollution,
+                      timeUnit: Time.values.firstWhereOrNull(
+                          (e) => e.keyValue == controller.timeUnit.value),
+                      windUnit: WindSpeed.values.firstWhereOrNull(
+                          (e) => e.keyValue == controller.windUnit.value),
+                      distanceUnit: Distance.values.firstWhereOrNull(
+                          (e) => e.keyValue == controller.distanceUnit.value),
+                      pressureUnit: Pressure.values.firstWhereOrNull(
+                          (e) => e.keyValue == controller.pressureUnit.value),
+                      precipitationUnit: Precipitation.values.firstWhereOrNull(
+                          (e) =>
+                              e.keyValue == controller.precipitationUnit.value),
                     ),
                   ],
                 ),

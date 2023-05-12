@@ -1,6 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:weather_v2_pepe/app/const/app_colors.dart';
+import 'package:weather_v2_pepe/app/const/distance_extension.dart';
+import 'package:weather_v2_pepe/app/const/precipitation_extension.dart';
+import 'package:weather_v2_pepe/app/const/pressure_extension.dart';
+import 'package:weather_v2_pepe/app/const/time_extension.dart';
+import 'package:weather_v2_pepe/app/const/wind_speed_extension.dart';
 import 'package:weather_v2_pepe/app/data/models/air_pollution_model.dart';
 import 'package:weather_v2_pepe/app/data/models/weather_model.dart';
 import 'package:intl/intl.dart';
@@ -8,25 +13,27 @@ import 'package:weather_v2_pepe/app/const/aqi_extension.dart';
 import 'package:weather_v2_pepe/resources/resources.dart';
 
 class Details extends StatelessWidget {
-  Details({
+  const Details({
     super.key,
     required this.weather_info,
     required this.pollution_info,
+    required this.windUnit,
+    required this.pressureUnit,
+    required this.precipitationUnit,
+    required this.distanceUnit,
+    required this.timeUnit,
   });
 
   final Weather? weather_info;
   final AirPollution? pollution_info;
+  final WindSpeed? windUnit;
+  final Pressure? pressureUnit;
+  final Precipitation? precipitationUnit;
+  final Distance? distanceUnit;
+  final Time? timeUnit;
 
   @override
   Widget build(BuildContext context) {
-    final sunriseTime = DateTime.fromMillisecondsSinceEpoch(
-        ((weather_info?.sys?.sunrise)?.toInt() ?? 0) * 1000);
-    final sunsetTime = DateTime.fromMillisecondsSinceEpoch(
-        ((weather_info?.sys?.sunset)?.toInt() ?? 0) * 1000);
-
-    final timeFormat = DateFormat('h:mm a');
-    final sunriseTimeString = timeFormat.format(sunriseTime);
-    final sunsetTimeString = timeFormat.format(sunsetTime);
     return Column(
       children: [
         Padding(
@@ -67,13 +74,17 @@ class Details extends StatelessWidget {
               Expanded(
                 child: _itemTime(
                   head: 'Sunrise',
-                  description: sunriseTimeString,
+                  description: timeUnit
+                          ?.convertTime((weather_info?.sys?.sunrise) ?? 0) ??
+                      '',
                 ),
               ),
               Expanded(
                 child: _itemTime(
                   head: 'Sunset',
-                  description: sunsetTimeString,
+                  description:
+                      timeUnit?.convertTime((weather_info?.sys?.sunset) ?? 0) ??
+                          '',
                 ),
               ),
             ],
@@ -86,14 +97,22 @@ class Details extends StatelessWidget {
               Expanded(
                 child: _itemWind(
                   head: 'Wind',
-                  description: weather_info?.wind?.speed.toString() ?? '',
+                  description: windUnit
+                          ?.convertWind(weather_info?.wind?.speed ?? 0)
+                          .toStringAsFixed(2) ??
+                      '',
+                  unitWind: windUnit?.windName ?? '',
                   degree: (weather_info?.wind?.deg as num).toDouble(),
                 ),
               ),
               Expanded(
                 child: _itemPressure(
                   head: 'Pressure',
-                  description: weather_info?.main?.pressure.toString() ?? '',
+                  description: pressureUnit
+                          ?.convertPressture(weather_info?.main?.pressure ?? 0)
+                          .toStringAsFixed(2) ??
+                      '',
+                  unitPressure: pressureUnit?.pressureName ?? '',
                 ),
               ),
             ],
@@ -106,7 +125,11 @@ class Details extends StatelessWidget {
               Expanded(
                 child: _itemVisible(
                   head: 'Visibility',
-                  description: weather_info?.visibility?.toString() ?? '-',
+                  description: distanceUnit
+                          ?.convertDistance(weather_info?.visibility ?? 0)
+                          .toStringAsFixed(2) ??
+                      '',
+                  unitVisibility: distanceUnit?.distanceName ?? '',
                 ),
               ),
               Expanded(
@@ -180,7 +203,7 @@ class Details extends StatelessWidget {
   _itemVisible({
     required String head,
     required String description,
-    String? unitVisibility,
+    required String unitVisibility,
   }) {
     return Column(
       mainAxisAlignment: MainAxisAlignment.start,
@@ -194,7 +217,7 @@ class Details extends StatelessWidget {
           ),
         ),
         Text(
-          description + (unitVisibility ?? ''),
+          '$description $unitVisibility',
           style: const TextStyle(
             fontSize: 16,
             color: AppColors.primaryNight,
@@ -207,7 +230,7 @@ class Details extends StatelessWidget {
   _itemPressure({
     required String head,
     required String description,
-    String? unitPressure,
+    required String unitPressure,
   }) {
     return Column(
       mainAxisAlignment: MainAxisAlignment.start,
@@ -221,7 +244,7 @@ class Details extends StatelessWidget {
           ),
         ),
         Text(
-          description + (unitPressure ?? ''),
+          '$description$unitPressure',
           style: const TextStyle(
             fontSize: 16,
             color: AppColors.primaryNight,
@@ -262,7 +285,7 @@ class Details extends StatelessWidget {
     required String head,
     required String description,
     required double degree,
-    String? unitWind,
+    required String unitWind,
   }) {
     return Column(
       mainAxisAlignment: MainAxisAlignment.start,
@@ -278,7 +301,7 @@ class Details extends StatelessWidget {
         Row(
           children: [
             Text(
-              description + (unitWind ?? ''),
+              '$description $unitWind',
               style: const TextStyle(
                 fontSize: 16,
                 color: AppColors.primaryNight,

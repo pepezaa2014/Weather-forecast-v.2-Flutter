@@ -184,7 +184,7 @@ class SettingView extends GetView<SettingController> {
                                 ),
                               ),
                               1: Text(
-                                'lnHg',
+                                'InHg',
                                 style: TextStyle(
                                   fontSize: 16,
                                   color: AppColors.fourthNight,
@@ -245,7 +245,8 @@ class SettingView extends GetView<SettingController> {
                             },
                             groupValue: controller.precipitationUnit.value,
                             onValueChanged: (value) {
-                              controller.changeSettingPressure(value as int);
+                              controller
+                                  .changeSettingPrecipitataion(value as int);
                             },
                           );
                         },
