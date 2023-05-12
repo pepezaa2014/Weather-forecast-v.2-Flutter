@@ -9,7 +9,7 @@ class AppColors {
   static const primaryBox = Color(0XFF2F4F4F);
   static const secondaryBox = Color(0XFF778899);
   static const primaryDivider = Color(0XFFFFFAFA);
-  static const appColor = Color(0XFF191970);
+  static const appColor = Color(0XFF000000);
   static const loadingIndicator = Color(0XFF778899);
-  static const backgroundColor = Color(0XFF4682B4);
+  static const backgroundColor = Color(0XFF778899);
 }

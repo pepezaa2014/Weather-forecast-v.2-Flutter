@@ -34,115 +34,118 @@ class Details extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Column(
-      children: [
-        Padding(
-          padding: const EdgeInsets.all(16),
-          child: Row(
-            children: [
-              Expanded(
-                child: _item(
-                  head: 'AQI',
-                  description: pollution_info?.list
-                          ?.firstWhereOrNull((element) => true)
-                          ?.main
-                          .airQuality
-                          ?.detail
-                          .toString() ??
-                      '-',
+    return Container(
+      child: Column(
+        children: [
+          Padding(
+            padding: const EdgeInsets.all(16),
+            child: Row(
+              children: [
+                Expanded(
+                  child: _item(
+                    head: 'AQI',
+                    description: pollution_info?.list
+                            ?.firstWhereOrNull((element) => true)
+                            ?.main
+                            .airQuality
+                            ?.detail
+                            .toString() ??
+                        '-',
+                  ),
                 ),
-              ),
-              Expanded(
-                child: _item(
-                  head: 'PM2.5',
-                  description: pollution_info?.list
-                          ?.firstWhereOrNull((element) => true)
-                          ?.components
-                          .pm2_5
-                          .toStringAsFixed(2) ??
-                      '-',
-                  unit: ' μg/m3',
+                Expanded(
+                  child: _item(
+                    head: 'PM2.5',
+                    description: pollution_info?.list
+                            ?.firstWhereOrNull((element) => true)
+                            ?.components
+                            .pm2_5
+                            .toStringAsFixed(2) ??
+                        '-',
+                    unit: ' μg/m3',
+                  ),
                 ),
-              ),
-            ],
+              ],
+            ),
           ),
-        ),
-        Padding(
-          padding: const EdgeInsets.all(16),
-          child: Row(
-            children: [
-              Expanded(
-                child: _itemTime(
-                  head: 'Sunrise',
-                  description: timeUnit
-                          ?.convertTime((weather_info?.sys?.sunrise) ?? 0) ??
-                      '',
+          Padding(
+            padding: const EdgeInsets.all(16),
+            child: Row(
+              children: [
+                Expanded(
+                  child: _itemTime(
+                    head: 'Sunrise',
+                    description: timeUnit
+                            ?.convertTime((weather_info?.sys?.sunrise) ?? 0) ??
+                        '',
+                  ),
                 ),
-              ),
-              Expanded(
-                child: _itemTime(
-                  head: 'Sunset',
-                  description:
-                      timeUnit?.convertTime((weather_info?.sys?.sunset) ?? 0) ??
-                          '',
+                Expanded(
+                  child: _itemTime(
+                    head: 'Sunset',
+                    description: timeUnit
+                            ?.convertTime((weather_info?.sys?.sunset) ?? 0) ??
+                        '',
+                  ),
                 ),
-              ),
-            ],
+              ],
+            ),
           ),
-        ),
-        Padding(
-          padding: const EdgeInsets.all(16),
-          child: Row(
-            children: [
-              Expanded(
-                child: _itemWind(
-                  head: 'Wind',
-                  description: windUnit
-                          ?.convertWind(weather_info?.wind?.speed ?? 0)
-                          .toStringAsFixed(2) ??
-                      '',
-                  unitWind: windUnit?.windName ?? '',
-                  degree: (weather_info?.wind?.deg as num).toDouble(),
+          Padding(
+            padding: const EdgeInsets.all(16),
+            child: Row(
+              children: [
+                Expanded(
+                  child: _itemWind(
+                    head: 'Wind',
+                    description: windUnit
+                            ?.convertWind(weather_info?.wind?.speed ?? 0)
+                            .toStringAsFixed(2) ??
+                        '',
+                    unitWind: windUnit?.windName ?? '',
+                    degree: (weather_info?.wind?.deg as num).toDouble(),
+                  ),
                 ),
-              ),
-              Expanded(
-                child: _itemPressure(
-                  head: 'Pressure',
-                  description: pressureUnit
-                          ?.convertPressture(weather_info?.main?.pressure ?? 0)
-                          .toStringAsFixed(2) ??
-                      '',
-                  unitPressure: pressureUnit?.pressureName ?? '',
+                Expanded(
+                  child: _itemPressure(
+                    head: 'Pressure',
+                    description: pressureUnit
+                            ?.convertPressture(
+                                weather_info?.main?.pressure ?? 0)
+                            .toStringAsFixed(2) ??
+                        '',
+                    unitPressure: pressureUnit?.pressureName ?? '',
+                  ),
                 ),
-              ),
-            ],
+              ],
+            ),
           ),
-        ),
-        Padding(
-          padding: const EdgeInsets.all(16),
-          child: Row(
-            children: [
-              Expanded(
-                child: _itemVisible(
-                  head: 'Visibility',
-                  description: distanceUnit
-                          ?.convertDistance(weather_info?.visibility ?? 0)
-                          .toStringAsFixed(2) ??
-                      '',
-                  unitVisibility: distanceUnit?.distanceName ?? '',
+          Padding(
+            padding: const EdgeInsets.all(16),
+            child: Row(
+              children: [
+                Expanded(
+                  child: _itemVisible(
+                    head: 'Visibility',
+                    description: distanceUnit
+                            ?.convertDistance(weather_info?.visibility ?? 0)
+                            .toStringAsFixed(2) ??
+                        '',
+                    unitVisibility: distanceUnit?.distanceName ?? '',
+                  ),
                 ),
-              ),
-              Expanded(
-                child: _item(
-                  head: 'Humidity',
-                  description: weather_info?.main?.humidity?.toString() ?? '',
-                  unit: '%',
+                Expanded(
+                  child: _item(
+                    head: 'Humidity',
+                    description: weather_info?.main?.humidity?.toString() ?? '',
+                    unit: '%',
+                  ),
                 ),
-              ),
-            ],
+              ],
+            ),
           ),
-        ),
-      ],
+        ],
+      ),
     );
   }
 
@@ -244,7 +247,7 @@ class Details extends StatelessWidget {
           ),
         ),
         Text(
-          '$description$unitPressure',
+          '$description $unitPressure',
           style: const TextStyle(
             fontSize: 16,
             color: AppColors.primaryNight,

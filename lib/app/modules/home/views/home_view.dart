@@ -55,6 +55,7 @@ class HomeView extends GetView<HomeController> {
       onRefresh: _refresh,
       child: Container(
         color: AppColors.backgroundColor,
+        height: double.infinity,
         child: Obx(
           () {
             final currentWeather = controller.weather.value;
