@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 
 import 'package:get/get.dart';
 import 'package:weather_v2_pepe/app/const/app_colors.dart';
+import 'package:weather_v2_pepe/app/data/models/geocoding_model.dart';
 
 import '../controllers/locate_location_controller.dart';
 
@@ -63,8 +64,19 @@ class LocateLocationView extends GetView<LocateLocationController> {
               ),
             ),
           ),
+          IconButton(
+            onPressed: controller.clickToGeo,
+            icon: Icon(
+              Icons.policy_rounded,
+              size: 64,
+            ),
+          ),
         ],
       ),
     );
+  }
+
+  _showList({required Geocoding itemList}) {
+    return;
   }
 }

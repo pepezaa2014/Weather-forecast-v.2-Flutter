@@ -7,8 +7,6 @@ class FutureWeather {
   int? cnt;
   List<FutureWeatherData>? list;
 
-  FutureWeather({this.cod, this.message, this.cnt, this.list});
-
   FutureWeather.fromJson(Map<String, dynamic> json) {
     cod = json['cod'];
     message = json['message'];
@@ -33,19 +31,6 @@ class FutureWeatherData {
   Rain? rain;
   Sys? sys;
   String? dtTxt;
-
-  FutureWeatherData({
-    this.dt,
-    this.main,
-    this.weather,
-    this.clouds,
-    this.wind,
-    this.visibility,
-    this.pop,
-    this.rain,
-    this.sys,
-    this.dtTxt,
-  });
 
   FutureWeatherData.fromJson(Map<String, dynamic> json) {
     dt = json['dt'];
@@ -77,17 +62,6 @@ class Main {
   int? humidity;
   double? tempKf;
 
-  Main(
-      {this.temp,
-      this.feelsLike,
-      this.tempMin,
-      this.tempMax,
-      this.pressure,
-      this.seaLevel,
-      this.grndLevel,
-      this.humidity,
-      this.tempKf});
-
   Main.fromJson(Map<String, dynamic> json) {
     temp = (json['temp'] as num).toDouble();
     feelsLike = (json['feels_like'] as num).toDouble();
@@ -107,8 +81,6 @@ class FutureWeatherDetail {
   String? description;
   String? icon;
 
-  FutureWeatherDetail({this.id, this.main, this.description, this.icon});
-
   FutureWeatherDetail.fromJson(Map<String, dynamic> json) {
     id = json['id'];
     main = json['main'];
@@ -120,8 +92,6 @@ class FutureWeatherDetail {
 class Clouds {
   int? all;
 
-  Clouds({this.all});
-
   Clouds.fromJson(Map<String, dynamic> json) {
     all = json['all'];
   }
@@ -131,8 +101,6 @@ class Wind {
   double? speed;
   int? deg;
   double? gust;
-
-  Wind({this.speed, this.deg, this.gust});
 
   Wind.fromJson(Map<String, dynamic> json) {
     speed = (json['speed'] as num).toDouble();
@@ -144,8 +112,6 @@ class Wind {
 class Rain {
   double? d3h;
 
-  Rain({this.d3h});
-
   Rain.fromJson(Map<String, dynamic> json) {
     d3h = (json['3h'] as num).toDouble();
   }
@@ -153,8 +119,6 @@ class Rain {
 
 class Sys {
   String? pod;
-
-  Sys({this.pod});
 
   Sys.fromJson(Map<String, dynamic> json) {
     pod = json['pod'];

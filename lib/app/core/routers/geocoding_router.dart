@@ -1,3 +1,3 @@
 class GeocodingRouter {
-  static const getAirPollution = '/geo/1.0/direct';
+  static const geocodingURL = '/geo/1.0/direct';
 }

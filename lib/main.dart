@@ -7,6 +7,7 @@ import 'package:weather_v2_pepe/app/const/app_colors.dart';
 import 'package:material_color_generator/material_color_generator.dart';
 import 'package:weather_v2_pepe/app/core/api/air_pollution_api.dart';
 import 'package:weather_v2_pepe/app/core/api/future_weather_api.dart';
+import 'package:weather_v2_pepe/app/core/api/geocoding_api.dart';
 import 'package:weather_v2_pepe/app/core/api/weather_api.dart';
 import 'package:weather_v2_pepe/app/core/dio_client.dart';
 import 'package:weather_v2_pepe/app/managers/session_manager.dart';
@@ -49,6 +50,7 @@ Future<void> _setupInstance() async {
   Get.put(WeatherAPI(dioClient));
   Get.put(FutureWeatherAPI(dioClient));
   Get.put(AirPollutionAPI(dioClient));
+  Get.put(GeocodingAPI(dioClient));
 
   return;
 }

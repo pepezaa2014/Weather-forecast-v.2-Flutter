@@ -19,12 +19,6 @@ class Weather {
   int? cod;
   String? message;
 
-  Weather({
-    this.coord,
-    this.weather,
-    this.name,
-  });
-
   Weather.fromJson(Map<String, dynamic> json) {
     coord = json['coord'] != null ? Coord?.fromJson(json['coord']) : null;
     if (json['weather'] != null) {
@@ -56,8 +50,6 @@ class Coord {
   double? lon;
   double? lat;
 
-  Coord({this.lon, this.lat});
-
   Coord.fromJson(Map<String, dynamic> json) {
     lon = (json['lon'] as num?)?.toDouble();
     lat = (json['lat'] as num?)?.toDouble();
@@ -69,8 +61,6 @@ class WeatherDetail {
   String? main;
   String? description;
   String? icon;
-
-  WeatherDetail({this.id, this.main, this.description, this.icon});
 
   WeatherDetail.fromJson(Map<String, dynamic> json) {
     id = json['id'];
@@ -88,14 +78,6 @@ class Main {
   int? pressure;
   int? humidity;
 
-  Main(
-      {this.temp,
-      this.feelsLike,
-      this.tempMin,
-      this.tempMax,
-      this.pressure,
-      this.humidity});
-
   Main.fromJson(Map<String, dynamic> json) {
     temp = (json['temp'] as num?)?.toDouble();
     feelsLike = (json['feels_like'] as num?)?.toDouble();
@@ -111,8 +93,6 @@ class Wind {
   int? deg;
   double? gust;
 
-  Wind({this.speed, this.deg});
-
   Wind.fromJson(Map<String, dynamic> json) {
     speed = (json['speed'] as num?)?.toDouble();
     deg = json['deg'];
@@ -122,8 +102,6 @@ class Wind {
 
 class Clouds {
   int? all;
-
-  Clouds({this.all});
 
   Clouds.fromJson(Map<String, dynamic> json) {
     all = json['all'];
@@ -136,8 +114,6 @@ class Sys {
   String? country;
   int? sunrise;
   int? sunset;
-
-  Sys({this.type, this.id, this.country, this.sunrise, this.sunset});
 
   Sys.fromJson(Map<String, dynamic> json) {
     type = json['type'];
@@ -163,8 +139,6 @@ class Snow {
 class Rain {
   double? d1h;
   double? d3h;
-
-  Rain({this.d1h, this.d3h});
 
   Rain.fromJson(Map<String, dynamic> json) {
     d1h = (json['1h'] as num?)?.toDouble();

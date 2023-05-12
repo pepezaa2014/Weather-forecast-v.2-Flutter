@@ -5,8 +5,6 @@ class AirPollution {
   List<double>? coord;
   List<AirPollutionData>? list;
 
-  AirPollution({this.coord, this.list});
-
   AirPollution.fromJson(Map<String, dynamic> json) {
     if (json['coord'] is List<dynamic>) {
       coord = (json['coord'] as List<dynamic>).cast<double>();
@@ -25,9 +23,6 @@ class AirPollutionData {
   late MainData main;
   late ComponentsData components;
 
-  AirPollutionData(
-      {required this.dt, required this.main, required this.components});
-
   AirPollutionData.fromJson(Map<String, dynamic> json) {
     dt = (json['dt'] as num).toDouble();
     main = MainData.fromJson(json['main']);
@@ -37,8 +32,6 @@ class AirPollutionData {
 
 class MainData {
   late int aqi;
-
-  MainData({required this.aqi});
 
   MainData.fromJson(Map<String, dynamic> json) {
     aqi = json['aqi'];
@@ -54,17 +47,6 @@ class ComponentsData {
   late double pm2_5;
   late double pm10;
   late double nh3;
-
-  ComponentsData({
-    required this.co,
-    required this.no,
-    required this.no2,
-    required this.o3,
-    required this.so2,
-    required this.pm2_5,
-    required this.pm10,
-    required this.nh3,
-  });
 
   ComponentsData.fromJson(Map<String, dynamic> json) {
     co = (json['co'] as num).toDouble();

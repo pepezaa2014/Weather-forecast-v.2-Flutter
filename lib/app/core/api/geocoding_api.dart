@@ -3,20 +3,19 @@ import 'package:weather_v2_pepe/app/const/app_constant.dart';
 import 'package:weather_v2_pepe/app/core/dio_client.dart';
 import 'package:weather_v2_pepe/app/core/handle_exceptions.dart';
 import 'package:weather_v2_pepe/app/core/routers/geocoding_router.dart';
-
-import 'package:weather_v2_pepe/app/data/models/weather_model.dart';
+import 'package:weather_v2_pepe/app/data/models/geocoding_model.dart';
 
 class GeocodingAPI {
   final DioClient _dioClient;
 
   GeocodingAPI(this._dioClient);
 
-  Future<Weather> getWeatherLatLon({
+  Future<Geocoding> getWeatherCity({
     required String city,
   }) async {
     try {
       final Response response = await _dioClient.get(
-        GeocodingRouter.getAirPollution,
+        GeocodingRouter.geocodingURL,
         queryParameters: {
           'q': city,
           'limit': AppConstant.limitGeocoding,
@@ -24,7 +23,7 @@ class GeocodingAPI {
         },
       );
 
-      return Weather.fromJson(response.data);
+      return Geocoding.fromJson(response.data);
     } catch (e) {
       throw HandleExceptions.handleError(e);
     }
