@@ -54,26 +54,33 @@ class HomeView extends GetView<HomeController> {
             final currentWeather = controller.weather.value;
             final futureWeather = controller.futureWeather.value;
             final airPollution = controller.airPollution.value;
-
-            return SingleChildScrollView(
-              physics: const ClampingScrollPhysics(),
-              child: Column(
-                children: [
-                  TopView(
-                    weather_info: currentWeather,
-                    location_now: 'Current Location',
-                    unit: 'C',
-                  ),
-                  FutureWeatherWidget(
-                    futureWeather: futureWeather,
-                  ),
-                  Details(
-                    weather_info: currentWeather,
-                    pollution_info: airPollution,
-                  ),
-                ],
-              ),
-            );
+            if (controller.airPollution.value == null ||
+                controller.futureWeather.value == null ||
+                controller.weather.value == null) {
+              return Container(
+                color: AppColors.backgroundColor,
+              );
+            } else {
+              return SingleChildScrollView(
+                physics: const ClampingScrollPhysics(),
+                child: Column(
+                  children: [
+                    TopView(
+                      weather_info: currentWeather,
+                      location_now: 'Current Location',
+                      unit: '°C',
+                    ),
+                    FutureWeatherWidget(
+                      futureWeather: futureWeather,
+                    ),
+                    Details(
+                      weather_info: currentWeather,
+                      pollution_info: airPollution,
+                    ),
+                  ],
+                ),
+              );
+            }
           },
         ),
       ),
@@ -83,7 +90,7 @@ class HomeView extends GetView<HomeController> {
   Future<void> _refresh() {
     return Future.delayed(
       const Duration(
-        seconds: 1,
+        seconds: 2,
       ),
     );
   }

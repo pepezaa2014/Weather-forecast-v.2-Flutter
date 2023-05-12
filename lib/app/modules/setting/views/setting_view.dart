@@ -80,10 +80,9 @@ class SettingView extends GetView<SettingController> {
                                 ),
                               ),
                             },
-                            groupValue: controller.currentSelectionTemp.value,
+                            groupValue: controller.temperatureUnit.value,
                             onValueChanged: (value) {
-                              controller.currentSelectionTemp.value =
-                                  value as int;
+                              controller.changeSettingTemp(value as int);
                             },
                           );
                         },
@@ -140,10 +139,9 @@ class SettingView extends GetView<SettingController> {
                                 ),
                               ),
                             },
-                            groupValue: controller.currentSelectionwind.value,
+                            groupValue: controller.windUnit.value,
                             onValueChanged: (value) {
-                              controller.currentSelectionwind.value =
-                                  value as int;
+                              controller.changeSettingWind(value as int);
                             },
                           );
                         },
@@ -193,11 +191,9 @@ class SettingView extends GetView<SettingController> {
                                 ),
                               ),
                             },
-                            groupValue:
-                                controller.currentSelectionPressure.value,
+                            groupValue: controller.pressureUnit.value,
                             onValueChanged: (value) {
-                              controller.currentSelectionPressure.value =
-                                  value as int;
+                              controller.changeSettingPressure(value as int);
                             },
                           );
                         },
@@ -247,11 +243,9 @@ class SettingView extends GetView<SettingController> {
                                 ),
                               ),
                             },
-                            groupValue:
-                                controller.currentSelectionPrecipitation.value,
+                            groupValue: controller.precipitationUnit.value,
                             onValueChanged: (value) {
-                              controller.currentSelectionPrecipitation.value =
-                                  value as int;
+                              controller.changeSettingPressure(value as int);
                             },
                           );
                         },
@@ -301,11 +295,9 @@ class SettingView extends GetView<SettingController> {
                                 ),
                               ),
                             },
-                            groupValue:
-                                controller.currentSelectionDistance.value,
+                            groupValue: controller.distanceUnit.value,
                             onValueChanged: (value) {
-                              controller.currentSelectionDistance.value =
-                                  value as int;
+                              controller.changeSettingDistance(value as int);
                             },
                           );
                         },
@@ -355,10 +347,9 @@ class SettingView extends GetView<SettingController> {
                                 ),
                               ),
                             },
-                            groupValue: controller.currentSelectionTime.value,
+                            groupValue: controller.timeUnit.value,
                             onValueChanged: (value) {
-                              controller.currentSelectionTime.value =
-                                  value as int;
+                              controller.changeSettingTime(value as int);
                             },
                           );
                         },

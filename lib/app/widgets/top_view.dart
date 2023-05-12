@@ -28,9 +28,9 @@ class TopView extends StatelessWidget {
     String? unit,
     double? temp,
   ) {
-    if (unit?.toLowerCase() == 'c') {
+    if (unit?.toLowerCase() == '°c') {
       return (temp ?? 0) - 273;
-    } else if (unit?.toLowerCase() == 'f') {
+    } else if (unit?.toLowerCase() == '°f') {
       return 1.8 * ((temp ?? 0) - 273) + 32;
     } else if (unit?.toLowerCase() == 'k') {
       return temp ?? 0;

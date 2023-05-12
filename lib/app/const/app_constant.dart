@@ -6,4 +6,10 @@ class AppConstant {
   static const limitGeocoding = 5;
 
   static const favoriteCity = 'favoriteCity';
+  static const temperature = 'temperature';
+  static const wind = 'wind';
+  static const pressure = 'pressure';
+  static const precipitataion = 'precipitataion';
+  static const distance = 'distance';
+  static const timeFormat = 'timeFormat';
 }
