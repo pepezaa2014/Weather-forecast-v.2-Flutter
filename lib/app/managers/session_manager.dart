@@ -7,7 +7,7 @@ class SessionManager {
 
   SessionManager(this._getStorage);
 
-  final RxString favorites = ''.obs;
+  final RxList<String> favorites = RxList();
   final RxInt temperature = 0.obs;
   final RxInt wind = 0.obs;
   final RxInt pressure = 0.obs;

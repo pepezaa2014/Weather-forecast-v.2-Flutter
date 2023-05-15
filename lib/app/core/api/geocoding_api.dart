@@ -10,7 +10,7 @@ class GeocodingAPI {
 
   GeocodingAPI(this._dioClient);
 
-  Future<Geocoding> getWeatherCity({
+  Future<List<Geocoding>> getWeatherCity({
     required String city,
   }) async {
     try {
@@ -23,7 +23,13 @@ class GeocodingAPI {
         },
       );
 
-      return Geocoding.fromJson(response.data);
+      List<Geocoding> result = [];
+      if (response.data is List) {
+        response.data.forEach((e) {
+          result.add(Geocoding.fromJson(e));
+        });
+      }
+      return result;
     } catch (e) {
       throw HandleExceptions.handleError(e);
     }

@@ -52,7 +52,7 @@ class HomeView extends GetView<HomeController> {
 
   _body() {
     return RefreshIndicator(
-      onRefresh: _refresh,
+      onRefresh: controller.refresh,
       child: Container(
         color: AppColors.backgroundColor,
         height: double.infinity,
@@ -104,14 +104,6 @@ class HomeView extends GetView<HomeController> {
             }
           },
         ),
-      ),
-    );
-  }
-
-  Future<void> _refresh() {
-    return Future.delayed(
-      const Duration(
-        seconds: 2,
       ),
     );
   }

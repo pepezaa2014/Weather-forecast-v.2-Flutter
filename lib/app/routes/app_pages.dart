@@ -6,6 +6,8 @@ import '../modules/locate_location/bindings/locate_location_binding.dart';
 import '../modules/locate_location/views/locate_location_view.dart';
 import '../modules/setting/bindings/setting_binding.dart';
 import '../modules/setting/views/setting_view.dart';
+import '../modules/show_detail/bindings/show_detail_binding.dart';
+import '../modules/show_detail/views/show_detail_view.dart';
 import '../modules/splash/bindings/splash_binding.dart';
 import '../modules/splash/views/splash_view.dart';
 
@@ -39,6 +41,12 @@ class AppPages {
       name: _Paths.SPLASH,
       page: () => const SplashView(),
       binding: SplashBinding(),
+      transition: Transition.cupertino,
+    ),
+    GetPage(
+      name: _Paths.SHOW_DETAIL,
+      page: () => const ShowDetailView(),
+      binding: ShowDetailBinding(),
       transition: Transition.cupertino,
     ),
   ];

@@ -4,18 +4,22 @@ class Geocoding {
   double? lat;
   double? lon;
   String? country;
-
-  Geocoding({this.name, this.localNames, this.lat, this.lon, this.country});
+  String? state;
 
   Geocoding.fromJson(Map<String, dynamic> json) {
     name = json['name'];
     localNames = json['local_names'] != null
         ? LocalNames?.fromJson(json['local_names'])
         : null;
-    lat = json['lat'];
-    lon = json['lon'];
+    lat = (json['lat'] as num).toDouble();
+    lon = (json['lon'] as num).toDouble();
     country = json['country'];
+    state = json['state'];
   }
+}
+
+List<Geocoding> geocodingListFromJson(List<dynamic> json) {
+  return json.map((item) => Geocoding.fromJson(item)).toList();
 }
 
 class LocalNames {

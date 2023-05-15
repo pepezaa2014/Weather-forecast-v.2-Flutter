@@ -1,31 +1,42 @@
-import 'dart:ffi';
-
 import 'package:get/get.dart';
-import 'package:geolocator/geolocator.dart';
+import 'package:intl/intl.dart';
 import 'package:weather_v2_pepe/app/core/api/air_pollution_api.dart';
 import 'package:weather_v2_pepe/app/core/api/future_weather_api.dart';
-
 import 'package:weather_v2_pepe/app/core/api/weather_api.dart';
 import 'package:weather_v2_pepe/app/data/models/air_pollution_model.dart';
 import 'package:weather_v2_pepe/app/data/models/app_error_model.dart';
 import 'package:weather_v2_pepe/app/data/models/future_weather_model.dart';
+import 'package:weather_v2_pepe/app/data/models/geocoding_model.dart';
 import 'package:weather_v2_pepe/app/data/models/weather_model.dart';
-
 import 'package:weather_v2_pepe/app/extensions/bool_extension.dart';
 import 'package:weather_v2_pepe/app/managers/session_manager.dart';
-import 'package:weather_v2_pepe/app/routes/app_pages.dart';
 import 'package:weather_v2_pepe/app/utils/show_alert.dart';
 
-class HomeController extends GetxController {
+class ShowDetailController extends GetxController {
   final SessionManager _sessionManager = Get.find();
 
   final WeatherAPI _weatherAPI = Get.find();
-  final FutureWeatherAPI _futureWeatherAPI = Get.find();
-  final AirPollutionAPI _airPollutionAPI = Get.find();
-
   late final Rxn<Weather> weather = Rxn();
+
+  final FutureWeatherAPI _futureWeatherAPI = Get.find();
   late final Rxn<FutureWeather> futureWeather = Rxn();
+
+  final AirPollutionAPI _airPollutionAPI = Get.find();
   late final Rxn<AirPollution> airPollution = Rxn();
+
+  late final Geocoding? geocoding;
+
+  final isLoadingGetWeather = false.obs;
+
+  DateTime now = DateTime.now();
+  late final String formattedDate =
+      DateFormat('dd MMMM yyyy HH:mm a').format(now);
+
+  RxBool get isLoading {
+    return [
+      isLoadingGetWeather.value,
+    ].atLeastOneTrue.obs;
+  }
 
   late final RxInt temperatureUnit;
   late final RxInt windUnit;
@@ -34,17 +45,10 @@ class HomeController extends GetxController {
   late final RxInt distanceUnit;
   late final RxInt timeUnit;
 
-  final isLoadingGetWeather = false.obs;
-
-  RxBool get isLoading {
-    return [
-      isLoadingGetWeather.value,
-    ].atLeastOneTrue.obs;
-  }
-
   @override
   void onInit() {
     super.onInit();
+    geocoding = Get.arguments;
     temperatureUnit = _sessionManager.temperature;
     windUnit = _sessionManager.wind;
     pressureUnit = _sessionManager.pressure;
@@ -56,7 +60,18 @@ class HomeController extends GetxController {
   @override
   void onReady() {
     super.onReady();
-    _determinePosition();
+    _getWeatherLatLon(
+      lat: geocoding?.lat ?? 0.0,
+      lon: geocoding?.lon ?? 0.0,
+    );
+    _getFutureWeather(
+      lat: geocoding?.lat ?? 0.0,
+      lon: geocoding?.lon ?? 0.0,
+    );
+    _getAirPollution(
+      lat: geocoding?.lat ?? 0.0,
+      lon: geocoding?.lon ?? 0.0,
+    );
   }
 
   @override
@@ -64,57 +79,7 @@ class HomeController extends GetxController {
     super.onClose();
   }
 
-  void goLocate() {
-    Get.toNamed(Routes.LOCATE_LOCATION);
-  }
-
-  @override
-  Future<void> refresh() async {
-    _determinePosition();
-  }
-
-  void _determinePosition() async {
-    bool serviceEnabled;
-    LocationPermission permission;
-
-    serviceEnabled = await Geolocator.isLocationServiceEnabled();
-    if (!serviceEnabled) {
-      showAlert(
-        title: 'Error',
-        message: 'Location services are disabled.',
-      );
-    }
-    permission = await Geolocator.checkPermission();
-    if (permission == LocationPermission.denied) {
-      permission = await Geolocator.requestPermission();
-      if (permission == LocationPermission.denied) {
-        showAlert(
-          title: 'Error',
-          message: 'Location permissions are denied',
-        );
-      }
-    }
-    if (permission == LocationPermission.deniedForever) {
-      showAlert(
-        title: 'Error',
-        message:
-            'Location permissions are permanently denied, we cannot request permissions.',
-      );
-    }
-    final location = await Geolocator.getCurrentPosition();
-    _getWeatherLatLon(
-      lat: location.latitude,
-      lon: location.longitude,
-    );
-    _getFutureWeather(
-      lat: location.latitude,
-      lon: location.longitude,
-    );
-    _getAirPollution(
-      lat: location.latitude,
-      lon: location.longitude,
-    );
-  }
+  void addFavorite() {}
 
   void _getWeatherLatLon({
     required double lat,
