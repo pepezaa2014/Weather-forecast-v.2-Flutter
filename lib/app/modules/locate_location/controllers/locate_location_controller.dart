@@ -21,7 +21,7 @@ class LocateLocationController extends GetxController {
   final RxString searchCityText = ''.obs;
 
   late final Rxn<Weather> weather = Rxn();
-  late final List<Weather> allFavoriteLocations = [];
+  late final RxList<Weather> allFavoriteLocations = RxList();
   late final RxList<Geocoding> geocoding = RxList();
 
   late final RxList<Map<String, dynamic>> favoriteLocation;
@@ -73,6 +73,10 @@ class LocateLocationController extends GetxController {
 
   void goSetting() {
     Get.toNamed(Routes.SETTING);
+  }
+
+  void deleteFavoriteIndex(int index) {
+    _sessionManager.favoriteLocation.removeAt(index);
   }
 
   void goShowDetail(Map<String, dynamic> item) {

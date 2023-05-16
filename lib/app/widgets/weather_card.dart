@@ -13,11 +13,13 @@ class WeatherCard extends StatelessWidget {
     required this.weather_info,
     required this.unit,
     required this.onTap,
+    required this.onTapDel,
   });
 
   final Weather? weather_info;
   final Temperature? unit;
   final Function() onTap;
+  final Function() onTapDel;
 
   @override
   Widget build(BuildContext context) {
@@ -26,23 +28,26 @@ class WeatherCard extends StatelessWidget {
     final String formattedDateTime =
         DateFormat('dd MMM yyyy HH:mm a').format(timeNow);
 
-    return GestureDetector(
-      onTap: onTap,
-      child: Stack(
-        children: [
-          Container(
+    return Stack(
+      children: [
+        GestureDetector(
+          onTap: onTap,
+          child: Container(
             decoration: BoxDecoration(
               borderRadius: BorderRadius.circular(10),
               color: AppColors.primaryBox,
             ),
             child: Padding(
-              padding: const EdgeInsets.all(8),
+              padding: const EdgeInsets.all(16),
               child: Row(
                 children: [
                   Expanded(
-                    child: Column(
-                      children: [
-                        Text(
+                      child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Align(
+                        alignment: Alignment.centerLeft,
+                        child: Text(
                           weather_info?.name ?? '',
                           style: const TextStyle(
                             fontWeight: FontWeight.bold,
@@ -50,41 +55,50 @@ class WeatherCard extends StatelessWidget {
                             color: AppColors.primaryNight,
                           ),
                         ),
-                        Text(
+                      ),
+                      Align(
+                        alignment: Alignment.centerLeft,
+                        child: Text(
                           formattedDateTime,
                           style: const TextStyle(
                             fontSize: 14,
                             color: AppColors.secondaryNight,
                           ),
                         ),
-                        Row(
-                          children: [
-                            Image.asset(
-                              weather_info?.weather
-                                      ?.firstWhereOrNull((e) => true)
-                                      ?.weatherIcon
-                                      ?.imageName
-                                      .toString() ??
-                                  '',
-                              width: 60,
-                              height: 60,
-                            ),
-                            Text(
-                              weather_info?.weather
-                                      ?.firstWhereOrNull((element) => true)
-                                      ?.main
-                                      .toString() ??
-                                  '',
-                              style: const TextStyle(
-                                fontSize: 14,
-                                color: AppColors.primaryNight,
+                      ),
+                      Row(
+                        children: [
+                          Image.asset(
+                            weather_info?.weather
+                                    ?.firstWhereOrNull((e) => true)
+                                    ?.weatherIcon
+                                    ?.imageName
+                                    .toString() ??
+                                '',
+                            width: 60,
+                            height: 60,
+                          ),
+                          Padding(
+                            padding: const EdgeInsets.only(left: 8),
+                            child: Align(
+                              alignment: Alignment.centerLeft,
+                              child: Text(
+                                weather_info?.weather
+                                        ?.firstWhereOrNull((element) => true)
+                                        ?.main
+                                        .toString() ??
+                                    '',
+                                style: const TextStyle(
+                                  fontSize: 14,
+                                  color: AppColors.primaryNight,
+                                ),
                               ),
-                            )
-                          ],
-                        )
-                      ],
-                    ),
-                  ),
+                            ),
+                          ),
+                        ],
+                      ),
+                    ],
+                  )),
                   Expanded(
                     child: Center(
                       child: Column(
@@ -119,19 +133,19 @@ class WeatherCard extends StatelessWidget {
               ),
             ),
           ),
-          Align(
-            alignment: Alignment.centerRight,
-            child: IconButton(
-              onPressed: onTap,
-              icon: const Icon(
-                Icons.restore_from_trash,
-                size: 24,
-                color: AppColors.primaryNight,
-              ),
+        ),
+        Align(
+          alignment: Alignment.centerRight,
+          child: IconButton(
+            onPressed: onTapDel,
+            icon: const Icon(
+              Icons.restore_from_trash,
+              size: 24,
+              color: AppColors.primaryNight,
             ),
           ),
-        ],
-      ),
+        ),
+      ],
     );
   }
 }

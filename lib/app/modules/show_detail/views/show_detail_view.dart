@@ -47,11 +47,21 @@ class ShowDetailView extends GetView<ShowDetailController> {
       ),
       centerTitle: true,
       actions: [
-        IconButton(
-          onPressed: controller.addFavorite,
-          icon: const Icon(
-            Icons.add,
-          ),
+        Obx(
+          () {
+            return Container(
+              child: controller.favoriteLocation.any((e) =>
+                      e['lat'] == controller.weather_info['lat'] &&
+                      e['lon'] == controller.weather_info['lon'])
+                  ? const SizedBox()
+                  : IconButton(
+                      onPressed: controller.addFavorite,
+                      icon: const Icon(
+                        Icons.add,
+                      ),
+                    ),
+            );
+          },
         ),
       ],
     );

@@ -23,32 +23,38 @@ class ShowList extends StatelessWidget {
       children: [
         Padding(
           padding: const EdgeInsets.all(8),
-          child: Text(
-            item?.name.toString() ?? '',
-            style: const TextStyle(
-              fontSize: 18,
-              fontWeight: FontWeight.bold,
-              color: AppColors.primaryNight,
+          child: Align(
+            alignment: Alignment.centerLeft,
+            child: Text(
+              item?.name.toString() ?? '',
+              style: const TextStyle(
+                fontSize: 18,
+                fontWeight: FontWeight.bold,
+                color: AppColors.primaryNight,
+              ),
+              textAlign: TextAlign.left,
             ),
-            textAlign: TextAlign.left,
           ),
         ),
         Padding(
           padding: const EdgeInsets.all(8),
-          child: Text(
-            '$state$country',
-            style: const TextStyle(
-              fontSize: 18,
-              fontWeight: FontWeight.bold,
-              color: AppColors.primaryNight,
+          child: Align(
+            alignment: Alignment.centerLeft,
+            child: Text(
+              '$state$country',
+              style: const TextStyle(
+                fontSize: 18,
+                fontWeight: FontWeight.bold,
+                color: AppColors.primaryNight,
+              ),
+              textAlign: TextAlign.left,
             ),
-            textAlign: TextAlign.left,
           ),
         ),
         const Padding(
           padding: EdgeInsets.all(8),
           child: Divider(
-            height: 4,
+            thickness: 1,
             color: AppColors.primaryNight,
           ),
         ),
