@@ -11,4 +11,5 @@ class AppConstant {
   static const precipitataion = 'precipitataion';
   static const distance = 'distance';
   static const timeFormat = 'timeFormat';
+  static const favoriteLocation = 'favoriteLocation';
 }

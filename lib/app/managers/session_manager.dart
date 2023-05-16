@@ -7,13 +7,13 @@ class SessionManager {
 
   SessionManager(this._getStorage);
 
-  final RxList<String> favorites = RxList();
   final RxInt temperature = 0.obs;
   final RxInt wind = 0.obs;
   final RxInt pressure = 0.obs;
   final RxInt precipitataion = 0.obs;
   final RxInt distance = 0.obs;
   final RxInt timeFormat = 0.obs;
+  final RxList<Map<String, double>> favoriteLocation = RxList();
 
   void loadSession() {
     if (_getStorage.read(AppConstant.temperature) == null) {
@@ -46,6 +46,21 @@ class SessionManager {
     precipitataion.value = _getStorage.read(AppConstant.precipitataion);
     distance.value = _getStorage.read(AppConstant.distance);
     timeFormat.value = _getStorage.read(AppConstant.timeFormat);
+
+    _getStorage.remove(AppConstant.favoriteLocation);
+    if (_getStorage.read(AppConstant.favoriteLocation) == null) {
+      _getStorage.write(
+        AppConstant.favoriteLocation,
+        [
+          {
+            'lat': 0.0,
+            'lon': 0.0,
+          },
+        ],
+      );
+    }
+    favoriteLocation.value = _getStorage.read(AppConstant.favoriteLocation);
+    print(favoriteLocation);
   }
 
   void setChangeTemperature(int index) {
@@ -76,5 +91,10 @@ class SessionManager {
   void setChangeTimeFormat(int index) {
     timeFormat.value = index;
     _getStorage.write(AppConstant.timeFormat, index);
+  }
+
+  void setYourLocation(List<Map<String, double>> item) {
+    _getStorage.remove(AppConstant.favoriteLocation);
+    _getStorage.write(AppConstant.favoriteLocation, item);
   }
 }

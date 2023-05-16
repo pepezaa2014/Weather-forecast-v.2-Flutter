@@ -2,8 +2,12 @@ import 'package:flutter/material.dart';
 
 import 'package:get/get.dart';
 import 'package:weather_v2_pepe/app/const/app_colors.dart';
+import 'package:weather_v2_pepe/app/const/temperature_extension.dart';
 import 'package:weather_v2_pepe/app/data/models/geocoding_model.dart';
+import 'package:weather_v2_pepe/app/data/models/weather_model.dart';
+import 'package:weather_v2_pepe/app/utils/loading_indicator.dart';
 import 'package:weather_v2_pepe/app/widgets/show_list.dart';
+import 'package:weather_v2_pepe/app/widgets/weather_card.dart';
 
 import '../controllers/locate_location_controller.dart';
 
@@ -11,12 +15,19 @@ class LocateLocationView extends GetView<LocateLocationController> {
   const LocateLocationView({Key? key}) : super(key: key);
   @override
   Widget build(BuildContext context) {
-    return GestureDetector(
-      onTap: () => FocusScope.of(context).unfocus(),
-      child: Scaffold(
-        appBar: _appbar(),
-        body: _body(),
-      ),
+    return Stack(
+      children: [
+        GestureDetector(
+          onTap: () => FocusScope.of(context).unfocus(),
+          child: Scaffold(
+            appBar: _appbar(),
+            body: _body(),
+          ),
+        ),
+        Obx(
+          () => loadingIndicator(controller.isLoadingGetWeather.value),
+        ),
+      ],
     );
   }
 
@@ -69,35 +80,78 @@ class LocateLocationView extends GetView<LocateLocationController> {
                 ),
               ),
             ),
+            Text(controller.allFavoriteLocations.length.toString()),
             Padding(
               padding: const EdgeInsets.all(16),
-              child: Container(
-                width: double.infinity,
-                height: 400,
-                color: Colors.blueAccent,
-                child: Obx(
-                  () {
-                    return ListView.builder(
-                      itemCount: thisGeocoding.length,
-                      itemBuilder: (context, index) {
-                        return GestureDetector(
-                          onTap: () => controller.goShowDetail(
-                            thisGeocoding[index],
-                          ),
-                          child: Container(
-                            color: Colors.black87,
-                            child: ShowList(
-                              item: thisGeocoding[index],
-                              onTap: () =>
-                                  controller.goShowDetail(thisGeocoding[index]),
-                            ),
-                          ),
-                        );
-                      },
-                    );
-                  },
-                ),
-              ),
+              child: controller.searchCityText != ''
+                  ? Container(
+                      width: double.infinity,
+                      height: 500,
+                      color: Colors.blueAccent,
+                      child: Obx(
+                        () {
+                          return ListView.builder(
+                            itemCount: thisGeocoding.length,
+                            itemBuilder: (context, index) {
+                              final Map<String, dynamic> thisWeatherItem = {
+                                'lat': thisGeocoding[index].lat,
+                                'lon': thisGeocoding[index].lon,
+                              };
+
+                              return GestureDetector(
+                                onTap: () => controller.goShowDetail(
+                                  thisWeatherItem,
+                                ),
+                                child: Container(
+                                  color: Colors.black87,
+                                  child: ShowList(
+                                    item: thisGeocoding[index],
+                                  ),
+                                ),
+                              );
+                            },
+                          );
+                        },
+                      ),
+                    )
+                  : Container(
+                      color: Colors.amber,
+                      width: double.infinity,
+                      height: 500,
+                      child: Obx(
+                        () {
+                          return ListView.builder(
+                            itemCount: controller.favoriteLocation.length,
+                            itemBuilder: (context, index) {
+                              final thisItemIndex =
+                                  controller.favoriteLocation[index];
+
+                              Map<String, dynamic> thisWeatherItem = {
+                                'lat': thisItemIndex['lat'],
+                                'lon': thisItemIndex['lon'],
+                              };
+
+                              return Padding(
+                                padding: const EdgeInsets.only(
+                                  top: 4,
+                                  bottom: 4,
+                                ),
+                                child: WeatherCard(
+                                  weather_info:
+                                      controller.allFavoriteLocations[index],
+                                  unit: Temperature.values.firstWhereOrNull(
+                                      (e) =>
+                                          e.keyValue ==
+                                          controller.temperatureUnit.value),
+                                  onTap: () =>
+                                      controller.goShowDetail(thisWeatherItem),
+                                ),
+                              );
+                            },
+                          );
+                        },
+                      ),
+                    ),
             ),
           ],
         ),

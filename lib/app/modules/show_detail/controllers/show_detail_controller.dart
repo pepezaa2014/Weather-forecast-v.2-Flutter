@@ -24,7 +24,7 @@ class ShowDetailController extends GetxController {
   final AirPollutionAPI _airPollutionAPI = Get.find();
   late final Rxn<AirPollution> airPollution = Rxn();
 
-  late final Geocoding? geocoding;
+  late final Map<String, dynamic> weather_info;
 
   final isLoadingGetWeather = false.obs;
 
@@ -44,33 +44,39 @@ class ShowDetailController extends GetxController {
   late final RxInt precipitationUnit;
   late final RxInt distanceUnit;
   late final RxInt timeUnit;
+  late final RxList<Map<String, double>> favoriteLocation;
 
   @override
   void onInit() {
     super.onInit();
-    geocoding = Get.arguments;
+    weather_info = Get.arguments;
+
+    _getWeatherLatLon(
+      lat: weather_info['lat'],
+      lon: weather_info['lon'],
+    );
+
     temperatureUnit = _sessionManager.temperature;
     windUnit = _sessionManager.wind;
     pressureUnit = _sessionManager.pressure;
     precipitationUnit = _sessionManager.precipitataion;
     distanceUnit = _sessionManager.distance;
     timeUnit = _sessionManager.timeFormat;
+    favoriteLocation = _sessionManager.favoriteLocation;
   }
 
   @override
   void onReady() {
     super.onReady();
-    _getWeatherLatLon(
-      lat: geocoding?.lat ?? 0.0,
-      lon: geocoding?.lon ?? 0.0,
-    );
+    // weather.value = weather_info;
+
     _getFutureWeather(
-      lat: geocoding?.lat ?? 0.0,
-      lon: geocoding?.lon ?? 0.0,
+      lat: weather.value?.coord?.lat ?? 0.0,
+      lon: weather.value?.coord?.lon ?? 0.0,
     );
     _getAirPollution(
-      lat: geocoding?.lat ?? 0.0,
-      lon: geocoding?.lon ?? 0.0,
+      lat: weather.value?.coord?.lat ?? 0.0,
+      lon: weather.value?.coord?.lon ?? 0.0,
     );
   }
 
@@ -79,7 +85,27 @@ class ShowDetailController extends GetxController {
     super.onClose();
   }
 
-  void addFavorite() {}
+  void addFavorite() {
+    final List<Map<String, double>> waitLocation = favoriteLocation;
+    print(waitLocation);
+
+    waitLocation.add(
+      {
+        'lat': ((weather.value?.coord?.lat ?? 0.0)).toDouble(),
+        'lon': ((weather.value?.coord?.lon ?? 0.0)).toDouble(),
+      },
+    );
+    print(waitLocation);
+
+    _sessionManager.setYourLocation(waitLocation);
+
+    Future.delayed(
+      Duration.zero,
+      () {
+        Get.back();
+      },
+    );
+  }
 
   void _getWeatherLatLon({
     required double lat,

@@ -5,10 +5,14 @@ import 'package:weather_v2_pepe/app/core/api/weather_api.dart';
 import 'package:weather_v2_pepe/app/data/models/app_error_model.dart';
 import 'package:weather_v2_pepe/app/data/models/geocoding_model.dart';
 import 'package:weather_v2_pepe/app/data/models/weather_model.dart';
+import 'package:weather_v2_pepe/app/extensions/bool_extension.dart';
+import 'package:weather_v2_pepe/app/managers/session_manager.dart';
 import 'package:weather_v2_pepe/app/routes/app_pages.dart';
 import 'package:weather_v2_pepe/app/utils/show_alert.dart';
 
 class LocateLocationController extends GetxController {
+  final SessionManager _sessionManager = Get.find();
+
   final GeocodingAPI _geocodingAPI = Get.find();
   final WeatherAPI _weatherAPI = Get.find();
 
@@ -17,11 +21,34 @@ class LocateLocationController extends GetxController {
   final RxString searchCityText = ''.obs;
 
   late final Rxn<Weather> weather = Rxn();
+  late final List<Weather> allFavoriteLocations = [];
   late final RxList<Geocoding> geocoding = RxList();
+
+  late final RxList<Map<String, dynamic>> favoriteLocation;
+  late final RxInt timeUnit;
+  late final RxInt temperatureUnit;
+
+  final isLoadingGetWeather = false.obs;
+
+  RxBool get isLoading {
+    return [
+      isLoadingGetWeather.value,
+    ].atLeastOneTrue.obs;
+  }
 
   @override
   void onInit() {
     super.onInit();
+    temperatureUnit = _sessionManager.temperature;
+    timeUnit = _sessionManager.timeFormat;
+    favoriteLocation = _sessionManager.favoriteLocation;
+
+    for (int i = 0; i < favoriteLocation.length; i++) {
+      _getAllWeatherLatLon(
+        lat: favoriteLocation[i]['lat'],
+        lon: favoriteLocation[i]['lon'],
+      );
+    }
   }
 
   @override
@@ -48,18 +75,36 @@ class LocateLocationController extends GetxController {
     Get.toNamed(Routes.SETTING);
   }
 
-  void goShowDetail(Geocoding item) {
+  void goShowDetail(Map<String, dynamic> item) {
     Get.toNamed(
       Routes.SHOW_DETAIL,
       arguments: item,
     );
   }
 
-  void testPrint() {
-    print('Here');
+  void clearTextField() {
+    searchCityText.value = '';
   }
 
-  void _getWeatherLatLon({
+  void _getAllWeatherLatLon({
+    required double lat,
+    required double lon,
+  }) async {
+    try {
+      final result = await _weatherAPI.getWeatherLatLon(
+        lat: lat,
+        lon: lon,
+      );
+      allFavoriteLocations.add(result);
+    } catch (error) {
+      showAlert(
+        title: 'Error',
+        message: (error as AppError).message,
+      );
+    }
+  }
+
+  void getWeatherLatLon({
     required double lat,
     required double lon,
   }) async {

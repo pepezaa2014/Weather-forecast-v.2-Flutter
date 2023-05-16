@@ -33,10 +33,17 @@ class ShowDetailView extends GetView<ShowDetailController> {
   }
 
   _appbar() {
-    final currentWeather = controller.weather.value;
     return AppBar(
-      title: Text(
-        currentWeather?.name.toString() ?? '',
+      title: Column(
+        children: [
+          Obx(
+            () {
+              return Text(
+                controller.weather.value?.name.toString() ?? '',
+              );
+            },
+          ),
+        ],
       ),
       centerTitle: true,
       actions: [

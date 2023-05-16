@@ -2,6 +2,8 @@ import 'dart:ffi';
 
 import 'package:get/get.dart';
 import 'package:geolocator/geolocator.dart';
+import 'package:get_storage/get_storage.dart';
+import 'package:weather_v2_pepe/app/const/app_constant.dart';
 import 'package:weather_v2_pepe/app/core/api/air_pollution_api.dart';
 import 'package:weather_v2_pepe/app/core/api/future_weather_api.dart';
 
@@ -17,6 +19,8 @@ import 'package:weather_v2_pepe/app/routes/app_pages.dart';
 import 'package:weather_v2_pepe/app/utils/show_alert.dart';
 
 class HomeController extends GetxController {
+  late final GetStorage _getStorage;
+
   final SessionManager _sessionManager = Get.find();
 
   final WeatherAPI _weatherAPI = Get.find();
@@ -114,6 +118,16 @@ class HomeController extends GetxController {
       lat: location.latitude,
       lon: location.longitude,
     );
+
+    // if (_getStorage.read(AppConstant.favoriteLocation) == null) {
+    //   List<Map<String, double>> locationList = [
+    //     {
+    //       'lat': location.latitude,
+    //       'lon': location.longitude,
+    //     },
+    //   ];
+    //   _getStorage.write(AppConstant.favoriteLocation, locationList);
+    // }
   }
 
   void _getWeatherLatLon({

@@ -6,11 +6,9 @@ class ShowList extends StatelessWidget {
   const ShowList({
     super.key,
     required this.item,
-    required this.onTap,
   });
 
   final Geocoding? item;
-  final Function() onTap;
 
   @override
   Widget build(BuildContext context) {
