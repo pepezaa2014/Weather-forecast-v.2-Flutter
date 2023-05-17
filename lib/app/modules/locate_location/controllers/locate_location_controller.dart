@@ -1,5 +1,7 @@
 import 'package:flutter/cupertino.dart';
 import 'package:get/get.dart';
+import 'package:url_launcher/url_launcher.dart';
+import 'package:weather_v2_pepe/app/const/app_constant.dart';
 import 'package:weather_v2_pepe/app/core/api/geocoding_api.dart';
 import 'package:weather_v2_pepe/app/core/api/weather_api.dart';
 import 'package:weather_v2_pepe/app/data/models/app_error_model.dart';
@@ -12,6 +14,10 @@ import 'package:weather_v2_pepe/app/utils/show_alert.dart';
 
 class LocateLocationController extends GetxController {
   final SessionManager _sessionManager = Get.find();
+  late final Map<String, double?> yourLocationNow = {
+    'lat': _sessionManager.favoriteLocation[0]['lat'],
+    'lon': _sessionManager.favoriteLocation[0]['lon']
+  };
 
   final GeocodingAPI _geocodingAPI = Get.find();
   final WeatherAPI _weatherAPI = Get.find();
@@ -71,8 +77,17 @@ class LocateLocationController extends GetxController {
     super.onClose();
   }
 
+  void goOpenMap(Map<String, double?> item) {
+    Get.toNamed(
+      Routes.MAP,
+      arguments: item,
+    );
+  }
+
   void goSetting() {
-    Get.toNamed(Routes.SETTING);
+    Get.toNamed(
+      Routes.SETTING,
+    );
   }
 
   void deleteFavoriteIndex(int index) {

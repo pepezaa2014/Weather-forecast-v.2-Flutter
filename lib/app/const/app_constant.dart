@@ -14,4 +14,6 @@ class AppConstant {
   static const favoriteLocation = 'favoriteLocation';
 
   static const setting = 'setting';
+
+  static const mapAPI = 'AIzaSyCtE2nxnG_y86GS_KZezYrlcDNq9FAfQt8';
 }

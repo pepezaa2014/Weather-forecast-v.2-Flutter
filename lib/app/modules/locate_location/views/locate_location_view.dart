@@ -58,27 +58,43 @@ class LocateLocationView extends GetView<LocateLocationController> {
           children: [
             Padding(
               padding: const EdgeInsets.all(16),
-              child: TextField(
-                cursorColor: AppColors.primaryNight,
-                controller: controller.searchTextCityController,
-                style: const TextStyle(
-                  color: AppColors.primaryNight,
-                ),
-                decoration: InputDecoration(
-                  filled: true,
-                  fillColor: AppColors.secondaryBox,
-                  prefixIcon: const Icon(Icons.search),
-                  contentPadding: const EdgeInsets.symmetric(
-                    horizontal: 16,
-                    vertical: 12,
+              child: Row(
+                children: [
+                  IconButton(
+                    icon: const Icon(
+                      Icons.map,
+                      size: 24,
+                    ),
+                    onPressed: () {
+                      controller.goOpenMap(controller.yourLocationNow);
+                    },
                   ),
-                  border: OutlineInputBorder(
-                    borderRadius: BorderRadius.circular(8),
-                    borderSide: const BorderSide(
-                      color: AppColors.primaryNight,
+                  SizedBox(
+                    width: 300,
+                    child: TextField(
+                      cursorColor: AppColors.primaryNight,
+                      controller: controller.searchTextCityController,
+                      style: const TextStyle(
+                        color: AppColors.primaryNight,
+                      ),
+                      decoration: InputDecoration(
+                        filled: true,
+                        fillColor: AppColors.secondaryBox,
+                        prefixIcon: const Icon(Icons.search),
+                        contentPadding: const EdgeInsets.symmetric(
+                          horizontal: 16,
+                          vertical: 12,
+                        ),
+                        border: OutlineInputBorder(
+                          borderRadius: BorderRadius.circular(8),
+                          borderSide: const BorderSide(
+                            color: AppColors.primaryNight,
+                          ),
+                        ),
+                      ),
                     ),
                   ),
-                ),
+                ],
               ),
             ),
             Obx(

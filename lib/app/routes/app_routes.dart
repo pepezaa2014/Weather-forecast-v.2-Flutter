@@ -8,6 +8,7 @@ abstract class Routes {
   static const SETTING = _Paths.SETTING;
   static const SPLASH = _Paths.SPLASH;
   static const SHOW_DETAIL = _Paths.SHOW_DETAIL;
+  static const MAP = _Paths.MAP;
 }
 
 abstract class _Paths {
@@ -17,4 +18,5 @@ abstract class _Paths {
   static const SETTING = '/setting';
   static const SPLASH = '/splash';
   static const SHOW_DETAIL = '/show-detail';
+  static const MAP = '/map';
 }

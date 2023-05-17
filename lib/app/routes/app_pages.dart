@@ -4,6 +4,8 @@ import '../modules/home/bindings/home_binding.dart';
 import '../modules/home/views/home_view.dart';
 import '../modules/locate_location/bindings/locate_location_binding.dart';
 import '../modules/locate_location/views/locate_location_view.dart';
+import '../modules/map/bindings/map_binding.dart';
+import '../modules/map/views/map_view.dart';
 import '../modules/setting/bindings/setting_binding.dart';
 import '../modules/setting/views/setting_view.dart';
 import '../modules/show_detail/bindings/show_detail_binding.dart';
@@ -47,6 +49,12 @@ class AppPages {
       name: _Paths.SHOW_DETAIL,
       page: () => const ShowDetailView(),
       binding: ShowDetailBinding(),
+      transition: Transition.cupertino,
+    ),
+    GetPage(
+      name: _Paths.MAP,
+      page: () => const MapView(),
+      binding: MapBinding(),
       transition: Transition.cupertino,
     ),
   ];
