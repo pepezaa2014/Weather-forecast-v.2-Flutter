@@ -80,7 +80,7 @@ class SettingView extends GetView<SettingController> {
                                 ),
                               ),
                             },
-                            groupValue: controller.temperatureUnit.value,
+                            groupValue: controller.setting?.temperature,
                             onValueChanged: (value) {
                               controller.changeSettingTemp(value as int);
                             },
@@ -365,78 +365,4 @@ class SettingView extends GetView<SettingController> {
       ),
     );
   }
-
-  // _settingBox({
-  //   required String head,
-  //   String? firstItem,
-  //   String? secondItem,
-  //   String? thridItem,
-  // }) {
-  //   int countItem = 0;
-  //   if (firstItem != null) {
-  //     countItem++;
-  //   }
-  //   if (secondItem != null) {
-  //     countItem++;
-  //   }
-  //   if (thridItem != null) {
-  //     countItem++;
-  //   }
-  //   return Row(
-  //     children: [
-  //       Expanded(
-  //         flex: 1,
-  //         child: Padding(
-  //           padding: EdgeInsets.all(8),
-  //           child: Text(
-  //             head,
-  //             style: const TextStyle(
-  //               fontSize: 16,
-  //               color: AppColors.primaryNight,
-  //             ),
-  //           ),
-  //         ),
-  //       ),
-  //       Expanded(
-  //         flex: 2,
-  //         child: Padding(
-  //           padding: const EdgeInsets.all(8),
-  //           child: Obx(
-  //             () {
-  //               return CupertinoSlidingSegmentedControl(
-  //                 children: const {
-  //                   0: Text(
-  //                     'Option 1',
-  //                     style: TextStyle(
-  //                       fontSize: 16,
-  //                       color: AppColors.fourthNight,
-  //                     ),
-  //                   ),
-  //                   1: Text(
-  //                     'Option 2',
-  //                     style: TextStyle(
-  //                       fontSize: 16,
-  //                       color: AppColors.fourthNight,
-  //                     ),
-  //                   ),
-  //                   2: Text(
-  //                     'Option 3',
-  //                     style: TextStyle(
-  //                       fontSize: 16,
-  //                       color: AppColors.fourthNight,
-  //                     ),
-  //                   ),
-  //                 },
-  //                 groupValue: controller.currentSelection.value,
-  //                 onValueChanged: (value) {
-  //                   controller.currentSelection.value = value as int;
-  //                 },
-  //               );
-  //             },
-  //           ),
-  //         ),
-  //       ),
-  //     ],
-  //   );
-  // }
 }

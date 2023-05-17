@@ -12,4 +12,6 @@ class AppConstant {
   static const distance = 'distance';
   static const timeFormat = 'timeFormat';
   static const favoriteLocation = 'favoriteLocation';
+
+  static const setting = 'setting';
 }

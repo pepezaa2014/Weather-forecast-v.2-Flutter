@@ -26,7 +26,8 @@ class HomeView extends GetView<HomeController> {
           body: _body(),
         ),
         Obx(
-          () => loadingIndicator(controller.isLoading.value),
+          () =>
+              LoadingIndicator(isLoading: controller.isLoadingGetWeather.value),
         ),
       ],
     );

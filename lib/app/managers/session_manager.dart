@@ -13,32 +13,25 @@ class SessionManager {
   final RxInt precipitataion = 0.obs;
   final RxInt distance = 0.obs;
   final RxInt timeFormat = 0.obs;
+
   final RxList<Map<String, double>> favoriteLocation = RxList();
+  final RxList<Map<String, int>> setting = RxList();
 
   void loadSession() {
-    if (_getStorage.read(AppConstant.temperature) == null) {
-      _getStorage.write(AppConstant.temperature, 0);
+    if (_getStorage.read(AppConstant.setting) == null) {
+      _getStorage.write(
+        AppConstant.setting,
+        {
+          {'temperature': 0},
+          {'windSpeed': 0},
+          {'pressure': 0},
+          {'precipitataion': 0},
+          {'distance': 0},
+          {'timeFormat': 0},
+        },
+      );
     }
-
-    if (_getStorage.read(AppConstant.wind) == null) {
-      _getStorage.write(AppConstant.wind, 0);
-    }
-
-    if (_getStorage.read(AppConstant.pressure) == null) {
-      _getStorage.write(AppConstant.pressure, 0);
-    }
-
-    if (_getStorage.read(AppConstant.precipitataion) == null) {
-      _getStorage.write(AppConstant.precipitataion, 0);
-    }
-
-    if (_getStorage.read(AppConstant.distance) == null) {
-      _getStorage.write(AppConstant.distance, 0);
-    }
-
-    if (_getStorage.read(AppConstant.timeFormat) == null) {
-      _getStorage.write(AppConstant.timeFormat, 0);
-    }
+    setting.value = _getStorage.read(AppConstant.setting);
 
     temperature.value = _getStorage.read(AppConstant.temperature);
     wind.value = _getStorage.read(AppConstant.wind);
@@ -60,7 +53,6 @@ class SessionManager {
       );
     }
     favoriteLocation.value = _getStorage.read(AppConstant.favoriteLocation);
-    print(favoriteLocation);
   }
 
   void setChangeTemperature(int index) {
@@ -96,5 +88,9 @@ class SessionManager {
   void setYourLocation(List<Map<String, double>> item) {
     _getStorage.remove(AppConstant.favoriteLocation);
     _getStorage.write(AppConstant.favoriteLocation, item);
+  }
+
+  void setSetting(Set<Map<String, int>> item) {
+    _getStorage.write(AppConstant.setting, item);
   }
 }

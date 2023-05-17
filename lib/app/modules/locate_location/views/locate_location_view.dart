@@ -25,7 +25,8 @@ class LocateLocationView extends GetView<LocateLocationController> {
           ),
         ),
         Obx(
-          () => loadingIndicator(controller.isLoadingGetWeather.value),
+          () =>
+              LoadingIndicator(isLoading: controller.isLoadingGetWeather.value),
         ),
       ],
     );
