@@ -80,7 +80,7 @@ class SettingView extends GetView<SettingController> {
                                 ),
                               ),
                             },
-                            groupValue: controller.setting?.temperature,
+                            groupValue: controller.temperatureUnit.value,
                             onValueChanged: (value) {
                               controller.changeSettingTemp(value as int);
                             },

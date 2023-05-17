@@ -52,60 +52,66 @@ class HomeView extends GetView<HomeController> {
   }
 
   _body() {
-    return RefreshIndicator(
-      onRefresh: controller.refresh,
-      child: Container(
-        color: AppColors.backgroundColor,
-        height: double.infinity,
-        child: Obx(
-          () {
-            final currentWeather = controller.weather.value;
-            final futureWeather = controller.futureWeather.value;
-            final airPollution = controller.airPollution.value;
-            if (controller.airPollution.value == null ||
-                controller.futureWeather.value == null ||
-                controller.weather.value == null) {
-              return Container(
-                color: AppColors.backgroundColor,
-              );
-            } else {
-              return SingleChildScrollView(
-                physics: const ClampingScrollPhysics(),
-                child: Column(
-                  children: [
-                    TopView(
-                      weather_info: currentWeather,
-                      location_now: 'Current Location',
-                      unit: Temperature.values.firstWhereOrNull((e) =>
-                          e.keyValue == controller.temperatureUnit.value),
+    return PageView.builder(
+      itemCount: controller.favoriteLocation.length,
+      itemBuilder: (context, index) {
+        return RefreshIndicator(
+          onRefresh: controller.refresh,
+          child: Container(
+            color: AppColors.backgroundColor,
+            height: double.infinity,
+            child: Obx(
+              () {
+                final currentWeather = controller.weather.value;
+                final futureWeather = controller.futureWeather.value;
+                final airPollution = controller.airPollution.value;
+                if (controller.airPollution.value == null ||
+                    controller.futureWeather.value == null ||
+                    controller.weather.value == null) {
+                  return Container(
+                    color: AppColors.backgroundColor,
+                  );
+                } else {
+                  return SingleChildScrollView(
+                    physics: const ClampingScrollPhysics(),
+                    child: Column(
+                      children: [
+                        TopView(
+                          weather_info: currentWeather,
+                          location_now: 'Current Location',
+                          unit: Temperature.values.firstWhereOrNull((e) =>
+                              e.keyValue == controller.temperatureUnit.value),
+                        ),
+                        FutureWeatherWidget(
+                          futureWeather: futureWeather,
+                          timeUnit: Time.values.firstWhereOrNull(
+                              (e) => e.keyValue == controller.timeUnit.value),
+                        ),
+                        Details(
+                          weather_info: currentWeather,
+                          pollution_info: airPollution,
+                          timeUnit: Time.values.firstWhereOrNull(
+                              (e) => e.keyValue == controller.timeUnit.value),
+                          windUnit: WindSpeed.values.firstWhereOrNull(
+                              (e) => e.keyValue == controller.windUnit.value),
+                          distanceUnit: Distance.values.firstWhereOrNull((e) =>
+                              e.keyValue == controller.distanceUnit.value),
+                          pressureUnit: Pressure.values.firstWhereOrNull((e) =>
+                              e.keyValue == controller.pressureUnit.value),
+                          precipitationUnit: Precipitation.values
+                              .firstWhereOrNull((e) =>
+                                  e.keyValue ==
+                                  controller.precipitationUnit.value),
+                        ),
+                      ],
                     ),
-                    FutureWeatherWidget(
-                      futureWeather: futureWeather,
-                      timeUnit: Time.values.firstWhereOrNull(
-                          (e) => e.keyValue == controller.timeUnit.value),
-                    ),
-                    Details(
-                      weather_info: currentWeather,
-                      pollution_info: airPollution,
-                      timeUnit: Time.values.firstWhereOrNull(
-                          (e) => e.keyValue == controller.timeUnit.value),
-                      windUnit: WindSpeed.values.firstWhereOrNull(
-                          (e) => e.keyValue == controller.windUnit.value),
-                      distanceUnit: Distance.values.firstWhereOrNull(
-                          (e) => e.keyValue == controller.distanceUnit.value),
-                      pressureUnit: Pressure.values.firstWhereOrNull(
-                          (e) => e.keyValue == controller.pressureUnit.value),
-                      precipitationUnit: Precipitation.values.firstWhereOrNull(
-                          (e) =>
-                              e.keyValue == controller.precipitationUnit.value),
-                    ),
-                  ],
-                ),
-              );
-            }
-          },
-        ),
-      ),
+                  );
+                }
+              },
+            ),
+          ),
+        );
+      },
     );
   }
 }

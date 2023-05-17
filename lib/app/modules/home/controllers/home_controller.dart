@@ -37,6 +37,7 @@ class HomeController extends GetxController {
   late final RxInt precipitationUnit;
   late final RxInt distanceUnit;
   late final RxInt timeUnit;
+  late final RxList<Map<String, dynamic>> favoriteLocation;
 
   final isLoadingGetWeather = false.obs;
 
@@ -55,6 +56,7 @@ class HomeController extends GetxController {
     precipitationUnit = _sessionManager.precipitataion;
     distanceUnit = _sessionManager.distance;
     timeUnit = _sessionManager.timeFormat;
+    favoriteLocation = _sessionManager.favoriteLocation;
   }
 
   @override
@@ -119,15 +121,17 @@ class HomeController extends GetxController {
       lon: location.longitude,
     );
 
-    // if (_getStorage.read(AppConstant.favoriteLocation) == null) {
-    //   List<Map<String, double>> locationList = [
-    //     {
-    //       'lat': location.latitude,
-    //       'lon': location.longitude,
-    //     },
-    //   ];
-    //   _getStorage.write(AppConstant.favoriteLocation, locationList);
-    // }
+    if (_sessionManager.favoriteLocation != null) {
+      if (_sessionManager.favoriteLocation[0]['lat'] == 0 &&
+          _sessionManager.favoriteLocation[0]['lon'] == 0) {
+        final waitToReplace = _sessionManager.favoriteLocation.value;
+        waitToReplace[0] = {
+          'lat': location.latitude,
+          'lon': location.longitude,
+        };
+        _sessionManager.setYourLocation(waitToReplace);
+      }
+    }
   }
 
   void _getWeatherLatLon({
