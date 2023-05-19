@@ -86,7 +86,7 @@ class ShowDetailController extends GetxController {
   }
 
   void addFavorite() {
-    final List<Map<String, double>> waitLocation = favoriteLocation;
+    final RxList<Map<String, double>> waitLocation = favoriteLocation;
     print(waitLocation);
 
     waitLocation.add(

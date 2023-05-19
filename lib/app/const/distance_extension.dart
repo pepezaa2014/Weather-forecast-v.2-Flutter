@@ -3,7 +3,7 @@ enum Distance {
   mi,
 }
 
-extension PrecipitationExtension on Distance {
+extension DistanceExtension on Distance {
   int get keyValue {
     switch (this) {
       case Distance.km:

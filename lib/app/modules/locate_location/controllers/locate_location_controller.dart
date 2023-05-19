@@ -1,7 +1,7 @@
+import 'dart:convert';
+
 import 'package:flutter/cupertino.dart';
 import 'package:get/get.dart';
-import 'package:url_launcher/url_launcher.dart';
-import 'package:weather_v2_pepe/app/const/app_constant.dart';
 import 'package:weather_v2_pepe/app/core/api/geocoding_api.dart';
 import 'package:weather_v2_pepe/app/core/api/weather_api.dart';
 import 'package:weather_v2_pepe/app/data/models/app_error_model.dart';
@@ -14,10 +14,7 @@ import 'package:weather_v2_pepe/app/utils/show_alert.dart';
 
 class LocateLocationController extends GetxController {
   final SessionManager _sessionManager = Get.find();
-  late final Map<String, double?> yourLocationNow = {
-    'lat': _sessionManager.favoriteLocation[0]['lat'],
-    'lon': _sessionManager.favoriteLocation[0]['lon']
-  };
+  late final Map<String, double?> yourLocationNow;
 
   final GeocodingAPI _geocodingAPI = Get.find();
   final WeatherAPI _weatherAPI = Get.find();
@@ -27,14 +24,16 @@ class LocateLocationController extends GetxController {
   final RxString searchCityText = ''.obs;
 
   late final Rxn<Weather> weather = Rxn();
-  late final RxList<Weather> allFavoriteLocations = RxList();
+  final RxList<Weather> allFavoriteLocations = RxList();
   late final RxList<Geocoding> geocoding = RxList();
 
   late final RxList<Map<String, dynamic>> favoriteLocation;
+  final RxBool checkedfavoriteNotNull = false.obs;
   late final RxInt timeUnit;
   late final RxInt temperatureUnit;
 
   final isLoadingGetWeather = false.obs;
+  late final decodedSetting;
 
   RxBool get isLoading {
     return [
@@ -47,14 +46,8 @@ class LocateLocationController extends GetxController {
     super.onInit();
     temperatureUnit = _sessionManager.temperature;
     timeUnit = _sessionManager.timeFormat;
-    favoriteLocation = _sessionManager.favoriteLocation;
 
-    for (int i = 0; i < favoriteLocation.length; i++) {
-      _getAllWeatherLatLon(
-        lat: favoriteLocation[i]['lat'],
-        lon: favoriteLocation[i]['lon'],
-      );
-    }
+    favoriteLocation = _sessionManager.favoriteLocation;
   }
 
   @override
@@ -88,6 +81,20 @@ class LocateLocationController extends GetxController {
     Get.toNamed(
       Routes.SETTING,
     );
+  }
+
+  void putDataInList() {
+    yourLocationNow = {
+      'lat': favoriteLocation.isNotEmpty ? favoriteLocation[0]['lat'] : null,
+      'lon': favoriteLocation.isNotEmpty ? favoriteLocation[0]['lon'] : null,
+    };
+
+    for (int i = 0; i < favoriteLocation.length; i++) {
+      _getAllWeatherLatLon(
+        lat: favoriteLocation[i]['lat'],
+        lon: favoriteLocation[i]['lon'],
+      );
+    }
   }
 
   void deleteFavoriteIndex(int index) {

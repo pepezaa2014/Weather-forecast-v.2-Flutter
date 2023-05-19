@@ -55,7 +55,7 @@ class MapView extends GetView<MapController> {
                   controller.goShowDetail(controller.convertLatLon());
                 },
                 style: TextButton.styleFrom(
-                  padding: EdgeInsets.symmetric(vertical: 16),
+                  padding: const EdgeInsets.symmetric(vertical: 16),
                   backgroundColor: Colors.blue,
                 ),
                 child: const Text(

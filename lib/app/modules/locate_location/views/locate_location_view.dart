@@ -15,6 +15,8 @@ class LocateLocationView extends GetView<LocateLocationController> {
   const LocateLocationView({Key? key}) : super(key: key);
   @override
   Widget build(BuildContext context) {
+    controller.putDataInList();
+
     return Stack(
       children: [
         GestureDetector(
@@ -50,56 +52,56 @@ class LocateLocationView extends GetView<LocateLocationController> {
   _body() {
     final thisGeocoding = controller.geocoding;
 
-    return Container(
-      color: AppColors.backgroundColor,
-      height: double.infinity,
-      child: SingleChildScrollView(
-        child: Column(
-          children: [
-            Padding(
-              padding: const EdgeInsets.all(16),
-              child: Row(
-                children: [
-                  IconButton(
-                    icon: const Icon(
-                      Icons.map,
-                      size: 24,
-                    ),
-                    onPressed: () {
-                      controller.goOpenMap(controller.yourLocationNow);
-                    },
-                  ),
-                  SizedBox(
-                    width: 300,
-                    child: TextField(
-                      cursorColor: AppColors.primaryNight,
-                      controller: controller.searchTextCityController,
-                      style: const TextStyle(
-                        color: AppColors.primaryNight,
-                      ),
-                      decoration: InputDecoration(
-                        filled: true,
-                        fillColor: AppColors.secondaryBox,
-                        prefixIcon: const Icon(Icons.search),
-                        contentPadding: const EdgeInsets.symmetric(
-                          horizontal: 16,
-                          vertical: 12,
+    return Obx(
+      () {
+        return Container(
+          color: AppColors.backgroundColor,
+          height: double.infinity,
+          child: SingleChildScrollView(
+            child: Column(
+              children: [
+                Padding(
+                  padding: const EdgeInsets.all(16),
+                  child: Row(
+                    children: [
+                      IconButton(
+                        icon: const Icon(
+                          Icons.map,
+                          size: 24,
                         ),
-                        border: OutlineInputBorder(
-                          borderRadius: BorderRadius.circular(8),
-                          borderSide: const BorderSide(
+                        onPressed: () {
+                          controller.goOpenMap(controller.yourLocationNow);
+                        },
+                      ),
+                      SizedBox(
+                        width: 300,
+                        child: TextField(
+                          cursorColor: AppColors.primaryNight,
+                          controller: controller.searchTextCityController,
+                          style: const TextStyle(
                             color: AppColors.primaryNight,
+                          ),
+                          decoration: InputDecoration(
+                            filled: true,
+                            fillColor: AppColors.secondaryBox,
+                            prefixIcon: const Icon(Icons.search),
+                            contentPadding: const EdgeInsets.symmetric(
+                              horizontal: 16,
+                              vertical: 12,
+                            ),
+                            border: OutlineInputBorder(
+                              borderRadius: BorderRadius.circular(8),
+                              borderSide: const BorderSide(
+                                color: AppColors.primaryNight,
+                              ),
+                            ),
                           ),
                         ),
                       ),
-                    ),
+                    ],
                   ),
-                ],
-              ),
-            ),
-            Obx(
-              () {
-                return Padding(
+                ),
+                Padding(
                   padding: const EdgeInsets.all(16),
                   child: controller.searchCityText != ''
                       ? SizedBox(
@@ -130,12 +132,13 @@ class LocateLocationView extends GetView<LocateLocationController> {
                       : SizedBox(
                           width: double.infinity,
                           height: 600,
-                          child: controller.allFavoriteLocations.length != 0
+                          child: controller.allFavoriteLocations.isNotEmpty
                               ? ListView.builder(
-                                  itemCount: controller.favoriteLocation.length,
+                                  itemCount:
+                                      controller.favoriteLocation.value.length,
                                   itemBuilder: (context, index) {
-                                    final thisItemIndex =
-                                        controller.favoriteLocation[index];
+                                    final thisItemIndex = controller
+                                        .favoriteLocation.value[index];
 
                                     Map<String, dynamic> thisWeatherItem = {
                                       'lat': thisItemIndex['lat'],
@@ -165,12 +168,12 @@ class LocateLocationView extends GetView<LocateLocationController> {
                                 )
                               : const SizedBox(),
                         ),
-                );
-              },
+                ),
+              ],
             ),
-          ],
-        ),
-      ),
+          ),
+        );
+      },
     );
   }
 }

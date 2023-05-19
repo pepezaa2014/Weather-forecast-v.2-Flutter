@@ -50,9 +50,19 @@ class Coord {
   double? lon;
   double? lat;
 
+  Coord(this.lat, this.lon);
+
   Coord.fromJson(Map<String, dynamic> json) {
     lon = (json['lon'] as num?)?.toDouble();
     lat = (json['lat'] as num?)?.toDouble();
+  }
+
+  Map<String, dynamic> toJson() {
+    final data = <String, dynamic>{};
+    data['lon'] = lon;
+    data['lat'] = lat;
+
+    return data;
   }
 }
 

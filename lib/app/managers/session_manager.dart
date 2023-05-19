@@ -1,6 +1,16 @@
+import 'dart:convert';
+
 import 'package:get/get.dart';
 import 'package:get_storage/get_storage.dart';
 import 'package:weather_v2_pepe/app/const/app_constant.dart';
+import 'package:weather_v2_pepe/app/const/distance_extension.dart';
+import 'package:weather_v2_pepe/app/const/precipitation_extension.dart';
+import 'package:weather_v2_pepe/app/const/pressure_extension.dart';
+import 'package:weather_v2_pepe/app/const/temperature_extension.dart';
+import 'package:weather_v2_pepe/app/const/time_extension.dart';
+import 'package:weather_v2_pepe/app/const/wind_speed_extension.dart';
+import 'package:weather_v2_pepe/app/data/models/setting_model.dart';
+import 'package:weather_v2_pepe/app/data/models/weather_model.dart';
 
 class SessionManager {
   late final GetStorage _getStorage;
@@ -15,9 +25,40 @@ class SessionManager {
   final RxInt timeFormat = 0.obs;
 
   final RxList<Map<String, double>> favoriteLocation = RxList();
-  // late final Map<String, int> setting;
+  late final setting;
+  final Rxn<Setting?> decoded = Rxn();
 
   void loadSession() {
+    _getStorage.remove(AppConstant.setting);
+    if (_getStorage.read(AppConstant.setting) == null) {
+      final a = Setting.fromJson(
+        {
+          'temperature': 0,
+          'windSpeed': 0,
+          'pressure': 0,
+          'precipitation': 0,
+          'distance': 0,
+          'timeFormat': 0,
+        },
+      );
+
+      final aEncoded = json.encode(a.toJson());
+      _getStorage.write(AppConstant.setting, aEncoded);
+    }
+
+    setting = _getStorage.read(AppConstant.setting);
+    //
+    print('Down here 1\n=============');
+    print(setting);
+    print('Down here 2\n=============');
+    print(Setting.fromJson(jsonDecode(setting)));
+    // print(decoded.value);
+    decoded.value = Setting.fromJson(jsonDecode(setting));
+    print(decoded.value?.distance);
+    //
+    print('Down here 3');
+    print(decoded);
+
     if (_getStorage.read(AppConstant.temperature) == null) {
       _getStorage.write(AppConstant.temperature, 0);
     }
@@ -80,8 +121,20 @@ class SessionManager {
   }
 
   void setChangeTemperature(int index) {
-    temperature.value = index;
-    _getStorage.write(AppConstant.temperature, index);
+    decoded.value?.temperature = index;
+    print('=================');
+    print(decoded.value?.temperature);
+    final dataEncoded = json.encode(decoded);
+    print('=========Before========');
+    print(_getStorage.read(AppConstant.setting));
+    _getStorage.write(AppConstant.setting, dataEncoded);
+    print('=========After=========');
+    print(_getStorage.read(AppConstant.setting));
+  }
+
+  void printText() {
+    print('This is in Session Manager');
+    print(decoded.value?.temperature ?? 0);
   }
 
   void setChangeWind(int index) {
@@ -109,7 +162,7 @@ class SessionManager {
     _getStorage.write(AppConstant.timeFormat, index);
   }
 
-  void setYourLocation(List<Map<String, double>> item) {
+  void setYourLocation(RxList<Map<String, double>> item) {
     _getStorage.remove(AppConstant.favoriteLocation);
     _getStorage.write(AppConstant.favoriteLocation, item);
   }

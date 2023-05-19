@@ -1,9 +1,5 @@
-import 'dart:ffi';
-
 import 'package:get/get.dart';
 import 'package:geolocator/geolocator.dart';
-import 'package:get_storage/get_storage.dart';
-import 'package:weather_v2_pepe/app/const/app_constant.dart';
 import 'package:weather_v2_pepe/app/core/api/air_pollution_api.dart';
 import 'package:weather_v2_pepe/app/core/api/future_weather_api.dart';
 
@@ -11,6 +7,7 @@ import 'package:weather_v2_pepe/app/core/api/weather_api.dart';
 import 'package:weather_v2_pepe/app/data/models/air_pollution_model.dart';
 import 'package:weather_v2_pepe/app/data/models/app_error_model.dart';
 import 'package:weather_v2_pepe/app/data/models/future_weather_model.dart';
+import 'package:weather_v2_pepe/app/data/models/setting_model.dart';
 import 'package:weather_v2_pepe/app/data/models/weather_model.dart';
 
 import 'package:weather_v2_pepe/app/extensions/bool_extension.dart';
@@ -19,8 +16,6 @@ import 'package:weather_v2_pepe/app/routes/app_pages.dart';
 import 'package:weather_v2_pepe/app/utils/show_alert.dart';
 
 class HomeController extends GetxController {
-  late final GetStorage _getStorage;
-
   final SessionManager _sessionManager = Get.find();
 
   final WeatherAPI _weatherAPI = Get.find();
@@ -31,12 +26,14 @@ class HomeController extends GetxController {
   late final Rxn<FutureWeather> futureWeather = Rxn();
   late final Rxn<AirPollution> airPollution = Rxn();
 
-  late final RxInt temperatureUnit;
-  late final RxInt windUnit;
-  late final RxInt pressureUnit;
-  late final RxInt precipitationUnit;
-  late final RxInt distanceUnit;
-  late final RxInt timeUnit;
+  final RxInt temperatureUnit = 0.obs;
+  final RxInt windUnit = 0.obs;
+  final RxInt pressureUnit = 0.obs;
+  final RxInt precipitationUnit = 0.obs;
+  final RxInt distanceUnit = 0.obs;
+  final RxInt timeUnit = 0.obs;
+  final Rxn<Setting?> dataSetting = Rxn();
+
   late final RxList<Map<String, dynamic>> favoriteLocation;
 
   final isLoadingGetWeather = false.obs;
@@ -50,13 +47,23 @@ class HomeController extends GetxController {
   @override
   void onInit() {
     super.onInit();
-    temperatureUnit = _sessionManager.temperature;
-    windUnit = _sessionManager.wind;
-    pressureUnit = _sessionManager.pressure;
-    precipitationUnit = _sessionManager.precipitataion;
-    distanceUnit = _sessionManager.distance;
-    timeUnit = _sessionManager.timeFormat;
+    dataSetting.value = _sessionManager.decoded.value;
+    // print('Start Now');
+    // print('=================================');
+    // _sessionManager.printText();
+    // print('This is controller');
+    // print('=================================');
+    // print(dataSetting.value);
+    // print(dataSetting.value?.temperature);
+
+    temperatureUnit.value = dataSetting.value?.temperature ?? 0;
+    windUnit.value = dataSetting.value?.windSpeed ?? 0;
+    pressureUnit.value = dataSetting.value?.pressure ?? 0;
+    precipitationUnit.value = dataSetting.value?.precipitation ?? 0;
+    distanceUnit.value = dataSetting.value?.distance ?? 0;
+    timeUnit.value = dataSetting.value?.timeFormat ?? 0;
     favoriteLocation = _sessionManager.favoriteLocation;
+    print(_sessionManager.favoriteLocation);
   }
 
   @override
@@ -121,16 +128,14 @@ class HomeController extends GetxController {
       lon: location.longitude,
     );
 
-    if (_sessionManager.favoriteLocation != null) {
-      if (_sessionManager.favoriteLocation[0]['lat'] == 0 &&
-          _sessionManager.favoriteLocation[0]['lon'] == 0) {
-        final waitToReplace = _sessionManager.favoriteLocation.value;
-        waitToReplace[0] = {
-          'lat': location.latitude,
-          'lon': location.longitude,
-        };
-        _sessionManager.setYourLocation(waitToReplace);
-      }
+    if (_sessionManager.favoriteLocation[0]['lat'] == 0 &&
+        _sessionManager.favoriteLocation[0]['lon'] == 0) {
+      final waitToReplace = _sessionManager.favoriteLocation;
+      waitToReplace[0] = {
+        'lat': location.latitude,
+        'lon': location.longitude,
+      };
+      _sessionManager.setYourLocation(waitToReplace);
     }
   }
 

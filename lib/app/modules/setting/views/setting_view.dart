@@ -1,3 +1,5 @@
+import 'dart:ffi';
+
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
@@ -37,6 +39,7 @@ class SettingView extends GetView<SettingController> {
             children: [
               Row(
                 children: [
+                  // Text(controller.setting?.dista),
                   const Expanded(
                     flex: 1,
                     child: Padding(
