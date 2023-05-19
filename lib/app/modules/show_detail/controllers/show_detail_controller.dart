@@ -1,12 +1,18 @@
 import 'package:get/get.dart';
 import 'package:intl/intl.dart';
+import 'package:weather_v2_pepe/app/const/distance_extension.dart';
+import 'package:weather_v2_pepe/app/const/precipitation_extension.dart';
+import 'package:weather_v2_pepe/app/const/pressure_extension.dart';
+import 'package:weather_v2_pepe/app/const/temperature_extension.dart';
+import 'package:weather_v2_pepe/app/const/time_extension.dart';
+import 'package:weather_v2_pepe/app/const/wind_speed_extension.dart';
 import 'package:weather_v2_pepe/app/core/api/air_pollution_api.dart';
 import 'package:weather_v2_pepe/app/core/api/future_weather_api.dart';
 import 'package:weather_v2_pepe/app/core/api/weather_api.dart';
 import 'package:weather_v2_pepe/app/data/models/air_pollution_model.dart';
 import 'package:weather_v2_pepe/app/data/models/app_error_model.dart';
 import 'package:weather_v2_pepe/app/data/models/future_weather_model.dart';
-import 'package:weather_v2_pepe/app/data/models/geocoding_model.dart';
+import 'package:weather_v2_pepe/app/data/models/setting_model.dart';
 import 'package:weather_v2_pepe/app/data/models/weather_model.dart';
 import 'package:weather_v2_pepe/app/extensions/bool_extension.dart';
 import 'package:weather_v2_pepe/app/managers/session_manager.dart';
@@ -38,12 +44,14 @@ class ShowDetailController extends GetxController {
     ].atLeastOneTrue.obs;
   }
 
-  late final RxInt temperatureUnit;
-  late final RxInt windUnit;
-  late final RxInt pressureUnit;
-  late final RxInt precipitationUnit;
-  late final RxInt distanceUnit;
-  late final RxInt timeUnit;
+  final Rx<Temperature?> temperatureUnit = Temperature.celcius.obs;
+  final Rx<WindSpeed?> windUnit = WindSpeed.mph.obs;
+  final Rx<Pressure?> pressureUnit = Pressure.hpa.obs;
+  final Rx<Precipitation?> precipitationUnit = Precipitation.mm.obs;
+  final Rx<Distance?> distanceUnit = Distance.km.obs;
+  final Rx<Time?> timeUnit = Time.h24.obs;
+  final Rxn<Setting?> dataSetting = Rxn();
+
   late final RxList<Map<String, double>> favoriteLocation;
 
   @override
@@ -56,12 +64,13 @@ class ShowDetailController extends GetxController {
       lon: weather_info['lon'],
     );
 
-    temperatureUnit = _sessionManager.temperature;
-    windUnit = _sessionManager.wind;
-    pressureUnit = _sessionManager.pressure;
-    precipitationUnit = _sessionManager.precipitataion;
-    distanceUnit = _sessionManager.distance;
-    timeUnit = _sessionManager.timeFormat;
+    temperatureUnit.value = dataSetting.value?.temperatureData;
+    windUnit.value = dataSetting.value?.windSpeedData;
+    pressureUnit.value = dataSetting.value?.pressureData;
+    precipitationUnit.value = dataSetting.value?.precipitationData;
+    distanceUnit.value = dataSetting.value?.distanceData;
+    timeUnit.value = dataSetting.value?.timeData;
+
     favoriteLocation = _sessionManager.favoriteLocation;
   }
 

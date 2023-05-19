@@ -29,8 +29,8 @@ class LocateLocationController extends GetxController {
 
   late final RxList<Map<String, dynamic>> favoriteLocation;
   final RxBool checkedfavoriteNotNull = false.obs;
-  late final RxInt timeUnit;
-  late final RxInt temperatureUnit;
+  final RxInt timeUnit = 0.obs;
+  final RxInt temperatureUnit = 0.obs;
 
   final isLoadingGetWeather = false.obs;
   late final decodedSetting;
@@ -44,8 +44,8 @@ class LocateLocationController extends GetxController {
   @override
   void onInit() {
     super.onInit();
-    temperatureUnit = _sessionManager.temperature;
-    timeUnit = _sessionManager.timeFormat;
+    // temperatureUnit.value = _sessionManager.temperature;
+    // timeUnit.value = _sessionManager.timeFormat;
 
     favoriteLocation = _sessionManager.favoriteLocation;
   }

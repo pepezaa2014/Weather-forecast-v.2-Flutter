@@ -1,5 +1,12 @@
 import 'package:get/get.dart';
 import 'package:geolocator/geolocator.dart';
+import 'package:weather_v2_pepe/app/const/app_colors.dart';
+import 'package:weather_v2_pepe/app/const/distance_extension.dart';
+import 'package:weather_v2_pepe/app/const/precipitation_extension.dart';
+import 'package:weather_v2_pepe/app/const/pressure_extension.dart';
+import 'package:weather_v2_pepe/app/const/temperature_extension.dart';
+import 'package:weather_v2_pepe/app/const/time_extension.dart';
+import 'package:weather_v2_pepe/app/const/wind_speed_extension.dart';
 import 'package:weather_v2_pepe/app/core/api/air_pollution_api.dart';
 import 'package:weather_v2_pepe/app/core/api/future_weather_api.dart';
 
@@ -26,12 +33,12 @@ class HomeController extends GetxController {
   late final Rxn<FutureWeather> futureWeather = Rxn();
   late final Rxn<AirPollution> airPollution = Rxn();
 
-  final RxInt temperatureUnit = 0.obs;
-  final RxInt windUnit = 0.obs;
-  final RxInt pressureUnit = 0.obs;
-  final RxInt precipitationUnit = 0.obs;
-  final RxInt distanceUnit = 0.obs;
-  final RxInt timeUnit = 0.obs;
+  final Rx<Temperature?> temperatureUnit = Temperature.celcius.obs;
+  final Rx<WindSpeed?> windUnit = WindSpeed.mph.obs;
+  final Rx<Pressure?> pressureUnit = Pressure.hpa.obs;
+  final Rx<Precipitation?> precipitationUnit = Precipitation.mm.obs;
+  final Rx<Distance?> distanceUnit = Distance.km.obs;
+  final Rx<Time?> timeUnit = Time.h24.obs;
   final Rxn<Setting?> dataSetting = Rxn();
 
   late final RxList<Map<String, dynamic>> favoriteLocation;
@@ -48,20 +55,14 @@ class HomeController extends GetxController {
   void onInit() {
     super.onInit();
     dataSetting.value = _sessionManager.decoded.value;
-    // print('Start Now');
-    // print('=================================');
-    // _sessionManager.printText();
-    // print('This is controller');
-    // print('=================================');
-    // print(dataSetting.value);
-    // print(dataSetting.value?.temperature);
 
-    temperatureUnit.value = dataSetting.value?.temperature ?? 0;
-    windUnit.value = dataSetting.value?.windSpeed ?? 0;
-    pressureUnit.value = dataSetting.value?.pressure ?? 0;
-    precipitationUnit.value = dataSetting.value?.precipitation ?? 0;
-    distanceUnit.value = dataSetting.value?.distance ?? 0;
-    timeUnit.value = dataSetting.value?.timeFormat ?? 0;
+    temperatureUnit.value = dataSetting.value?.temperatureData;
+    windUnit.value = dataSetting.value?.windSpeedData;
+    pressureUnit.value = dataSetting.value?.pressureData;
+    precipitationUnit.value = dataSetting.value?.precipitationData;
+    distanceUnit.value = dataSetting.value?.distanceData;
+    timeUnit.value = dataSetting.value?.timeData;
+
     favoriteLocation = _sessionManager.favoriteLocation;
     print(_sessionManager.favoriteLocation);
   }

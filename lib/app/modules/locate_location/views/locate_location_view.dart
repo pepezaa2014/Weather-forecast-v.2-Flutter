@@ -3,8 +3,6 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:weather_v2_pepe/app/const/app_colors.dart';
 import 'package:weather_v2_pepe/app/const/temperature_extension.dart';
-import 'package:weather_v2_pepe/app/data/models/geocoding_model.dart';
-import 'package:weather_v2_pepe/app/data/models/weather_model.dart';
 import 'package:weather_v2_pepe/app/utils/loading_indicator.dart';
 import 'package:weather_v2_pepe/app/widgets/show_list.dart';
 import 'package:weather_v2_pepe/app/widgets/weather_card.dart';

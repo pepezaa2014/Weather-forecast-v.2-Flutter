@@ -37,7 +37,7 @@ class Setting {
     data['temperature'] = temperature;
     data['windSpeed'] = windSpeed;
     data['pressure'] = pressure;
-    data['precipitatation'] = precipitation;
+    data['precipitation'] = precipitation;
     data['distance'] = distance;
     data['timeFormat'] = timeFormat;
     return data;
@@ -45,39 +45,39 @@ class Setting {
 }
 
 extension TemperatureExtension on Setting {
-  Temperature? get temperatureName {
+  Temperature? get temperatureData {
     return Temperature.values
         .firstWhereOrNull((e) => e.keyValue == temperature);
   }
 }
 
 extension WindSpeedExtension on Setting {
-  WindSpeed? get temperatureName {
+  WindSpeed? get windSpeedData {
     return WindSpeed.values.firstWhereOrNull((e) => e.keyValue == windSpeed);
   }
 }
 
 extension PressureExtension on Setting {
-  Pressure? get temperatureName {
+  Pressure? get pressureData {
     return Pressure.values.firstWhereOrNull((e) => e.keyValue == pressure);
   }
 }
 
 extension PrecipitationExtension on Setting {
-  Precipitation? get temperatureName {
+  Precipitation? get precipitationData {
     return Precipitation.values
         .firstWhereOrNull((e) => e.keyValue == precipitation);
   }
 }
 
 extension DistanceExtension on Setting {
-  Distance? get temperatureName {
+  Distance? get distanceData {
     return Distance.values.firstWhereOrNull((e) => e.keyValue == distance);
   }
 }
 
 extension TimeExtension on Setting {
-  Time? get temperatureName {
+  Time? get timeData {
     return Time.values.firstWhereOrNull((e) => e.keyValue == timeFormat);
   }
 }

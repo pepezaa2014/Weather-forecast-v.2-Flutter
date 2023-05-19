@@ -1,8 +1,4 @@
-import 'dart:convert';
-
 import 'package:get/get.dart';
-import 'package:get/get_connect/http/src/utils/utils.dart';
-import 'package:weather_v2_pepe/app/const/distance_extension.dart';
 import 'package:weather_v2_pepe/app/data/models/setting_model.dart';
 import 'package:weather_v2_pepe/app/managers/session_manager.dart';
 
