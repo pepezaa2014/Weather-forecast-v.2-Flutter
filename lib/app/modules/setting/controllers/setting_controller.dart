@@ -31,14 +31,6 @@ class SettingController extends GetxController {
 
   void updateData() {
     dataSetting.value = _sessionManager.decodedSetting.value;
-    // print('Start Now');
-    // print('=================================');
-    // _sessionManager.printText();
-    // print('This is controller');
-    // print('=================================');
-    // print(dataSetting.value);
-    // print(dataSetting.value?.temperature);
-
     temperatureUnit.value = dataSetting.value?.temperature ?? 0;
     windUnit.value = dataSetting.value?.windSpeed ?? 0;
     pressureUnit.value = dataSetting.value?.pressure ?? 0;
@@ -48,9 +40,6 @@ class SettingController extends GetxController {
   }
 
   void changeSettingTemp(int index) {
-    // print('=================Before Update================');
-    // print(temperatureUnit);
-    // print('=================After Update================');
     temperatureUnit.value = index;
     dataSetting.value?.temperature = index;
     _sessionManager.setChangeTemperature(index);
