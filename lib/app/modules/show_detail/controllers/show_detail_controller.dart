@@ -11,6 +11,7 @@ import 'package:weather_v2_pepe/app/core/api/future_weather_api.dart';
 import 'package:weather_v2_pepe/app/core/api/weather_api.dart';
 import 'package:weather_v2_pepe/app/data/models/air_pollution_model.dart';
 import 'package:weather_v2_pepe/app/data/models/app_error_model.dart';
+import 'package:weather_v2_pepe/app/data/models/favorite_locations_model.dart';
 import 'package:weather_v2_pepe/app/data/models/future_weather_model.dart';
 import 'package:weather_v2_pepe/app/data/models/setting_model.dart';
 import 'package:weather_v2_pepe/app/data/models/weather_model.dart';
@@ -30,7 +31,7 @@ class ShowDetailController extends GetxController {
   final AirPollutionAPI _airPollutionAPI = Get.find();
   late final Rxn<AirPollution> airPollution = Rxn();
 
-  late final Map<String, dynamic> weather_info;
+  final Rxn<FavoriteLocations?> weather_info = Rxn();
 
   final isLoadingGetWeather = false.obs;
 
@@ -52,16 +53,17 @@ class ShowDetailController extends GetxController {
   final Rx<Time?> timeUnit = Time.h24.obs;
   final Rxn<Setting?> dataSetting = Rxn();
 
-  late final RxList<Map<String, double>> favoriteLocation;
+  final RxList<FavoriteLocations?> dataFavoriteLocations = RxList();
 
   @override
   void onInit() {
     super.onInit();
-    weather_info = Get.arguments;
+    dataSetting.value = _sessionManager.decodedSetting.value;
+    weather_info.value = Get.arguments;
 
     _getWeatherLatLon(
-      lat: weather_info['lat'],
-      lon: weather_info['lon'],
+      lat: weather_info.value?.lat ?? 0,
+      lon: weather_info.value?.lon ?? 0,
     );
 
     temperatureUnit.value = dataSetting.value?.temperatureData;
@@ -71,14 +73,12 @@ class ShowDetailController extends GetxController {
     distanceUnit.value = dataSetting.value?.distanceData;
     timeUnit.value = dataSetting.value?.timeData;
 
-    favoriteLocation = _sessionManager.favoriteLocation;
+    dataFavoriteLocations.value = _sessionManager.decodedFavoriteLocations;
   }
 
   @override
   void onReady() {
     super.onReady();
-    // weather.value = weather_info;
-
     _getFutureWeather(
       lat: weather.value?.coord?.lat ?? 0.0,
       lon: weather.value?.coord?.lon ?? 0.0,
@@ -95,19 +95,16 @@ class ShowDetailController extends GetxController {
   }
 
   void addFavorite() {
-    final RxList<Map<String, double>> waitLocation = favoriteLocation;
-    print(waitLocation);
-
+    final RxList<FavoriteLocations?> waitLocation = dataFavoriteLocations;
     waitLocation.add(
-      {
-        'lat': ((weather.value?.coord?.lat ?? 0.0)).toDouble(),
-        'lon': ((weather.value?.coord?.lon ?? 0.0)).toDouble(),
-      },
+      FavoriteLocations.fromJson(
+        {
+          'lat': ((weather.value?.coord?.lat ?? 0.0)).toDouble(),
+          'lon': ((weather.value?.coord?.lon ?? 0.0)).toDouble(),
+        },
+      ),
     );
-    print(waitLocation);
-
     _sessionManager.setYourLocation(waitLocation);
-
     Future.delayed(
       Duration.zero,
       () {

@@ -2,12 +2,9 @@ import 'package:flutter/material.dart';
 
 import 'package:get/get.dart';
 import 'package:weather_v2_pepe/app/const/app_colors.dart';
-import 'package:weather_v2_pepe/app/const/distance_extension.dart';
-import 'package:weather_v2_pepe/app/const/precipitation_extension.dart';
-import 'package:weather_v2_pepe/app/const/pressure_extension.dart';
-import 'package:weather_v2_pepe/app/const/temperature_extension.dart';
-import 'package:weather_v2_pepe/app/const/time_extension.dart';
-import 'package:weather_v2_pepe/app/const/wind_speed_extension.dart';
+import 'package:weather_v2_pepe/app/data/models/air_pollution_model.dart';
+import 'package:weather_v2_pepe/app/data/models/future_weather_model.dart';
+import 'package:weather_v2_pepe/app/data/models/weather_model.dart';
 import 'package:weather_v2_pepe/app/utils/loading_indicator.dart';
 import 'package:weather_v2_pepe/app/widgets/details.dart';
 import 'package:weather_v2_pepe/app/widgets/future_weather_widget.dart';
@@ -51,9 +48,9 @@ class ShowDetailView extends GetView<ShowDetailController> {
         Obx(
           () {
             return Container(
-              child: controller.favoriteLocation.any((e) =>
-                      e['lat'] == controller.weather_info['lat'] &&
-                      e['lon'] == controller.weather_info['lon'])
+              child: controller.dataFavoriteLocations.any((e) =>
+                      e?.lat == controller.weather_info.value?.lat &&
+                      e?.lon == controller.weather_info.value?.lon)
                   ? const SizedBox()
                   : IconButton(
                       onPressed: controller.addFavorite,
@@ -74,51 +71,54 @@ class ShowDetailView extends GetView<ShowDetailController> {
       height: double.infinity,
       child: Obx(
         () {
-          final currentWeather = controller.weather.value;
-          final futureWeather = controller.futureWeather.value;
-          final airPollution = controller.airPollution.value;
-          if (controller.airPollution.value == null ||
-              controller.futureWeather.value == null ||
-              controller.weather.value == null) {
+          final currentWeather = controller.weather;
+          final futureWeather = controller.futureWeather;
+          final airPollution = controller.airPollution;
+          if (controller.airPollution == null ||
+              controller.futureWeather == null ||
+              controller.weather == null) {
             return Container(
               color: AppColors.backgroundColor,
             );
           } else {
-            return SingleChildScrollView(
-              physics: const ClampingScrollPhysics(),
-              child: Column(
-                children: [
-                  TopView(
-                    weather_info: currentWeather,
-                    location_now: controller.formattedDate,
-                    unit: Temperature.values.firstWhereOrNull(
-                        (e) => e.keyValue == controller.temperatureUnit.value),
-                  ),
-                  FutureWeatherWidget(
-                    futureWeather: futureWeather,
-                    timeUnit: Time.values.firstWhereOrNull(
-                        (e) => e.keyValue == controller.timeUnit.value),
-                  ),
-                  Details(
-                    weather_info: currentWeather,
-                    pollution_info: airPollution,
-                    timeUnit: Time.values.firstWhereOrNull(
-                        (e) => e.keyValue == controller.timeUnit.value),
-                    windUnit: WindSpeed.values.firstWhereOrNull(
-                        (e) => e.keyValue == controller.windUnit.value),
-                    distanceUnit: Distance.values.firstWhereOrNull(
-                        (e) => e.keyValue == controller.distanceUnit.value),
-                    pressureUnit: Pressure.values.firstWhereOrNull(
-                        (e) => e.keyValue == controller.pressureUnit.value),
-                    precipitationUnit: Precipitation.values.firstWhereOrNull(
-                        (e) =>
-                            e.keyValue == controller.precipitationUnit.value),
-                  ),
-                ],
-              ),
+            return _detail(
+              currentWeather: currentWeather.value,
+              futureWeather: futureWeather.value,
+              airPollution: airPollution.value,
             );
           }
         },
+      ),
+    );
+  }
+
+  _detail({
+    required Weather? currentWeather,
+    required FutureWeather? futureWeather,
+    required AirPollution? airPollution,
+  }) {
+    return Container(
+      child: Column(
+        children: [
+          TopView(
+            weather_info: currentWeather,
+            location_now: 'Current Location',
+            unit: controller.temperatureUnit.value,
+          ),
+          FutureWeatherWidget(
+            futureWeather: futureWeather,
+            timeUnit: controller.timeUnit.value,
+          ),
+          Details(
+            weather_info: currentWeather,
+            pollution_info: airPollution,
+            timeUnit: controller.timeUnit.value,
+            windUnit: controller.windUnit.value,
+            distanceUnit: controller.distanceUnit.value,
+            pressureUnit: controller.pressureUnit.value,
+            precipitationUnit: controller.precipitationUnit.value,
+          ),
+        ],
       ),
     );
   }

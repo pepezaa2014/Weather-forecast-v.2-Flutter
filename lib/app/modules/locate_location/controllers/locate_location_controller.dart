@@ -1,11 +1,13 @@
-import 'dart:convert';
-
 import 'package:flutter/cupertino.dart';
 import 'package:get/get.dart';
+import 'package:weather_v2_pepe/app/const/temperature_extension.dart';
+import 'package:weather_v2_pepe/app/const/time_extension.dart';
 import 'package:weather_v2_pepe/app/core/api/geocoding_api.dart';
 import 'package:weather_v2_pepe/app/core/api/weather_api.dart';
 import 'package:weather_v2_pepe/app/data/models/app_error_model.dart';
+import 'package:weather_v2_pepe/app/data/models/favorite_locations_model.dart';
 import 'package:weather_v2_pepe/app/data/models/geocoding_model.dart';
+import 'package:weather_v2_pepe/app/data/models/setting_model.dart';
 import 'package:weather_v2_pepe/app/data/models/weather_model.dart';
 import 'package:weather_v2_pepe/app/extensions/bool_extension.dart';
 import 'package:weather_v2_pepe/app/managers/session_manager.dart';
@@ -14,26 +16,25 @@ import 'package:weather_v2_pepe/app/utils/show_alert.dart';
 
 class LocateLocationController extends GetxController {
   final SessionManager _sessionManager = Get.find();
-  late final Map<String, double?> yourLocationNow;
-
   final GeocodingAPI _geocodingAPI = Get.find();
   final WeatherAPI _weatherAPI = Get.find();
+
+  final Rxn<FavoriteLocations?> yourLocationNow = Rxn();
 
   final TextEditingController searchTextCityController =
       TextEditingController();
   final RxString searchCityText = ''.obs;
 
-  late final Rxn<Weather> weather = Rxn();
-  final RxList<Weather> allFavoriteLocations = RxList();
-  late final RxList<Geocoding> geocoding = RxList();
+  final RxList<Weather?> weather = RxList();
+  final Rxn<Setting?> dataSetting = Rxn();
+  final RxList<Geocoding?> geocoding = RxList();
 
-  late final RxList<Map<String, dynamic>> favoriteLocation;
-  final RxBool checkedfavoriteNotNull = false.obs;
-  final RxInt timeUnit = 0.obs;
-  final RxInt temperatureUnit = 0.obs;
+  final Rx<Temperature?> temperatureUnit = Temperature.celcius.obs;
+  final Rx<Time?> timeUnit = Time.h24.obs;
+
+  final RxList<FavoriteLocations?> dataFavoriteLocations = RxList();
 
   final isLoadingGetWeather = false.obs;
-  late final decodedSetting;
 
   RxBool get isLoading {
     return [
@@ -44,10 +45,15 @@ class LocateLocationController extends GetxController {
   @override
   void onInit() {
     super.onInit();
-    // temperatureUnit.value = _sessionManager.temperature;
-    // timeUnit.value = _sessionManager.timeFormat;
+    dataSetting.value = _sessionManager.decodedSetting.value;
+    dataFavoriteLocations.value = _sessionManager.decodedFavoriteLocations;
 
-    favoriteLocation = _sessionManager.favoriteLocation;
+    temperatureUnit.value = dataSetting.value?.temperatureData;
+    timeUnit.value = dataSetting.value?.timeData;
+
+    yourLocationNow.value = dataFavoriteLocations[0];
+    // print('===================Here================');
+    // print(yourLocationNow);
   }
 
   @override
@@ -70,7 +76,7 @@ class LocateLocationController extends GetxController {
     super.onClose();
   }
 
-  void goOpenMap(Map<String, double?> item) {
+  void goOpenMap(FavoriteLocations? item) {
     Get.toNamed(
       Routes.MAP,
       arguments: item,
@@ -83,25 +89,11 @@ class LocateLocationController extends GetxController {
     );
   }
 
-  void putDataInList() {
-    yourLocationNow = {
-      'lat': favoriteLocation.isNotEmpty ? favoriteLocation[0]['lat'] : null,
-      'lon': favoriteLocation.isNotEmpty ? favoriteLocation[0]['lon'] : null,
-    };
-
-    for (int i = 0; i < favoriteLocation.length; i++) {
-      _getAllWeatherLatLon(
-        lat: favoriteLocation[i]['lat'],
-        lon: favoriteLocation[i]['lon'],
-      );
-    }
-  }
-
   void deleteFavoriteIndex(int index) {
-    _sessionManager.favoriteLocation.removeAt(index);
+    _sessionManager.decodedFavoriteLocations.removeAt(index);
   }
 
-  void goShowDetail(Map<String, dynamic> item) {
+  void goShowDetail(FavoriteLocations? item) {
     Get.toNamed(
       Routes.SHOW_DETAIL,
       arguments: item,
@@ -112,23 +104,23 @@ class LocateLocationController extends GetxController {
     searchCityText.value = '';
   }
 
-  void _getAllWeatherLatLon({
-    required double lat,
-    required double lon,
-  }) async {
-    try {
-      final result = await _weatherAPI.getWeatherLatLon(
-        lat: lat,
-        lon: lon,
-      );
-      allFavoriteLocations.add(result);
-    } catch (error) {
-      showAlert(
-        title: 'Error',
-        message: (error as AppError).message,
-      );
-    }
-  }
+  // void _getAllWeatherLatLon({
+  //   required double lat,
+  //   required double lon,
+  // }) async {
+  //   try {
+  //     final result = await _weatherAPI.getWeatherLatLon(
+  //       lat: lat,
+  //       lon: lon,
+  //     );
+  //     allFavoriteLocations.add(result);
+  //   } catch (error) {
+  //     showAlert(
+  //       title: 'Error',
+  //       message: (error as AppError).message,
+  //     );
+  //   }
+  // }
 
   void getWeatherLatLon({
     required double lat,
@@ -139,7 +131,7 @@ class LocateLocationController extends GetxController {
         lat: lat,
         lon: lon,
       );
-      weather.value = result;
+      weather.add(result);
     } catch (error) {
       showAlert(
         title: 'Error',

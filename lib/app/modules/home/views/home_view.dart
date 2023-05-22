@@ -3,12 +3,6 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:smooth_page_indicator/smooth_page_indicator.dart';
 import 'package:weather_v2_pepe/app/const/app_colors.dart';
-import 'package:weather_v2_pepe/app/const/distance_extension.dart';
-import 'package:weather_v2_pepe/app/const/precipitation_extension.dart';
-import 'package:weather_v2_pepe/app/const/pressure_extension.dart';
-import 'package:weather_v2_pepe/app/const/temperature_extension.dart';
-import 'package:weather_v2_pepe/app/const/time_extension.dart';
-import 'package:weather_v2_pepe/app/const/wind_speed_extension.dart';
 import 'package:weather_v2_pepe/app/data/models/air_pollution_model.dart';
 import 'package:weather_v2_pepe/app/data/models/future_weather_model.dart';
 import 'package:weather_v2_pepe/app/data/models/weather_model.dart';
@@ -59,27 +53,27 @@ class HomeView extends GetView<HomeController> {
     return Stack(
       children: [
         PageView.builder(
-          itemCount: controller.favoriteLocation.value.length,
+          itemCount: controller.dataFavoriteLocations.length,
           itemBuilder: (context, index) {
             return Container(
               color: AppColors.backgroundColor,
               height: double.infinity,
               child: Obx(
                 () {
-                  final currentWeather = controller.weather.value;
-                  final futureWeather = controller.futureWeather.value;
-                  final airPollution = controller.airPollution.value;
-                  if (controller.airPollution.value == null ||
-                      controller.futureWeather.value == null ||
-                      controller.weather.value == null) {
+                  final currentWeather = controller.weather;
+                  final futureWeather = controller.futureWeather;
+                  final airPollution = controller.airPollution;
+                  if (controller.airPollution.isEmpty ||
+                      controller.futureWeather.isEmpty ||
+                      controller.weather.isEmpty) {
                     return Container(
                       color: AppColors.backgroundColor,
                     );
                   } else {
                     return _detail(
-                      currentWeather: currentWeather,
-                      futureWeather: futureWeather,
-                      airPollution: airPollution,
+                      currentWeather: currentWeather[index],
+                      futureWeather: futureWeather[index],
+                      airPollution: airPollution[index],
                     );
                   }
                 },
@@ -100,7 +94,7 @@ class HomeView extends GetView<HomeController> {
                   viewportFraction: 0.8,
                   keepPage: true,
                 ),
-                count: controller.favoriteLocation.value.length,
+                count: controller.dataFavoriteLocations.value.length,
                 effect: const JumpingDotEffect(
                   dotHeight: 16,
                   dotWidth: 16,

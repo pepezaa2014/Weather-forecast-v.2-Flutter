@@ -13,8 +13,6 @@ class LocateLocationView extends GetView<LocateLocationController> {
   const LocateLocationView({Key? key}) : super(key: key);
   @override
   Widget build(BuildContext context) {
-    controller.putDataInList();
-
     return Stack(
       children: [
         GestureDetector(
@@ -48,8 +46,6 @@ class LocateLocationView extends GetView<LocateLocationController> {
   }
 
   _body() {
-    final thisGeocoding = controller.geocoding;
-
     return Obx(
       () {
         return Container(
@@ -68,7 +64,8 @@ class LocateLocationView extends GetView<LocateLocationController> {
                           size: 24,
                         ),
                         onPressed: () {
-                          controller.goOpenMap(controller.yourLocationNow);
+                          controller
+                              .goOpenMap(controller.yourLocationNow.value);
                         },
                       ),
                       SizedBox(
@@ -106,21 +103,16 @@ class LocateLocationView extends GetView<LocateLocationController> {
                           width: double.infinity,
                           height: 600,
                           child: ListView.builder(
-                            itemCount: thisGeocoding.length,
+                            itemCount: controller.geocoding.length,
                             itemBuilder: (context, index) {
-                              final Map<String, dynamic> thisWeatherItem = {
-                                'lat': thisGeocoding[index].lat,
-                                'lon': thisGeocoding[index].lon,
-                              };
-
                               return GestureDetector(
                                 onTap: () => controller.goShowDetail(
-                                  thisWeatherItem,
+                                  controller.dataFavoriteLocations[index],
                                 ),
                                 child: Container(
                                   color: AppColors.backgroundColor,
                                   child: ShowList(
-                                    item: thisGeocoding[index],
+                                    item: controller.geocoding[index],
                                   ),
                                 ),
                               );
@@ -130,40 +122,41 @@ class LocateLocationView extends GetView<LocateLocationController> {
                       : SizedBox(
                           width: double.infinity,
                           height: 600,
-                          child: controller.allFavoriteLocations.isNotEmpty
-                              ? ListView.builder(
-                                  itemCount:
-                                      controller.favoriteLocation.value.length,
-                                  itemBuilder: (context, index) {
-                                    final thisItemIndex = controller
-                                        .favoriteLocation.value[index];
+                          child: controller.dataFavoriteLocations.isNotEmpty
+                              ? const SizedBox()
+                              // ? ListView.builder(
+                              //     itemCount:
+                              //         controller.dataFavoriteLocations.value.length,
+                              //     itemBuilder: (context, index) {
+                              //       final thisItemIndex = controller
+                              //           .favoriteLocation.value[index];
 
-                                    Map<String, dynamic> thisWeatherItem = {
-                                      'lat': thisItemIndex['lat'],
-                                      'lon': thisItemIndex['lon'],
-                                    };
+                              //       Map<String, dynamic> thisWeatherItem = {
+                              //         'lat': thisItemIndex['lat'],
+                              //         'lon': thisItemIndex['lon'],
+                              //       };
 
-                                    return Padding(
-                                      padding: const EdgeInsets.only(
-                                        top: 4,
-                                        bottom: 4,
-                                      ),
-                                      child: WeatherCard(
-                                        weather_info: controller
-                                            .allFavoriteLocations[index],
-                                        unit: Temperature.values
-                                            .firstWhereOrNull((e) =>
-                                                e.keyValue ==
-                                                controller
-                                                    .temperatureUnit.value),
-                                        onTap: () => controller
-                                            .goShowDetail(thisWeatherItem),
-                                        onTapDel: () => controller
-                                            .deleteFavoriteIndex(index),
-                                      ),
-                                    );
-                                  },
-                                )
+                              //       return Padding(
+                              //         padding: const EdgeInsets.only(
+                              //           top: 4,
+                              //           bottom: 4,
+                              //         ),
+                              //         child: WeatherCard(
+                              //           weather_info: controller
+                              //               .allFavoriteLocations[index],
+                              //           unit: Temperature.values
+                              //               .firstWhereOrNull((e) =>
+                              //                   e.keyValue ==
+                              //                   controller
+                              //                       .temperatureUnit.value),
+                              //           onTap: () => controller
+                              //               .goShowDetail(thisWeatherItem),
+                              //           onTapDel: () => controller
+                              //               .deleteFavoriteIndex(index),
+                              //         ),
+                              //       );
+                              //     },
+                              //   )
                               : const SizedBox(),
                         ),
                 ),

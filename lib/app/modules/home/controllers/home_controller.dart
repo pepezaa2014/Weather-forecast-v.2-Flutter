@@ -13,6 +13,7 @@ import 'package:weather_v2_pepe/app/core/api/future_weather_api.dart';
 import 'package:weather_v2_pepe/app/core/api/weather_api.dart';
 import 'package:weather_v2_pepe/app/data/models/air_pollution_model.dart';
 import 'package:weather_v2_pepe/app/data/models/app_error_model.dart';
+import 'package:weather_v2_pepe/app/data/models/favorite_locations_model.dart';
 import 'package:weather_v2_pepe/app/data/models/future_weather_model.dart';
 import 'package:weather_v2_pepe/app/data/models/setting_model.dart';
 import 'package:weather_v2_pepe/app/data/models/weather_model.dart';
@@ -29,9 +30,9 @@ class HomeController extends GetxController {
   final FutureWeatherAPI _futureWeatherAPI = Get.find();
   final AirPollutionAPI _airPollutionAPI = Get.find();
 
-  late final Rxn<Weather> weather = Rxn();
-  late final Rxn<FutureWeather> futureWeather = Rxn();
-  late final Rxn<AirPollution> airPollution = Rxn();
+  late final RxList<Weather> weather = RxList();
+  late final RxList<FutureWeather> futureWeather = RxList();
+  late final RxList<AirPollution> airPollution = RxList();
 
   final Rx<Temperature?> temperatureUnit = Temperature.celcius.obs;
   final Rx<WindSpeed?> windUnit = WindSpeed.mph.obs;
@@ -41,7 +42,7 @@ class HomeController extends GetxController {
   final Rx<Time?> timeUnit = Time.h24.obs;
   final Rxn<Setting?> dataSetting = Rxn();
 
-  late final RxList<Map<String, dynamic>> favoriteLocation;
+  final RxList<FavoriteLocations?> dataFavoriteLocations = RxList();
 
   final isLoadingGetWeather = false.obs;
 
@@ -54,7 +55,7 @@ class HomeController extends GetxController {
   @override
   void onInit() {
     super.onInit();
-    dataSetting.value = _sessionManager.decoded.value;
+    dataSetting.value = _sessionManager.decodedSetting.value;
 
     temperatureUnit.value = dataSetting.value?.temperatureData;
     windUnit.value = dataSetting.value?.windSpeedData;
@@ -63,8 +64,7 @@ class HomeController extends GetxController {
     distanceUnit.value = dataSetting.value?.distanceData;
     timeUnit.value = dataSetting.value?.timeData;
 
-    favoriteLocation = _sessionManager.favoriteLocation;
-    print(_sessionManager.favoriteLocation);
+    dataFavoriteLocations.value = _sessionManager.decodedFavoriteLocations;
   }
 
   @override
@@ -129,14 +129,12 @@ class HomeController extends GetxController {
       lon: location.longitude,
     );
 
-    if (_sessionManager.favoriteLocation[0]['lat'] == 0 &&
-        _sessionManager.favoriteLocation[0]['lon'] == 0) {
-      final waitToReplace = _sessionManager.favoriteLocation;
-      waitToReplace[0] = {
-        'lat': location.latitude,
-        'lon': location.longitude,
-      };
-      _sessionManager.setYourLocation(waitToReplace);
+    if (dataFavoriteLocations[0]?.lat == 0 &&
+        dataFavoriteLocations[0]?.lon == 0) {
+      dataFavoriteLocations[0]?.lat = location.latitude;
+      dataFavoriteLocations[0]?.lon = location.longitude;
+
+      _sessionManager.setYourLocation(dataFavoriteLocations);
     }
   }
 
@@ -151,7 +149,7 @@ class HomeController extends GetxController {
         lon: lon,
       );
       isLoadingGetWeather(false);
-      weather.value = result;
+      weather.add(result);
     } catch (error) {
       isLoadingGetWeather(false);
       showAlert(
@@ -172,7 +170,7 @@ class HomeController extends GetxController {
         lon: lon,
       );
       isLoadingGetWeather(false);
-      futureWeather.value = result;
+      futureWeather.add(result);
     } catch (error) {
       isLoadingGetWeather(false);
       showAlert(
@@ -193,7 +191,7 @@ class HomeController extends GetxController {
         lon: lon,
       );
       isLoadingGetWeather(false);
-      airPollution.value = result;
+      airPollution.add(result);
     } catch (error) {
       isLoadingGetWeather(false);
       showAlert(

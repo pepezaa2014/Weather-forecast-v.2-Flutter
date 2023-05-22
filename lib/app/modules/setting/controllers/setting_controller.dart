@@ -30,7 +30,7 @@ class SettingController extends GetxController {
   }
 
   void updateData() {
-    dataSetting.value = _sessionManager.decoded.value;
+    dataSetting.value = _sessionManager.decodedSetting.value;
     // print('Start Now');
     // print('=================================');
     // _sessionManager.printText();

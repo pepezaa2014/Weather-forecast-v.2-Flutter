@@ -8,8 +8,8 @@ class FavoriteLocations {
   });
 
   FavoriteLocations.fromJson(Map<String, dynamic> json) {
-    lat = json['lat'];
-    lon = json['lon'];
+    lat = (json['lat'] as num).toDouble();
+    lon = (json['lon'] as num).toDouble();
   }
 
   Map<String, dynamic> toJson() {
