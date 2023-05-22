@@ -50,62 +50,62 @@ class HomeView extends GetView<HomeController> {
   }
 
   _body() {
-    return Stack(
-      children: [
-        PageView.builder(
-          itemCount: controller.dataFavoriteLocations.length,
-          itemBuilder: (context, index) {
-            return Container(
-              color: AppColors.backgroundColor,
-              height: double.infinity,
-              child: Obx(
-                () {
-                  final currentWeather = controller.weather;
-                  final futureWeather = controller.futureWeather;
-                  final airPollution = controller.airPollution;
-                  if (controller.airPollution.isEmpty ||
-                      controller.futureWeather.isEmpty ||
-                      controller.weather.isEmpty) {
-                    return Container(
-                      color: AppColors.backgroundColor,
-                    );
-                  } else {
-                    return _detail(
-                      currentWeather: currentWeather[index],
-                      futureWeather: futureWeather[index],
-                      airPollution: airPollution[index],
-                    );
-                  }
-                },
-              ),
-            );
-          },
-        ),
-        Positioned(
-          bottom: 0,
-          left: 0,
-          right: 0,
-          child: Align(
-            alignment: Alignment.bottomCenter,
-            child: Padding(
-              padding: const EdgeInsets.only(bottom: 16),
-              child: SmoothPageIndicator(
-                controller: PageController(
-                  viewportFraction: 0.8,
-                  keepPage: true,
+    return Obx(
+      () {
+        final currentWeather = controller.weather;
+        final futureWeather = controller.futureWeather;
+        final airPollution = controller.airPollution;
+        if (controller.airPollution.isEmpty ||
+            controller.futureWeather.isEmpty ||
+            controller.weather.isEmpty) {
+          return Container(
+            color: AppColors.backgroundColor,
+          );
+        } else {
+          return PageView.builder(
+            controller: controller.pageController,
+            itemCount: controller.dataFavoriteLocations.length,
+            itemBuilder: (context, index) {
+              return Container(
+                color: AppColors.backgroundColor,
+                height: double.infinity,
+                child: Column(
+                  children: [
+                    Container(
+                      child: _detail(
+                        currentWeather: currentWeather[index],
+                        futureWeather: futureWeather[index],
+                        airPollution: airPollution[index],
+                      ),
+                    ),
+                    Positioned(
+                      bottom: 0,
+                      left: 0,
+                      right: 0,
+                      child: Align(
+                        alignment: Alignment.bottomCenter,
+                        child: Padding(
+                          padding: const EdgeInsets.only(bottom: 16),
+                          child: SmoothPageIndicator(
+                            controller: controller.pageController,
+                            count: controller.dataFavoriteLocations.length,
+                            effect: const JumpingDotEffect(
+                              dotHeight: 16,
+                              dotWidth: 16,
+                              jumpScale: .7,
+                              dotColor: AppColors.primaryBox,
+                            ),
+                          ),
+                        ),
+                      ),
+                    ),
+                  ],
                 ),
-                count: controller.dataFavoriteLocations.value.length,
-                effect: const JumpingDotEffect(
-                  dotHeight: 16,
-                  dotWidth: 16,
-                  jumpScale: .7,
-                  dotColor: AppColors.primaryBox,
-                ),
-              ),
-            ),
-          ),
-        ),
-      ],
+              );
+            },
+          );
+        }
+      },
     );
   }
 

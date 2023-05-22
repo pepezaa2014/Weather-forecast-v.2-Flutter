@@ -23,8 +23,9 @@ class ShowDetailView extends GetView<ShowDetailController> {
           body: _body(),
         ),
         Obx(
-          () =>
-              LoadingIndicator(isLoading: controller.isLoadingGetWeather.value),
+          () => LoadingIndicator(
+            isLoading: controller.isLoadingGetWeather.value,
+          ),
         ),
       ],
     );

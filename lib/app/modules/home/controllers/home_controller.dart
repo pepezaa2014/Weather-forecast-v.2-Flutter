@@ -1,3 +1,4 @@
+import 'package:flutter/cupertino.dart';
 import 'package:get/get.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:weather_v2_pepe/app/const/app_colors.dart';
@@ -46,6 +47,11 @@ class HomeController extends GetxController {
 
   final isLoadingGetWeather = false.obs;
 
+  final pageController = PageController(
+    viewportFraction: 1.0,
+    keepPage: true,
+  );
+
   RxBool get isLoading {
     return [
       isLoadingGetWeather.value,
@@ -71,6 +77,21 @@ class HomeController extends GetxController {
   void onReady() {
     super.onReady();
     _determinePosition();
+
+    for (int index = 1; index < dataFavoriteLocations.length; index++) {
+      _getWeatherLatLon(
+        lat: dataFavoriteLocations[index]?.lat ?? 0,
+        lon: dataFavoriteLocations[index]?.lon ?? 0,
+      );
+      _getFutureWeather(
+        lat: dataFavoriteLocations[index]?.lat ?? 0,
+        lon: dataFavoriteLocations[index]?.lon ?? 0,
+      );
+      _getAirPollution(
+        lat: dataFavoriteLocations[index]?.lat ?? 0,
+        lon: dataFavoriteLocations[index]?.lon ?? 0,
+      );
+    }
   }
 
   @override

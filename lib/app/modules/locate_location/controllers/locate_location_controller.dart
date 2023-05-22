@@ -52,8 +52,13 @@ class LocateLocationController extends GetxController {
     timeUnit.value = dataSetting.value?.timeData;
 
     yourLocationNow.value = dataFavoriteLocations[0];
-    // print('===================Here================');
-    // print(yourLocationNow);
+
+    for (int index = 0; index < dataFavoriteLocations.length; index++) {
+      _getWeatherLatLon(
+        lat: dataFavoriteLocations[index]?.lat ?? 0,
+        lon: dataFavoriteLocations[index]?.lon ?? 0,
+      );
+    }
   }
 
   @override
@@ -74,6 +79,16 @@ class LocateLocationController extends GetxController {
   @override
   void onClose() {
     super.onClose();
+  }
+
+  void changeDataAndGoShowDetail(Geocoding? item) {
+    final result = FavoriteLocations.fromJson(
+      {
+        'lat': item?.lat,
+        'lon': item?.lon,
+      },
+    );
+    goShowDetail(result);
   }
 
   void goOpenMap(FavoriteLocations? item) {
@@ -104,25 +119,7 @@ class LocateLocationController extends GetxController {
     searchCityText.value = '';
   }
 
-  // void _getAllWeatherLatLon({
-  //   required double lat,
-  //   required double lon,
-  // }) async {
-  //   try {
-  //     final result = await _weatherAPI.getWeatherLatLon(
-  //       lat: lat,
-  //       lon: lon,
-  //     );
-  //     allFavoriteLocations.add(result);
-  //   } catch (error) {
-  //     showAlert(
-  //       title: 'Error',
-  //       message: (error as AppError).message,
-  //     );
-  //   }
-  // }
-
-  void getWeatherLatLon({
+  void _getWeatherLatLon({
     required double lat,
     required double lon,
   }) async {

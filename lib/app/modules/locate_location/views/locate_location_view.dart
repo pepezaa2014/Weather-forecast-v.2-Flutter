@@ -106,9 +106,9 @@ class LocateLocationView extends GetView<LocateLocationController> {
                             itemCount: controller.geocoding.length,
                             itemBuilder: (context, index) {
                               return GestureDetector(
-                                onTap: () => controller.goShowDetail(
-                                  controller.dataFavoriteLocations[index],
-                                ),
+                                onTap: () =>
+                                    controller.changeDataAndGoShowDetail(
+                                        controller.geocoding[index]),
                                 child: Container(
                                   color: AppColors.backgroundColor,
                                   child: ShowList(
@@ -122,41 +122,31 @@ class LocateLocationView extends GetView<LocateLocationController> {
                       : SizedBox(
                           width: double.infinity,
                           height: 600,
-                          child: controller.dataFavoriteLocations.isNotEmpty
-                              ? const SizedBox()
-                              // ? ListView.builder(
-                              //     itemCount:
-                              //         controller.dataFavoriteLocations.value.length,
-                              //     itemBuilder: (context, index) {
-                              //       final thisItemIndex = controller
-                              //           .favoriteLocation.value[index];
-
-                              //       Map<String, dynamic> thisWeatherItem = {
-                              //         'lat': thisItemIndex['lat'],
-                              //         'lon': thisItemIndex['lon'],
-                              //       };
-
-                              //       return Padding(
-                              //         padding: const EdgeInsets.only(
-                              //           top: 4,
-                              //           bottom: 4,
-                              //         ),
-                              //         child: WeatherCard(
-                              //           weather_info: controller
-                              //               .allFavoriteLocations[index],
-                              //           unit: Temperature.values
-                              //               .firstWhereOrNull((e) =>
-                              //                   e.keyValue ==
-                              //                   controller
-                              //                       .temperatureUnit.value),
-                              //           onTap: () => controller
-                              //               .goShowDetail(thisWeatherItem),
-                              //           onTapDel: () => controller
-                              //               .deleteFavoriteIndex(index),
-                              //         ),
-                              //       );
-                              //     },
-                              //   )
+                          child: controller.weather.isNotEmpty
+                              ? ListView.builder(
+                                  itemCount: controller.weather.length,
+                                  itemBuilder: (context, index) {
+                                    return Padding(
+                                      padding: const EdgeInsets.only(
+                                        top: 4,
+                                        bottom: 4,
+                                      ),
+                                      child: WeatherCard(
+                                        weather_info: controller.weather[index],
+                                        unit: Temperature.values
+                                            .firstWhereOrNull((e) =>
+                                                e.keyValue ==
+                                                controller
+                                                    .temperatureUnit.value),
+                                        onTap: () => controller.goShowDetail(
+                                            controller
+                                                .dataFavoriteLocations[index]),
+                                        onTapDel: () => controller
+                                            .deleteFavoriteIndex(index),
+                                      ),
+                                    );
+                                  },
+                                )
                               : const SizedBox(),
                         ),
                 ),
