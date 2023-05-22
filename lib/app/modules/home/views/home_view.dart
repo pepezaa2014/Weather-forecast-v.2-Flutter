@@ -119,7 +119,7 @@ class HomeView extends GetView<HomeController> {
         children: [
           TopView(
             weather_info: currentWeather,
-            location_now: 'Current Location',
+            location_now: '-',
             unit: controller.temperatureUnit.value,
           ),
           FutureWeatherWidget(

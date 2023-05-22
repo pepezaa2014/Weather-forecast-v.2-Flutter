@@ -39,10 +39,12 @@ class MapController extends GetxController {
   }
 
   FavoriteLocations? convertLatLon() {
-    return FavoriteLocations.fromJson({
-      'lat': centerLatLng.value.latitude,
-      'lon': centerLatLng.value.longitude,
-    });
+    return FavoriteLocations.fromJson(
+      {
+        'lat': centerLatLng.value.latitude,
+        'lon': centerLatLng.value.longitude,
+      },
+    );
   }
 
   void goShowDetail(FavoriteLocations? item) {
