@@ -46,8 +46,7 @@ class LocateLocationController extends GetxController {
   void onInit() async {
     super.onInit();
     dataSetting.value = _sessionManager.decodedSetting.value;
-    dataFavoriteLocations.value =
-        _sessionManager.decodedFavoriteLocations.value;
+    dataFavoriteLocations.value = _sessionManager.decodedFavoriteLocations;
 
     temperatureUnit.value = dataSetting.value?.temperatureData;
     timeUnit.value = dataSetting.value?.timeData;

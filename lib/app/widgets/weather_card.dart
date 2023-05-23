@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:weather_v2_pepe/app/const/app_colors.dart';
 import 'package:weather_v2_pepe/app/const/temperature_extension.dart';
+import 'package:weather_v2_pepe/app/const/time_extension.dart';
 import 'package:weather_v2_pepe/app/data/models/weather_model.dart';
 import 'package:weather_v2_pepe/app/const/weather_icon_extension.dart';
 import 'package:collection/collection.dart';
@@ -9,27 +10,31 @@ import 'package:collection/collection.dart';
 class WeatherCard extends StatelessWidget {
   const WeatherCard({
     super.key,
-    required this.weather_info,
-    required this.unit,
+    required this.boolFirst,
+    required this.weatherInfo,
+    required this.tempUnit,
+    required this.timeUnit,
     required this.onTap,
     required this.onTapDel,
   });
 
-  final Weather? weather_info;
-  final Temperature? unit;
+  final bool boolFirst;
+  final Weather? weatherInfo;
+  final Temperature? tempUnit;
+  final Time? timeUnit;
   final Function() onTap;
   final Function() onTapDel;
 
   @override
   Widget build(BuildContext context) {
-    final timeNow =
-        DateTime.fromMillisecondsSinceEpoch((weather_info?.dt ?? 0) * 1000);
-    final offsetTimeZone = 25200 - (weather_info?.timezone ?? 0);
+    // final timeNow =
+    //     DateTime.fromMillisecondsSinceEpoch((weatherInfo?.dt ?? 0) * 1000);
+    // final offsetTimeZone = 25200 - (weatherInfo?.timezone ?? 0);
 
-    DateTime convertedDateTime = timeNow.add(Duration(seconds: offsetTimeZone));
+    // DateTime convertedDateTime = timeNow.add(Duration(seconds: offsetTimeZone));
 
-    final String formattedDateTime =
-        DateFormat('dd MMM yyyy HH:mm a').format(convertedDateTime);
+    // final String formattedDateTime =
+    // DateFormat('dd MMM yyyy HH:mm a').format(convertedDateTime);
 
     return Stack(
       children: [
@@ -51,7 +56,7 @@ class WeatherCard extends StatelessWidget {
                         Align(
                           alignment: Alignment.centerLeft,
                           child: Text(
-                            weather_info?.name ?? '',
+                            weatherInfo?.name ?? '',
                             style: const TextStyle(
                               fontWeight: FontWeight.bold,
                               fontSize: 16,
@@ -62,7 +67,12 @@ class WeatherCard extends StatelessWidget {
                         Align(
                           alignment: Alignment.centerLeft,
                           child: Text(
-                            formattedDateTime,
+                            boolFirst
+                                ? 'Current Location'
+                                : timeUnit?.convertTimeWithTimeZone(
+                                        (weatherInfo?.dt ?? 0),
+                                        (weatherInfo?.timezone ?? 0)) ??
+                                    '',
                             style: const TextStyle(
                               fontSize: 14,
                               color: AppColors.secondaryNight,
@@ -72,7 +82,7 @@ class WeatherCard extends StatelessWidget {
                         Row(
                           children: [
                             Image.asset(
-                              weather_info?.weather
+                              weatherInfo?.weather
                                       ?.firstWhereOrNull((e) => true)
                                       ?.weatherIcon
                                       ?.imageName
@@ -86,7 +96,7 @@ class WeatherCard extends StatelessWidget {
                               child: Align(
                                 alignment: Alignment.centerLeft,
                                 child: Text(
-                                  weather_info?.weather
+                                  weatherInfo?.weather
                                           ?.firstWhereOrNull((element) => true)
                                           ?.main
                                           .toString() ??
@@ -108,7 +118,7 @@ class WeatherCard extends StatelessWidget {
                       child: Column(
                         children: [
                           Text(
-                            '${unit?.convertTemp(weather_info?.main?.temp ?? 0.0).toStringAsFixed(0) ?? ''} ${unit?.tempName ?? ''}',
+                            '${tempUnit?.convertTemp(weatherInfo?.main?.temp ?? 0.0).toStringAsFixed(0) ?? ''} ${tempUnit?.tempName ?? ''}',
                             style: const TextStyle(
                               fontSize: 40,
                               color: AppColors.primaryNight,
@@ -116,14 +126,14 @@ class WeatherCard extends StatelessWidget {
                             ),
                           ),
                           Text(
-                            'H:${unit?.convertTemp(weather_info?.main?.tempMax ?? 0.0).toStringAsFixed(0) ?? ''} ${unit?.tempName ?? ''} L:${unit?.convertTemp(weather_info?.main?.tempMin ?? 0.0).toStringAsFixed(0) ?? ''} ${unit?.tempName ?? ''}',
+                            'H:${tempUnit?.convertTemp(weatherInfo?.main?.tempMax ?? 0.0).toStringAsFixed(0) ?? ''} ${tempUnit?.tempName ?? ''} L:${tempUnit?.convertTemp(weatherInfo?.main?.tempMin ?? 0.0).toStringAsFixed(0) ?? ''} ${tempUnit?.tempName ?? ''}',
                             style: const TextStyle(
                               fontSize: 16,
                               color: AppColors.primaryNight,
                             ),
                           ),
                           Text(
-                            'Feels like ${unit?.convertTemp(weather_info?.main?.feelsLike ?? 0.0).toStringAsFixed(0) ?? ''} ${unit?.tempName ?? ''}',
+                            'Feels like ${tempUnit?.convertTemp(weatherInfo?.main?.feelsLike ?? 0.0).toStringAsFixed(0) ?? ''} ${tempUnit?.tempName ?? ''}',
                             style: const TextStyle(
                               fontSize: 14,
                               color: AppColors.thirdaryNight,

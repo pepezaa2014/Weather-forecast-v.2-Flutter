@@ -25,4 +25,17 @@ extension TimeExtension on Time {
         return DateFormat('h:mm a').format(afterTime);
     }
   }
+
+  String convertTimeWithTimeZone(int time, int timeZone) {
+    final timeNow = DateTime.fromMillisecondsSinceEpoch((time) * 1000);
+    final offsetTimeZone = 25200 - (timeZone);
+    DateTime convertedDateTime = timeNow.add(Duration(seconds: offsetTimeZone));
+
+    switch (this) {
+      case Time.h24:
+        return DateFormat('dd MMM yyyy HH:mm').format(convertedDateTime);
+      case Time.h12:
+        return DateFormat('dd MMM yyyy HH:mm a').format(convertedDateTime);
+    }
+  }
 }
