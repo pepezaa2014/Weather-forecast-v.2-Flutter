@@ -67,21 +67,21 @@ class SettingView extends GetView<SettingController> {
                         () {
                           return CupertinoSlidingSegmentedControl(
                             children: const {
-                              0: Text(
+                              Temperature.celcius: Text(
                                 '°C',
                                 style: TextStyle(
                                   fontSize: 16,
                                   color: AppColors.fourthNight,
                                 ),
                               ),
-                              1: Text(
+                              Temperature.fahrenheit: Text(
                                 '°F',
                                 style: TextStyle(
                                   fontSize: 16,
                                   color: AppColors.fourthNight,
                                 ),
                               ),
-                              2: Text(
+                              Temperature.kelvin: Text(
                                 'K',
                                 style: TextStyle(
                                   fontSize: 16,
@@ -89,9 +89,9 @@ class SettingView extends GetView<SettingController> {
                                 ),
                               ),
                             },
-                            groupValue: controller.temperatureUnit.value?.index,
+                            groupValue: controller.temperatureUnit.value,
                             onValueChanged: (value) {
-                              controller.changeSettingTemp(value as int);
+                              controller.changeSettingTemp(value);
                             },
                           );
                         },
@@ -126,21 +126,21 @@ class SettingView extends GetView<SettingController> {
                         () {
                           return CupertinoSlidingSegmentedControl(
                             children: const {
-                              0: Text(
+                              WindSpeed.ms: Text(
                                 'm/s',
                                 style: TextStyle(
                                   fontSize: 16,
                                   color: AppColors.fourthNight,
                                 ),
                               ),
-                              1: Text(
+                              WindSpeed.kmh: Text(
                                 'km/h',
                                 style: TextStyle(
                                   fontSize: 16,
                                   color: AppColors.fourthNight,
                                 ),
                               ),
-                              2: Text(
+                              WindSpeed.mph: Text(
                                 'mph',
                                 style: TextStyle(
                                   fontSize: 16,
@@ -148,9 +148,9 @@ class SettingView extends GetView<SettingController> {
                                 ),
                               ),
                             },
-                            groupValue: controller.windUnit.value?.index,
+                            groupValue: controller.windUnit.value,
                             onValueChanged: (value) {
-                              controller.changeSettingWind(value as int);
+                              controller.changeSettingWind(value);
                             },
                           );
                         },
@@ -185,14 +185,14 @@ class SettingView extends GetView<SettingController> {
                         () {
                           return CupertinoSlidingSegmentedControl(
                             children: const {
-                              0: Text(
+                              Pressure.hpa: Text(
                                 'hPa',
                                 style: TextStyle(
                                   fontSize: 16,
                                   color: AppColors.fourthNight,
                                 ),
                               ),
-                              1: Text(
+                              Pressure.inhg: Text(
                                 'InHg',
                                 style: TextStyle(
                                   fontSize: 16,
@@ -200,9 +200,9 @@ class SettingView extends GetView<SettingController> {
                                 ),
                               ),
                             },
-                            groupValue: controller.pressureUnit.value?.index,
+                            groupValue: controller.pressureUnit.value,
                             onValueChanged: (value) {
-                              controller.changeSettingPressure(value as int);
+                              controller.changeSettingPressure(value);
                             },
                           );
                         },
@@ -237,14 +237,14 @@ class SettingView extends GetView<SettingController> {
                         () {
                           return CupertinoSlidingSegmentedControl(
                             children: const {
-                              0: Text(
+                              Precipitation.mm: Text(
                                 'mm',
                                 style: TextStyle(
                                   fontSize: 16,
                                   color: AppColors.fourthNight,
                                 ),
                               ),
-                              1: Text(
+                              Precipitation.inn: Text(
                                 'in',
                                 style: TextStyle(
                                   fontSize: 16,
@@ -252,11 +252,9 @@ class SettingView extends GetView<SettingController> {
                                 ),
                               ),
                             },
-                            groupValue:
-                                controller.precipitationUnit.value?.index,
+                            groupValue: controller.precipitationUnit.value,
                             onValueChanged: (value) {
-                              controller
-                                  .changeSettingPrecipitataion(value as int);
+                              controller.changeSettingPrecipitataion(value);
                             },
                           );
                         },
@@ -291,14 +289,14 @@ class SettingView extends GetView<SettingController> {
                         () {
                           return CupertinoSlidingSegmentedControl(
                             children: const {
-                              0: Text(
+                              Distance.km: Text(
                                 'km',
                                 style: TextStyle(
                                   fontSize: 16,
                                   color: AppColors.fourthNight,
                                 ),
                               ),
-                              1: Text(
+                              Distance.mi: Text(
                                 'mi',
                                 style: TextStyle(
                                   fontSize: 16,
@@ -306,9 +304,9 @@ class SettingView extends GetView<SettingController> {
                                 ),
                               ),
                             },
-                            groupValue: controller.distanceUnit.value?.index,
+                            groupValue: controller.distanceUnit.value,
                             onValueChanged: (value) {
-                              controller.changeSettingDistance(value as int);
+                              controller.changeSettingDistance(value);
                             },
                           );
                         },
@@ -343,14 +341,14 @@ class SettingView extends GetView<SettingController> {
                         () {
                           return CupertinoSlidingSegmentedControl(
                             children: const {
-                              0: Text(
+                              Time.h24: Text(
                                 '24-hour',
                                 style: TextStyle(
                                   fontSize: 16,
                                   color: AppColors.fourthNight,
                                 ),
                               ),
-                              1: Text(
+                              Time.h12: Text(
                                 '12-hour',
                                 style: TextStyle(
                                   fontSize: 16,
@@ -358,9 +356,9 @@ class SettingView extends GetView<SettingController> {
                                 ),
                               ),
                             },
-                            groupValue: controller.timeUnit.value?.index,
+                            groupValue: controller.timeUnit.value,
                             onValueChanged: (value) {
-                              controller.changeSettingTime(value as int);
+                              controller.changeSettingTime(value);
                             },
                           );
                         },

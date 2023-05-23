@@ -69,7 +69,7 @@ class HomeView extends GetView<HomeController> {
               onRefresh: controller.refresh,
               child: PageView.builder(
                 controller: controller.pageController,
-                itemCount: controller.dataFavoriteLocations.value.length,
+                itemCount: controller.dataFavoriteLocations.length,
                 itemBuilder: (context, index) {
                   return Container(
                     color: AppColors.backgroundColor,

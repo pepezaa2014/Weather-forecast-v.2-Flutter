@@ -36,7 +36,7 @@ class HomeController extends GetxController {
   final RxList<AirPollution> airPollution = RxList();
 
   Rxn<Setting?> dataSetting = Rxn();
-  final RxList<FavoriteLocations?> dataFavoriteLocations = RxList();
+  RxList<FavoriteLocations?> dataFavoriteLocations = RxList();
 
   final isLoadingGetWeather = false.obs;
 
@@ -56,8 +56,7 @@ class HomeController extends GetxController {
     super.onInit();
     dataSetting = _sessionManager.decodedSetting;
 
-    dataFavoriteLocations.value =
-        _sessionManager.decodedFavoriteLocations.value;
+    dataFavoriteLocations = _sessionManager.decodedFavoriteLocations;
   }
 
   @override

@@ -115,6 +115,7 @@ class LocateLocationController extends GetxController {
   void deleteFavoriteIndex(int index) {
     _sessionManager.decodedFavoriteLocations.removeAt(index);
     _sessionManager.setDeleteFavorite();
+    _updateWeatherLatLon();
   }
 
   void goShowDetail(FavoriteLocations? item) {

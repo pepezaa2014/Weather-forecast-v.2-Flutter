@@ -22,7 +22,8 @@ class SessionManager {
 
   void loadSession() {
     // _getStorage.remove(AppConstant.favoriteLocation);
-    if (_getStorage.read(AppConstant.setting) == null) {
+    final waitToCheckSetting = _getStorage.read(AppConstant.setting);
+    if (waitToCheckSetting == null) {
       final a = Setting.fromJson(
         {
           'temperature': 0,
@@ -37,10 +38,11 @@ class SessionManager {
       final aEncoded = json.encode(a.toJson());
       _getStorage.write(AppConstant.setting, aEncoded);
     }
-    decodedSetting.value =
-        Setting.fromJson(jsonDecode(_getStorage.read(AppConstant.setting)));
+    decodedSetting.value = Setting.fromJson(jsonDecode(waitToCheckSetting));
 
-    if (_getStorage.read(AppConstant.favoriteLocation) == null) {
+    final waitToCheckFavorite = _getStorage.read(AppConstant.favoriteLocation);
+
+    if (waitToCheckFavorite == null) {
       final a = FavoriteLocations.fromJson(
         {
           'lat': 0.0,
@@ -51,18 +53,15 @@ class SessionManager {
       b.add(a);
       final bEncoded = json.encode(b.toJson());
       _getStorage.write(AppConstant.favoriteLocation, bEncoded);
-
-      final c = jsonDecode(_getStorage.read(AppConstant.favoriteLocation));
+      final c = jsonDecode(waitToCheckFavorite);
 
       for (int i = 0; i < c.length; i++) {
         decodedFavoriteLocations.add(FavoriteLocations.fromJson(c[i]));
       }
     } else {
-      final c = _getStorage.read(AppConstant.favoriteLocation);
-
-      for (int i = 0; i < c.length; i++) {
-        decodedFavoriteLocations
-            .add(FavoriteLocations.fromJson(jsonDecode(c[i])));
+      for (int i = 0; i < waitToCheckFavorite.length; i++) {
+        decodedFavoriteLocations.add(
+            FavoriteLocations.fromJson(jsonDecode(waitToCheckFavorite[i])));
       }
     }
   }
@@ -110,8 +109,6 @@ class SessionManager {
       waittouse.add(dataEncoded);
     }
     _getStorage.write(AppConstant.favoriteLocation, waittouse);
-    // decodedFavoriteLocations.value =
-    //     _getStorage.read(AppConstant.favoriteLocation);
   }
 
   void setDeleteFavorite() {
