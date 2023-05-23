@@ -27,15 +27,6 @@ class WeatherCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    // final timeNow =
-    //     DateTime.fromMillisecondsSinceEpoch((weatherInfo?.dt ?? 0) * 1000);
-    // final offsetTimeZone = 25200 - (weatherInfo?.timezone ?? 0);
-
-    // DateTime convertedDateTime = timeNow.add(Duration(seconds: offsetTimeZone));
-
-    // final String formattedDateTime =
-    // DateFormat('dd MMM yyyy HH:mm a').format(convertedDateTime);
-
     return Stack(
       children: [
         GestureDetector(
@@ -150,14 +141,16 @@ class WeatherCard extends StatelessWidget {
         ),
         Align(
           alignment: Alignment.centerRight,
-          child: IconButton(
-            onPressed: onTapDel,
-            icon: const Icon(
-              Icons.restore_from_trash,
-              size: 24,
-              color: AppColors.primaryNight,
-            ),
-          ),
+          child: boolFirst
+              ? const SizedBox()
+              : IconButton(
+                  onPressed: onTapDel,
+                  icon: const Icon(
+                    Icons.restore_from_trash,
+                    size: 24,
+                    color: AppColors.primaryNight,
+                  ),
+                ),
         ),
       ],
     );

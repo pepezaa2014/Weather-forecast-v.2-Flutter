@@ -27,8 +27,8 @@ class LocateLocationController extends GetxController {
   final RxString searchCityText = ''.obs;
 
   final RxList<Weather?> weather = RxList();
-  final Rxn<Setting?> dataSetting = Rxn();
   final RxList<Geocoding?> geocoding = RxList();
+  final Rxn<Setting?> dataSetting = Rxn();
 
   final Rx<Temperature?> temperatureUnit = Temperature.celcius.obs;
   final Rx<Time?> timeUnit = Time.h24.obs;
@@ -53,6 +53,11 @@ class LocateLocationController extends GetxController {
 
     yourLocationNow.value = dataFavoriteLocations[0];
 
+    await _updateWeatherLatLon();
+  }
+
+  Future<void> _updateWeatherLatLon() async {
+    weather.clear();
     for (int index = 0; index < dataFavoriteLocations.length; index++) {
       await _getWeatherLatLon(
         lat: dataFavoriteLocations[index]?.lat ?? 0,
@@ -114,10 +119,11 @@ class LocateLocationController extends GetxController {
 
   void goShowDetail(FavoriteLocations? item) {
     FocusNode().unfocus();
+
     Get.toNamed(
       Routes.SHOW_DETAIL,
       arguments: item,
-    );
+    )?.then((value) => _updateWeatherLatLon());
   }
 
   void clearTextField() {
@@ -149,7 +155,7 @@ class LocateLocationController extends GetxController {
       final result = await _geocodingAPI.getWeatherCity(
         city: cityName,
       );
-      geocoding.value = result;
+      geocoding(result);
     } catch (error) {
       showAlert(
         title: 'Error',

@@ -46,10 +46,10 @@ class LocateLocationView extends GetView<LocateLocationController> {
   }
 
   _body() {
-    final weathers = controller.weather;
-    final geocoding = controller.geocoding;
     return Obx(
       () {
+        final weathers = controller.weather;
+        final geocoding = controller.geocoding;
         return Container(
           color: AppColors.backgroundColor,
           height: double.infinity,
@@ -82,6 +82,12 @@ class LocateLocationView extends GetView<LocateLocationController> {
                             filled: true,
                             fillColor: AppColors.secondaryBox,
                             prefixIcon: const Icon(Icons.search),
+                            suffixIcon: IconButton(
+                              icon: Icon(Icons.close),
+                              onPressed: () {
+                                controller.searchTextCityController.clear();
+                              },
+                            ),
                             contentPadding: const EdgeInsets.symmetric(
                               horizontal: 16,
                               vertical: 12,
@@ -100,7 +106,7 @@ class LocateLocationView extends GetView<LocateLocationController> {
                 ),
                 Padding(
                   padding: const EdgeInsets.all(16),
-                  child: controller.searchCityText != ''
+                  child: controller.searchCityText.value != ''
                       ? SizedBox(
                           width: double.infinity,
                           height: 600,

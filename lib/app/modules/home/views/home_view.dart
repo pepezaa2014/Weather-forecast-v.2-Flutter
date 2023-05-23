@@ -127,7 +127,7 @@ class HomeView extends GetView<HomeController> {
 
     final String formattedDateTime =
         DateFormat('dd MMM yyyy HH:mm a').format(convertedDateTime);
-
+    final setting = controller.dataSetting.value;
     return Container(
       child: Column(
         children: [
@@ -136,20 +136,20 @@ class HomeView extends GetView<HomeController> {
             location_now: (currentWeather == controller.weather[0])
                 ? 'Current Location'
                 : formattedDateTime,
-            unit: controller.temperatureUnit.value,
+            unit: controller.dataSetting.value?.temperature,
           ),
           FutureWeatherWidget(
             futureWeather: futureWeather,
-            timeUnit: controller.timeUnit.value,
+            timeUnit: controller.dataSetting.value?.timeFormat,
           ),
           Details(
             weather_info: currentWeather,
             pollution_info: airPollution,
-            timeUnit: controller.timeUnit.value,
-            windUnit: controller.windUnit.value,
-            distanceUnit: controller.distanceUnit.value,
-            pressureUnit: controller.pressureUnit.value,
-            precipitationUnit: controller.precipitationUnit.value,
+            timeUnit: setting?.timeFormat,
+            windUnit: setting?.windSpeed,
+            distanceUnit: setting?.distance,
+            pressureUnit: setting?.pressure,
+            precipitationUnit: setting?.precipitation,
           ),
         ],
       ),

@@ -31,18 +31,11 @@ class HomeController extends GetxController {
   final FutureWeatherAPI _futureWeatherAPI = Get.find();
   final AirPollutionAPI _airPollutionAPI = Get.find();
 
-  late final RxList<Weather> weather = RxList();
-  late final RxList<FutureWeather> futureWeather = RxList();
-  late final RxList<AirPollution> airPollution = RxList();
+  final RxList<Weather> weather = RxList();
+  final RxList<FutureWeather> futureWeather = RxList();
+  final RxList<AirPollution> airPollution = RxList();
 
-  final Rx<Temperature?> temperatureUnit = Temperature.celcius.obs;
-  final Rx<WindSpeed?> windUnit = WindSpeed.kmh.obs;
-  final Rx<Pressure?> pressureUnit = Pressure.hpa.obs;
-  final Rx<Precipitation?> precipitationUnit = Precipitation.mm.obs;
-  final Rx<Distance?> distanceUnit = Distance.km.obs;
-  final Rx<Time?> timeUnit = Time.h24.obs;
-  final Rxn<Setting?> dataSetting = Rxn();
-
+  Rxn<Setting?> dataSetting = Rxn();
   final RxList<FavoriteLocations?> dataFavoriteLocations = RxList();
 
   final isLoadingGetWeather = false.obs;
@@ -61,14 +54,7 @@ class HomeController extends GetxController {
   @override
   void onInit() {
     super.onInit();
-    dataSetting.value = _sessionManager.decodedSetting.value;
-
-    temperatureUnit.value = dataSetting.value?.temperatureData;
-    windUnit.value = dataSetting.value?.windSpeedData;
-    pressureUnit.value = dataSetting.value?.pressureData;
-    precipitationUnit.value = dataSetting.value?.precipitationData;
-    distanceUnit.value = dataSetting.value?.distanceData;
-    timeUnit.value = dataSetting.value?.timeData;
+    dataSetting = _sessionManager.decodedSetting;
 
     dataFavoriteLocations.value =
         _sessionManager.decodedFavoriteLocations.value;
@@ -77,9 +63,8 @@ class HomeController extends GetxController {
   @override
   void onReady() {
     super.onReady();
-    _determinePosition();
 
-    getAllData();
+    _getAllData();
   }
 
   @override
@@ -96,7 +81,9 @@ class HomeController extends GetxController {
     _determinePosition();
   }
 
-  Future<void> getAllData() async {
+  Future<void> _getAllData() async {
+    await _determinePosition();
+
     for (int index = 1; index < dataFavoriteLocations.length; index++) {
       await _getWeatherLatLon(
         lat: dataFavoriteLocations[index]?.lat ?? 0,
@@ -115,7 +102,7 @@ class HomeController extends GetxController {
     }
   }
 
-  void _determinePosition() async {
+  Future<void> _determinePosition() async {
     bool serviceEnabled;
     LocationPermission permission;
 
@@ -157,13 +144,10 @@ class HomeController extends GetxController {
       lon: location.longitude,
     );
 
-    if (dataFavoriteLocations[0]?.lat == 0 &&
-        dataFavoriteLocations[0]?.lon == 0) {
-      dataFavoriteLocations[0]?.lat = location.latitude;
-      dataFavoriteLocations[0]?.lon = location.longitude;
+    dataFavoriteLocations[0]?.lat = location.latitude;
+    dataFavoriteLocations[0]?.lon = location.longitude;
 
-      _sessionManager.setYourLocation(dataFavoriteLocations);
-    }
+    _sessionManager.setYourLocation(dataFavoriteLocations);
   }
 
   Future<void> _getWeatherLatLon({

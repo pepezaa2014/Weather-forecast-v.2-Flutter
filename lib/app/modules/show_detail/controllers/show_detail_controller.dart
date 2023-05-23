@@ -1,3 +1,5 @@
+import 'dart:ffi';
+
 import 'package:get/get.dart';
 import 'package:intl/intl.dart';
 import 'package:weather_v2_pepe/app/const/distance_extension.dart';
@@ -31,7 +33,7 @@ class ShowDetailController extends GetxController {
   final AirPollutionAPI _airPollutionAPI = Get.find();
   late final Rxn<AirPollution> airPollution = Rxn();
 
-  final Rxn<FavoriteLocations?> weather_info = Rxn();
+  final Rxn<FavoriteLocations?> weatherInfo = Rxn();
 
   final isLoadingGetWeather = false.obs;
 
@@ -59,12 +61,7 @@ class ShowDetailController extends GetxController {
   void onInit() {
     super.onInit();
     dataSetting.value = _sessionManager.decodedSetting.value;
-    weather_info.value = Get.arguments;
-
-    _getWeatherLatLon(
-      lat: weather_info.value?.lat ?? 0,
-      lon: weather_info.value?.lon ?? 0,
-    );
+    weatherInfo.value = Get.arguments;
 
     temperatureUnit.value = dataSetting.value?.temperatureData;
     windUnit.value = dataSetting.value?.windSpeedData;
@@ -79,14 +76,7 @@ class ShowDetailController extends GetxController {
   @override
   void onReady() {
     super.onReady();
-    _getFutureWeather(
-      lat: weather.value?.coord?.lat ?? 0.0,
-      lon: weather.value?.coord?.lon ?? 0.0,
-    );
-    _getAirPollution(
-      lat: weather.value?.coord?.lat ?? 0.0,
-      lon: weather.value?.coord?.lon ?? 0.0,
-    );
+    _getLoadingAllData();
   }
 
   @override
@@ -94,16 +84,32 @@ class ShowDetailController extends GetxController {
     super.onClose();
   }
 
+  Future<void> _getLoadingAllData() async {
+    await _getWeatherLatLon(
+      lat: weatherInfo.value?.lat ?? 0,
+      lon: weatherInfo.value?.lon ?? 0,
+    );
+    await _getFutureWeather(
+      lat: weather.value?.coord?.lat ?? 0.0,
+      lon: weather.value?.coord?.lon ?? 0.0,
+    );
+    await _getAirPollution(
+      lat: weather.value?.coord?.lat ?? 0.0,
+      lon: weather.value?.coord?.lon ?? 0.0,
+    );
+  }
+
   void addFavorite() {
     final RxList<FavoriteLocations?> waitLocation = dataFavoriteLocations;
-    waitLocation.add(
-      FavoriteLocations.fromJson(
-        {
-          'lat': ((weather.value?.coord?.lat ?? 0.0)).toDouble(),
-          'lon': ((weather.value?.coord?.lon ?? 0.0)).toDouble(),
-        },
-      ),
+
+    final result = FavoriteLocations.fromJson(
+      {
+        'lat': ((weather.value?.coord?.lat ?? 0.0)).toDouble(),
+        'lon': ((weather.value?.coord?.lon ?? 0.0)).toDouble(),
+      },
     );
+
+    waitLocation.add(result);
     _sessionManager.setYourLocation(waitLocation);
     Future.delayed(
       Duration.zero,
@@ -113,7 +119,7 @@ class ShowDetailController extends GetxController {
     );
   }
 
-  void _getWeatherLatLon({
+  Future<void> _getWeatherLatLon({
     required double lat,
     required double lon,
   }) async {
@@ -134,7 +140,7 @@ class ShowDetailController extends GetxController {
     }
   }
 
-  void _getFutureWeather({
+  Future<void> _getFutureWeather({
     required double lat,
     required double lon,
   }) async {
@@ -155,7 +161,7 @@ class ShowDetailController extends GetxController {
     }
   }
 
-  void _getAirPollution({
+  Future<void> _getAirPollution({
     required double lat,
     required double lon,
   }) async {

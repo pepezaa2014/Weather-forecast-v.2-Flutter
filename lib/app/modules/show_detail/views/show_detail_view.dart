@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 
 import 'package:get/get.dart';
 import 'package:weather_v2_pepe/app/const/app_colors.dart';
+import 'package:weather_v2_pepe/app/const/time_extension.dart';
 import 'package:weather_v2_pepe/app/data/models/air_pollution_model.dart';
 import 'package:weather_v2_pepe/app/data/models/future_weather_model.dart';
 import 'package:weather_v2_pepe/app/data/models/weather_model.dart';
@@ -50,8 +51,8 @@ class ShowDetailView extends GetView<ShowDetailController> {
           () {
             return Container(
               child: controller.dataFavoriteLocations.any((e) =>
-                      e?.lat == controller.weather_info.value?.lat &&
-                      e?.lon == controller.weather_info.value?.lon)
+                      e?.lat == controller.weatherInfo.value?.lat &&
+                      e?.lon == controller.weatherInfo.value?.lon)
                   ? const SizedBox()
                   : IconButton(
                       onPressed: controller.addFavorite,
@@ -75,19 +76,11 @@ class ShowDetailView extends GetView<ShowDetailController> {
           final currentWeather = controller.weather;
           final futureWeather = controller.futureWeather;
           final airPollution = controller.airPollution;
-          if (controller.airPollution == null ||
-              controller.futureWeather == null ||
-              controller.weather == null) {
-            return Container(
-              color: AppColors.backgroundColor,
-            );
-          } else {
-            return _detail(
-              currentWeather: currentWeather.value,
-              futureWeather: futureWeather.value,
-              airPollution: airPollution.value,
-            );
-          }
+          return _detail(
+            currentWeather: currentWeather.value,
+            futureWeather: futureWeather.value,
+            airPollution: airPollution.value,
+          );
         },
       ),
     );
@@ -98,12 +91,20 @@ class ShowDetailView extends GetView<ShowDetailController> {
     required FutureWeather? futureWeather,
     required AirPollution? airPollution,
   }) {
+    final bool checkedCurrent =
+        (controller.dataFavoriteLocations[0]?.lat ?? 0) ==
+                (controller.weatherInfo.value?.lat ?? 0) &&
+            (controller.dataFavoriteLocations[0]?.lon ?? 0) ==
+                (controller.weatherInfo.value?.lon ?? 0);
     return Container(
       child: Column(
         children: [
           TopView(
             weather_info: currentWeather,
-            location_now: 'Current Location',
+            location_now: checkedCurrent
+                ? 'Current Location'
+                : controller.timeUnit.value?.convertTimeWithTimeZone(
+                    (currentWeather?.dt ?? 0), (currentWeather?.timezone ?? 0)),
             unit: controller.temperatureUnit.value,
           ),
           FutureWeatherWidget(
