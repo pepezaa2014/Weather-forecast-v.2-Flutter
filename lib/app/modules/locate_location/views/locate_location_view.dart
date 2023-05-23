@@ -46,6 +46,8 @@ class LocateLocationView extends GetView<LocateLocationController> {
   }
 
   _body() {
+    final weathers = controller.weather;
+    final geocoding = controller.geocoding.value;
     return Obx(
       () {
         return Container(
@@ -103,16 +105,16 @@ class LocateLocationView extends GetView<LocateLocationController> {
                           width: double.infinity,
                           height: 600,
                           child: ListView.builder(
-                            itemCount: controller.geocoding.length,
+                            itemCount: geocoding.length,
                             itemBuilder: (context, index) {
                               return GestureDetector(
                                 onTap: () =>
                                     controller.changeDataAndGoShowDetail(
-                                        controller.geocoding[index]),
+                                        geocoding[index]),
                                 child: Container(
                                   color: AppColors.backgroundColor,
                                   child: ShowList(
-                                    item: controller.geocoding[index],
+                                    item: geocoding[index],
                                   ),
                                 ),
                               );
@@ -122,9 +124,9 @@ class LocateLocationView extends GetView<LocateLocationController> {
                       : SizedBox(
                           width: double.infinity,
                           height: 600,
-                          child: controller.weather.isNotEmpty
+                          child: weathers.isNotEmpty
                               ? ListView.builder(
-                                  itemCount: controller.weather.length,
+                                  itemCount: weathers.length,
                                   itemBuilder: (context, index) {
                                     return Padding(
                                       padding: const EdgeInsets.only(
@@ -132,7 +134,7 @@ class LocateLocationView extends GetView<LocateLocationController> {
                                         bottom: 4,
                                       ),
                                       child: WeatherCard(
-                                        weather_info: controller.weather[index],
+                                        weather_info: weathers[index],
                                         unit: controller.temperatureUnit.value,
                                         onTap: () => controller.goShowDetail(
                                             controller

@@ -5,6 +5,12 @@ import 'package:flutter/material.dart';
 
 import 'package:get/get.dart';
 import 'package:weather_v2_pepe/app/const/app_colors.dart';
+import 'package:weather_v2_pepe/app/const/distance_extension.dart';
+import 'package:weather_v2_pepe/app/const/precipitation_extension.dart';
+import 'package:weather_v2_pepe/app/const/pressure_extension.dart';
+import 'package:weather_v2_pepe/app/const/temperature_extension.dart';
+import 'package:weather_v2_pepe/app/const/time_extension.dart';
+import 'package:weather_v2_pepe/app/const/wind_speed_extension.dart';
 
 import '../controllers/setting_controller.dart';
 
@@ -83,7 +89,7 @@ class SettingView extends GetView<SettingController> {
                                 ),
                               ),
                             },
-                            groupValue: controller.temperatureUnit.value,
+                            groupValue: controller.temperatureUnit.value?.index,
                             onValueChanged: (value) {
                               controller.changeSettingTemp(value as int);
                             },
@@ -142,7 +148,7 @@ class SettingView extends GetView<SettingController> {
                                 ),
                               ),
                             },
-                            groupValue: controller.windUnit.value,
+                            groupValue: controller.windUnit.value?.index,
                             onValueChanged: (value) {
                               controller.changeSettingWind(value as int);
                             },
@@ -194,7 +200,7 @@ class SettingView extends GetView<SettingController> {
                                 ),
                               ),
                             },
-                            groupValue: controller.pressureUnit.value,
+                            groupValue: controller.pressureUnit.value?.index,
                             onValueChanged: (value) {
                               controller.changeSettingPressure(value as int);
                             },
@@ -246,7 +252,8 @@ class SettingView extends GetView<SettingController> {
                                 ),
                               ),
                             },
-                            groupValue: controller.precipitationUnit.value,
+                            groupValue:
+                                controller.precipitationUnit.value?.index,
                             onValueChanged: (value) {
                               controller
                                   .changeSettingPrecipitataion(value as int);
@@ -299,7 +306,7 @@ class SettingView extends GetView<SettingController> {
                                 ),
                               ),
                             },
-                            groupValue: controller.distanceUnit.value,
+                            groupValue: controller.distanceUnit.value?.index,
                             onValueChanged: (value) {
                               controller.changeSettingDistance(value as int);
                             },
@@ -351,7 +358,7 @@ class SettingView extends GetView<SettingController> {
                                 ),
                               ),
                             },
-                            groupValue: controller.timeUnit.value,
+                            groupValue: controller.timeUnit.value?.index,
                             onValueChanged: (value) {
                               controller.changeSettingTime(value as int);
                             },

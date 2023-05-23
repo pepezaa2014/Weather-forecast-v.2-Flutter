@@ -24,113 +24,115 @@ class TopView extends StatelessWidget {
     if (country == 'null') {
       country = '';
     }
-    return Column(
-      children: [
-        Padding(
-          padding: const EdgeInsets.all(16),
-          child: Column(
-            children: [
-              Text(
-                weather_info?.name?.toString() ?? '',
-                style: const TextStyle(
-                  fontSize: 32,
-                  fontWeight: FontWeight.bold,
-                  color: AppColors.primaryNight,
-                ),
-              ),
-              Text(
-                country,
-                style: const TextStyle(
-                  fontSize: 16,
-                  color: AppColors.secondaryNight,
-                ),
-              ),
-              Text(
-                location_now ?? '',
-                style: const TextStyle(
-                  fontSize: 14,
-                  color: AppColors.thirdaryNight,
-                ),
-              ),
-            ],
-          ),
-        ),
-        Padding(
-          padding: const EdgeInsets.all(8),
-          child: Column(
-            children: [
-              Row(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  Image.asset(
-                    weather_info?.weather
-                            ?.firstWhereOrNull((e) => true)
-                            ?.weatherIcon
-                            ?.imageName
-                            .toString() ??
-                        '',
-                    width: 60,
-                    height: 60,
+    return SizedBox(
+      child: Column(
+        children: [
+          Padding(
+            padding: const EdgeInsets.all(16),
+            child: Column(
+              children: [
+                Text(
+                  weather_info?.name?.toString() ?? '',
+                  style: const TextStyle(
+                    fontSize: 32,
+                    fontWeight: FontWeight.bold,
+                    color: AppColors.primaryNight,
                   ),
-                  Align(
-                    alignment: Alignment.centerLeft,
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      mainAxisAlignment: MainAxisAlignment.start,
-                      children: [
-                        Text(
-                          weather_info?.weather
-                                  ?.firstWhereOrNull((element) => true)
-                                  ?.main
-                                  .toString() ??
-                              '',
-                          style: const TextStyle(
-                            fontSize: 16,
-                            color: AppColors.primaryNight,
-                          ),
-                        ),
-                        Text(
-                          weather_info?.weather
-                                  ?.firstWhereOrNull((element) => true)
-                                  ?.description
-                                  .toString() ??
-                              '',
-                          style: const TextStyle(
-                            fontSize: 16,
-                            color: AppColors.secondaryNight,
-                          ),
-                        ),
-                      ],
+                ),
+                Text(
+                  country,
+                  style: const TextStyle(
+                    fontSize: 16,
+                    color: AppColors.secondaryNight,
+                  ),
+                ),
+                Text(
+                  location_now ?? '',
+                  style: const TextStyle(
+                    fontSize: 14,
+                    color: AppColors.thirdaryNight,
+                  ),
+                ),
+              ],
+            ),
+          ),
+          Padding(
+            padding: const EdgeInsets.all(8),
+            child: Column(
+              children: [
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    Image.asset(
+                      weather_info?.weather
+                              ?.firstWhereOrNull((e) => true)
+                              ?.weatherIcon
+                              ?.imageName
+                              .toString() ??
+                          '',
+                      width: 60,
+                      height: 60,
                     ),
+                    Align(
+                      alignment: Alignment.centerLeft,
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        mainAxisAlignment: MainAxisAlignment.start,
+                        children: [
+                          Text(
+                            weather_info?.weather
+                                    ?.firstWhereOrNull((element) => true)
+                                    ?.main
+                                    .toString() ??
+                                '',
+                            style: const TextStyle(
+                              fontSize: 16,
+                              color: AppColors.primaryNight,
+                            ),
+                          ),
+                          Text(
+                            weather_info?.weather
+                                    ?.firstWhereOrNull((element) => true)
+                                    ?.description
+                                    .toString() ??
+                                '',
+                            style: const TextStyle(
+                              fontSize: 16,
+                              color: AppColors.secondaryNight,
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
+                  ],
+                ),
+                Text(
+                  '${unit?.convertTemp(weather_info?.main?.temp ?? 0.0).toStringAsFixed(0) ?? ''} ${unit?.tempName ?? ''}',
+                  style: const TextStyle(
+                    fontSize: 40,
+                    color: AppColors.primaryNight,
+                    fontWeight: FontWeight.bold,
                   ),
-                ],
-              ),
-              Text(
-                '${unit?.convertTemp(weather_info?.main?.temp ?? 0.0).toStringAsFixed(0) ?? ''} ${unit?.tempName ?? ''}',
-                style: const TextStyle(
-                  fontSize: 40,
-                  color: AppColors.primaryNight,
-                  fontWeight: FontWeight.bold,
                 ),
-              ),
-              Text(
-                'H:${unit?.convertTemp(weather_info?.main?.tempMax ?? 0.0).toStringAsFixed(0) ?? ''} ${unit?.tempName ?? ''} L:${unit?.convertTemp(weather_info?.main?.tempMin ?? 0.0).toStringAsFixed(0) ?? ''} ${unit?.tempName ?? ''}',
-                style: const TextStyle(
-                  fontSize: 16,
-                  color: AppColors.primaryNight,
+                Text(
+                  'H:${unit?.convertTemp(weather_info?.main?.tempMax ?? 0.0).toStringAsFixed(0) ?? ''} ${unit?.tempName ?? ''} L:${unit?.convertTemp(weather_info?.main?.tempMin ?? 0.0).toStringAsFixed(0) ?? ''} ${unit?.tempName ?? ''}',
+                  style: const TextStyle(
+                    fontSize: 16,
+                    color: AppColors.primaryNight,
+                  ),
                 ),
-              ),
-              Text(
-                'Feels like ${unit?.convertTemp(weather_info?.main?.feelsLike ?? 0.0).toStringAsFixed(0) ?? ''} ${unit?.tempName ?? ''}',
-                style: const TextStyle(
-                  fontSize: 14,
-                  color: AppColors.thirdaryNight,
+                Text(
+                  'Feels like ${unit?.convertTemp(weather_info?.main?.feelsLike ?? 0.0).toStringAsFixed(0) ?? ''} ${unit?.tempName ?? ''}',
+                  style: const TextStyle(
+                    fontSize: 14,
+                    color: AppColors.thirdaryNight,
+                  ),
                 ),
-              ),
-            ],
+              ],
+            ),
           ),
-        ),
-      ],
+        ],
+      ),
     );
   }
 }

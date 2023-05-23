@@ -16,6 +16,7 @@ import 'package:weather_v2_pepe/app/utils/show_alert.dart';
 
 class LocateLocationController extends GetxController {
   final SessionManager _sessionManager = Get.find();
+
   final GeocodingAPI _geocodingAPI = Get.find();
   final WeatherAPI _weatherAPI = Get.find();
 
@@ -35,7 +36,6 @@ class LocateLocationController extends GetxController {
   final RxList<FavoriteLocations?> dataFavoriteLocations = RxList();
 
   final isLoadingGetWeather = false.obs;
-
   RxBool get isLoading {
     return [
       isLoadingGetWeather.value,
@@ -43,10 +43,11 @@ class LocateLocationController extends GetxController {
   }
 
   @override
-  void onInit() {
+  void onInit() async {
     super.onInit();
     dataSetting.value = _sessionManager.decodedSetting.value;
-    dataFavoriteLocations.value = _sessionManager.decodedFavoriteLocations;
+    dataFavoriteLocations.value =
+        _sessionManager.decodedFavoriteLocations.value;
 
     temperatureUnit.value = dataSetting.value?.temperatureData;
     timeUnit.value = dataSetting.value?.timeData;
@@ -54,7 +55,7 @@ class LocateLocationController extends GetxController {
     yourLocationNow.value = dataFavoriteLocations[0];
 
     for (int index = 0; index < dataFavoriteLocations.length; index++) {
-      _getWeatherLatLon(
+      await _getWeatherLatLon(
         lat: dataFavoriteLocations[index]?.lat ?? 0,
         lon: dataFavoriteLocations[index]?.lon ?? 0,
       );
@@ -88,10 +89,12 @@ class LocateLocationController extends GetxController {
         'lon': item?.lon,
       },
     );
+    FocusNode().unfocus();
     goShowDetail(result);
   }
 
   void goOpenMap(FavoriteLocations? item) {
+    FocusNode().unfocus();
     Get.toNamed(
       Routes.MAP,
       arguments: item,
@@ -99,6 +102,7 @@ class LocateLocationController extends GetxController {
   }
 
   void goSetting() {
+    FocusNode().unfocus();
     Get.toNamed(
       Routes.SETTING,
     );
@@ -109,6 +113,7 @@ class LocateLocationController extends GetxController {
   }
 
   void goShowDetail(FavoriteLocations? item) {
+    FocusNode().unfocus();
     Get.toNamed(
       Routes.SHOW_DETAIL,
       arguments: item,
@@ -119,7 +124,7 @@ class LocateLocationController extends GetxController {
     searchCityText.value = '';
   }
 
-  void _getWeatherLatLon({
+  Future<void> _getWeatherLatLon({
     required double lat,
     required double lon,
   }) async {

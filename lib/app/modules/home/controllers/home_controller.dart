@@ -36,7 +36,7 @@ class HomeController extends GetxController {
   late final RxList<AirPollution> airPollution = RxList();
 
   final Rx<Temperature?> temperatureUnit = Temperature.celcius.obs;
-  final Rx<WindSpeed?> windUnit = WindSpeed.mph.obs;
+  final Rx<WindSpeed?> windUnit = WindSpeed.kmh.obs;
   final Rx<Pressure?> pressureUnit = Pressure.hpa.obs;
   final Rx<Precipitation?> precipitationUnit = Precipitation.mm.obs;
   final Rx<Distance?> distanceUnit = Distance.km.obs;
@@ -70,7 +70,8 @@ class HomeController extends GetxController {
     distanceUnit.value = dataSetting.value?.distanceData;
     timeUnit.value = dataSetting.value?.timeData;
 
-    dataFavoriteLocations.value = _sessionManager.decodedFavoriteLocations;
+    dataFavoriteLocations.value =
+        _sessionManager.decodedFavoriteLocations.value;
   }
 
   @override
@@ -79,15 +80,7 @@ class HomeController extends GetxController {
     _determinePosition();
 
     for (int index = 1; index < dataFavoriteLocations.length; index++) {
-      _getWeatherLatLon(
-        lat: dataFavoriteLocations[index]?.lat ?? 0,
-        lon: dataFavoriteLocations[index]?.lon ?? 0,
-      );
-      _getFutureWeather(
-        lat: dataFavoriteLocations[index]?.lat ?? 0,
-        lon: dataFavoriteLocations[index]?.lon ?? 0,
-      );
-      _getAirPollution(
+      getAllData(
         lat: dataFavoriteLocations[index]?.lat ?? 0,
         lon: dataFavoriteLocations[index]?.lon ?? 0,
       );
@@ -106,6 +99,26 @@ class HomeController extends GetxController {
   @override
   Future<void> refresh() async {
     _determinePosition();
+  }
+
+  Future<void> getAllData({
+    required double lat,
+    required double lon,
+  }) async {
+    await _getWeatherLatLon(
+      lat: lat,
+      lon: lon,
+    );
+
+    await _getFutureWeather(
+      lat: lat,
+      lon: lon,
+    );
+
+    await _getAirPollution(
+      lat: lat,
+      lon: lon,
+    );
   }
 
   void _determinePosition() async {
@@ -137,15 +150,15 @@ class HomeController extends GetxController {
       );
     }
     final location = await Geolocator.getCurrentPosition();
-    _getWeatherLatLon(
+    await _getWeatherLatLon(
       lat: location.latitude,
       lon: location.longitude,
     );
-    _getFutureWeather(
+    await _getFutureWeather(
       lat: location.latitude,
       lon: location.longitude,
     );
-    _getAirPollution(
+    await _getAirPollution(
       lat: location.latitude,
       lon: location.longitude,
     );
@@ -159,7 +172,7 @@ class HomeController extends GetxController {
     }
   }
 
-  void _getWeatherLatLon({
+  Future<void> _getWeatherLatLon({
     required double lat,
     required double lon,
   }) async {
@@ -180,7 +193,7 @@ class HomeController extends GetxController {
     }
   }
 
-  void _getFutureWeather({
+  Future<void> _getFutureWeather({
     required double lat,
     required double lon,
   }) async {
@@ -201,7 +214,7 @@ class HomeController extends GetxController {
     }
   }
 
-  void _getAirPollution({
+  Future<void> _getAirPollution({
     required double lat,
     required double lon,
   }) async {

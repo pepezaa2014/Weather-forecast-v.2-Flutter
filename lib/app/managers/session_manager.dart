@@ -3,6 +3,12 @@ import 'dart:convert';
 import 'package:get/get.dart';
 import 'package:get_storage/get_storage.dart';
 import 'package:weather_v2_pepe/app/const/app_constant.dart';
+import 'package:weather_v2_pepe/app/const/distance_extension.dart';
+import 'package:weather_v2_pepe/app/const/precipitation_extension.dart';
+import 'package:weather_v2_pepe/app/const/pressure_extension.dart';
+import 'package:weather_v2_pepe/app/const/temperature_extension.dart';
+import 'package:weather_v2_pepe/app/const/time_extension.dart';
+import 'package:weather_v2_pepe/app/const/wind_speed_extension.dart';
 import 'package:weather_v2_pepe/app/data/models/favorite_locations_model.dart';
 import 'package:weather_v2_pepe/app/data/models/setting_model.dart';
 
@@ -15,6 +21,7 @@ class SessionManager {
   final RxList<FavoriteLocations?> decodedFavoriteLocations = RxList();
 
   void loadSession() {
+    _getStorage.remove(AppConstant.setting);
     if (_getStorage.read(AppConstant.setting) == null) {
       final a = Setting.fromJson(
         {
@@ -32,8 +39,9 @@ class SessionManager {
     }
     decodedSetting.value =
         Setting.fromJson(jsonDecode(_getStorage.read(AppConstant.setting)));
+    print(_getStorage.read(AppConstant.setting));
+    print(decodedSetting);
 
-    // _getStorage.remove(AppConstant.favoriteLocation);
     if (_getStorage.read(AppConstant.favoriteLocation) == null) {
       final a = FavoriteLocations.fromJson(
         {
@@ -63,37 +71,37 @@ class SessionManager {
     }
   }
 
-  void setChangeTemperature(int index) {
+  void setChangeTemperature(Temperature? index) {
     decodedSetting.value?.temperature = index;
     final dataEncoded = json.encode(decodedSetting);
     _getStorage.write(AppConstant.setting, dataEncoded);
   }
 
-  void setChangeWind(int index) {
+  void setChangeWind(WindSpeed? index) {
     decodedSetting.value?.windSpeed = index;
     final dataEncoded = json.encode(decodedSetting);
     _getStorage.write(AppConstant.setting, dataEncoded);
   }
 
-  void setChangePressure(int index) {
+  void setChangePressure(Pressure? index) {
     decodedSetting.value?.pressure = index;
     final dataEncoded = json.encode(decodedSetting);
     _getStorage.write(AppConstant.setting, dataEncoded);
   }
 
-  void setChangePrecipitataion(int index) {
+  void setChangePrecipitataion(Precipitation? index) {
     decodedSetting.value?.precipitation = index;
     final dataEncoded = json.encode(decodedSetting);
     _getStorage.write(AppConstant.setting, dataEncoded);
   }
 
-  void setChangeDistance(int index) {
+  void setChangeDistance(Distance? index) {
     decodedSetting.value?.distance = index;
     final dataEncoded = json.encode(decodedSetting);
     _getStorage.write(AppConstant.setting, dataEncoded);
   }
 
-  void setChangeTimeFormat(int index) {
+  void setChangeTimeFormat(Time? index) {
     decodedSetting.value?.timeFormat = index;
     final dataEncoded = json.encode(decodedSetting);
     _getStorage.write(AppConstant.setting, dataEncoded);

@@ -4,7 +4,6 @@ import 'package:weather_v2_pepe/app/const/app_colors.dart';
 import 'package:weather_v2_pepe/app/const/temperature_extension.dart';
 import 'package:weather_v2_pepe/app/data/models/weather_model.dart';
 import 'package:weather_v2_pepe/app/const/weather_icon_extension.dart';
-
 import 'package:collection/collection.dart';
 
 class WeatherCard extends StatelessWidget {
@@ -42,63 +41,64 @@ class WeatherCard extends StatelessWidget {
               child: Row(
                 children: [
                   Expanded(
-                      child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Align(
-                        alignment: Alignment.centerLeft,
-                        child: Text(
-                          weather_info?.name ?? '',
-                          style: const TextStyle(
-                            fontWeight: FontWeight.bold,
-                            fontSize: 16,
-                            color: AppColors.primaryNight,
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Align(
+                          alignment: Alignment.centerLeft,
+                          child: Text(
+                            weather_info?.name ?? '',
+                            style: const TextStyle(
+                              fontWeight: FontWeight.bold,
+                              fontSize: 16,
+                              color: AppColors.primaryNight,
+                            ),
                           ),
                         ),
-                      ),
-                      Align(
-                        alignment: Alignment.centerLeft,
-                        child: Text(
-                          formattedDateTime,
-                          style: const TextStyle(
-                            fontSize: 14,
-                            color: AppColors.secondaryNight,
+                        Align(
+                          alignment: Alignment.centerLeft,
+                          child: Text(
+                            formattedDateTime,
+                            style: const TextStyle(
+                              fontSize: 14,
+                              color: AppColors.secondaryNight,
+                            ),
                           ),
                         ),
-                      ),
-                      Row(
-                        children: [
-                          Image.asset(
-                            weather_info?.weather
-                                    ?.firstWhereOrNull((e) => true)
-                                    ?.weatherIcon
-                                    ?.imageName
-                                    .toString() ??
-                                '',
-                            width: 60,
-                            height: 60,
-                          ),
-                          Padding(
-                            padding: const EdgeInsets.only(left: 8),
-                            child: Align(
-                              alignment: Alignment.centerLeft,
-                              child: Text(
-                                weather_info?.weather
-                                        ?.firstWhereOrNull((element) => true)
-                                        ?.main
-                                        .toString() ??
-                                    '',
-                                style: const TextStyle(
-                                  fontSize: 14,
-                                  color: AppColors.primaryNight,
+                        Row(
+                          children: [
+                            Image.asset(
+                              weather_info?.weather
+                                      ?.firstWhereOrNull((e) => true)
+                                      ?.weatherIcon
+                                      ?.imageName
+                                      .toString() ??
+                                  '',
+                              width: 60,
+                              height: 60,
+                            ),
+                            Padding(
+                              padding: const EdgeInsets.only(left: 8),
+                              child: Align(
+                                alignment: Alignment.centerLeft,
+                                child: Text(
+                                  weather_info?.weather
+                                          ?.firstWhereOrNull((element) => true)
+                                          ?.main
+                                          .toString() ??
+                                      '',
+                                  style: const TextStyle(
+                                    fontSize: 14,
+                                    color: AppColors.primaryNight,
+                                  ),
                                 ),
                               ),
                             ),
-                          ),
-                        ],
-                      ),
-                    ],
-                  )),
+                          ],
+                        ),
+                      ],
+                    ),
+                  ),
                   Expanded(
                     child: Center(
                       child: Column(

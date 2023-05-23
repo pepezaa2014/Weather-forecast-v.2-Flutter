@@ -8,7 +8,6 @@ import 'package:weather_v2_pepe/app/const/time_extension.dart';
 import 'package:weather_v2_pepe/app/const/wind_speed_extension.dart';
 import 'package:weather_v2_pepe/app/data/models/air_pollution_model.dart';
 import 'package:weather_v2_pepe/app/data/models/weather_model.dart';
-import 'package:intl/intl.dart';
 import 'package:weather_v2_pepe/app/const/aqi_extension.dart';
 import 'package:weather_v2_pepe/resources/resources.dart';
 
@@ -34,7 +33,7 @@ class Details extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Container(
+    return SizedBox(
       child: Column(
         children: [
           Padding(
@@ -112,7 +111,7 @@ class Details extends StatelessWidget {
                     description: pressureUnit
                             ?.convertPressture(
                                 weather_info?.main?.pressure ?? 0)
-                            .toStringAsFixed(2) ??
+                            .toStringAsFixed(0) ??
                         '',
                     unitPressure: pressureUnit?.pressureName ?? '',
                   ),
