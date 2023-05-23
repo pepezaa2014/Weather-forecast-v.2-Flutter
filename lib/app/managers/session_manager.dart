@@ -39,6 +39,7 @@ class SessionManager {
     decodedSetting.value =
         Setting.fromJson(jsonDecode(_getStorage.read(AppConstant.setting)));
 
+    // _getStorage.remove(AppConstant.favoriteLocation);
     if (_getStorage.read(AppConstant.favoriteLocation) == null) {
       final a = FavoriteLocations.fromJson(
         {
@@ -112,6 +113,11 @@ class SessionManager {
   }
 
   void setDeleteFavorite() {
-    _getStorage.write(AppConstant.favoriteLocation, decodedFavoriteLocations);
+    final RxList waittouse = RxList();
+    for (int i = 0; i < decodedFavoriteLocations.length; i++) {
+      final a = jsonEncode(decodedFavoriteLocations[i]);
+      waittouse.add(a);
+    }
+    _getStorage.write(AppConstant.favoriteLocation, waittouse);
   }
 }

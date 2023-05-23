@@ -43,6 +43,8 @@ class Weather {
 
     cod = json['cod'];
     message = json['message'];
+    dt = json['dt'];
+    timezone = json['timezone'];
   }
 }
 
