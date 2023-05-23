@@ -47,7 +47,7 @@ class LocateLocationView extends GetView<LocateLocationController> {
 
   _body() {
     final weathers = controller.weather;
-    final geocoding = controller.geocoding.value;
+    final geocoding = controller.geocoding;
     return Obx(
       () {
         return Container(

@@ -21,7 +21,6 @@ class SessionManager {
   final RxList<FavoriteLocations?> decodedFavoriteLocations = RxList();
 
   void loadSession() {
-    _getStorage.remove(AppConstant.setting);
     if (_getStorage.read(AppConstant.setting) == null) {
       final a = Setting.fromJson(
         {
@@ -39,8 +38,6 @@ class SessionManager {
     }
     decodedSetting.value =
         Setting.fromJson(jsonDecode(_getStorage.read(AppConstant.setting)));
-    print(_getStorage.read(AppConstant.setting));
-    print(decodedSetting);
 
     if (_getStorage.read(AppConstant.favoriteLocation) == null) {
       final a = FavoriteLocations.fromJson(
@@ -54,14 +51,12 @@ class SessionManager {
       final bEncoded = json.encode(b.toJson());
       _getStorage.write(AppConstant.favoriteLocation, bEncoded);
 
-      print(_getStorage.read(AppConstant.favoriteLocation));
       final c = jsonDecode(_getStorage.read(AppConstant.favoriteLocation));
 
       for (int i = 0; i < c.length; i++) {
         decodedFavoriteLocations.add(FavoriteLocations.fromJson(c[i]));
       }
     } else {
-      print(_getStorage.read(AppConstant.favoriteLocation));
       final c = _getStorage.read(AppConstant.favoriteLocation);
 
       for (int i = 0; i < c.length; i++) {
@@ -114,5 +109,9 @@ class SessionManager {
       waittouse.add(dataEncoded);
     }
     _getStorage.write(AppConstant.favoriteLocation, waittouse);
+  }
+
+  void setDeleteFavorite() {
+    _getStorage.write(AppConstant.favoriteLocation, decodedFavoriteLocations);
   }
 }

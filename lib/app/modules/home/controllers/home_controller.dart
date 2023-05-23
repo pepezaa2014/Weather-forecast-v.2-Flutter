@@ -79,12 +79,7 @@ class HomeController extends GetxController {
     super.onReady();
     _determinePosition();
 
-    for (int index = 1; index < dataFavoriteLocations.length; index++) {
-      getAllData(
-        lat: dataFavoriteLocations[index]?.lat ?? 0,
-        lon: dataFavoriteLocations[index]?.lon ?? 0,
-      );
-    }
+    getAllData();
   }
 
   @override
@@ -101,24 +96,23 @@ class HomeController extends GetxController {
     _determinePosition();
   }
 
-  Future<void> getAllData({
-    required double lat,
-    required double lon,
-  }) async {
-    await _getWeatherLatLon(
-      lat: lat,
-      lon: lon,
-    );
+  Future<void> getAllData() async {
+    for (int index = 1; index < dataFavoriteLocations.length; index++) {
+      await _getWeatherLatLon(
+        lat: dataFavoriteLocations[index]?.lat ?? 0,
+        lon: dataFavoriteLocations[index]?.lon ?? 0,
+      );
 
-    await _getFutureWeather(
-      lat: lat,
-      lon: lon,
-    );
+      await _getFutureWeather(
+        lat: dataFavoriteLocations[index]?.lat ?? 0,
+        lon: dataFavoriteLocations[index]?.lon ?? 0,
+      );
 
-    await _getAirPollution(
-      lat: lat,
-      lon: lon,
-    );
+      await _getAirPollution(
+        lat: dataFavoriteLocations[index]?.lat ?? 0,
+        lon: dataFavoriteLocations[index]?.lon ?? 0,
+      );
+    }
   }
 
   void _determinePosition() async {
