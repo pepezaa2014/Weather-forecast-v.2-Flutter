@@ -22,13 +22,9 @@ class WeatherCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    print('==================');
-    print(weather_info?.dt);
-    print('==================');
-
     final timeNow =
         DateTime.fromMillisecondsSinceEpoch((weather_info?.dt ?? 0) * 1000);
-    final offsetTimeZone = weather_info?.timezone ?? 0;
+    final offsetTimeZone = 25200 - (weather_info?.timezone ?? 0);
 
     DateTime convertedDateTime = timeNow.add(Duration(seconds: offsetTimeZone));
 

@@ -39,7 +39,6 @@ class SessionManager {
     decodedSetting.value =
         Setting.fromJson(jsonDecode(_getStorage.read(AppConstant.setting)));
 
-    // _getStorage.remove(AppConstant.favoriteLocation);
     if (_getStorage.read(AppConstant.favoriteLocation) == null) {
       final a = FavoriteLocations.fromJson(
         {

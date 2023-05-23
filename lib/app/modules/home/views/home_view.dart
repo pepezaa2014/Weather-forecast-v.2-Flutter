@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 
 import 'package:get/get.dart';
+import 'package:intl/intl.dart';
 import 'package:smooth_page_indicator/smooth_page_indicator.dart';
 import 'package:weather_v2_pepe/app/const/app_colors.dart';
 import 'package:weather_v2_pepe/app/data/models/air_pollution_model.dart';
@@ -118,12 +119,23 @@ class HomeView extends GetView<HomeController> {
     required FutureWeather? futureWeather,
     required AirPollution? airPollution,
   }) {
+    final timeNow =
+        DateTime.fromMillisecondsSinceEpoch((currentWeather?.dt ?? 0) * 1000);
+    final offsetTimeZone = 25200 - (currentWeather?.timezone ?? 0);
+
+    DateTime convertedDateTime = timeNow.add(Duration(seconds: offsetTimeZone));
+
+    final String formattedDateTime =
+        DateFormat('dd MMM yyyy HH:mm a').format(convertedDateTime);
+
     return Container(
       child: Column(
         children: [
           TopView(
             weather_info: currentWeather,
-            location_now: '-',
+            location_now: (currentWeather == controller.weather[0])
+                ? 'Current Location'
+                : formattedDateTime,
             unit: controller.temperatureUnit.value,
           ),
           FutureWeatherWidget(
