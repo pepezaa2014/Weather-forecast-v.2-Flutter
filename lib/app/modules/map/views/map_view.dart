@@ -48,23 +48,20 @@ class MapView extends GetView<MapController> {
             left: 0,
             right: 0,
             bottom: 0,
-            child: Container(
-              width: double.infinity,
-              child: TextButton(
-                onPressed: () {
-                  controller.goShowDetail(controller.convertLatLon());
-                },
-                style: TextButton.styleFrom(
-                  padding: const EdgeInsets.symmetric(vertical: 16),
-                  backgroundColor: Colors.blue,
-                ),
-                child: const Text(
-                  'Select',
-                  style: TextStyle(
-                    fontSize: 18,
-                    fontWeight: FontWeight.bold,
-                    color: AppColors.primaryNight,
-                  ),
+            child: TextButton(
+              onPressed: () {
+                controller.goShowDetail(controller.convertLatLon());
+              },
+              style: TextButton.styleFrom(
+                padding: const EdgeInsets.symmetric(vertical: 16),
+                backgroundColor: Colors.blue,
+              ),
+              child: const Text(
+                'Select',
+                style: TextStyle(
+                  fontSize: 18,
+                  fontWeight: FontWeight.bold,
+                  color: AppColors.primaryNight,
                 ),
               ),
             ),

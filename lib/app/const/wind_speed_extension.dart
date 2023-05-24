@@ -4,7 +4,7 @@ enum WindSpeed {
   mph,
 }
 
-extension WindExtension on WindSpeed {
+extension WindSpeedExtension on WindSpeed {
   int get keyValue {
     switch (this) {
       case WindSpeed.ms:

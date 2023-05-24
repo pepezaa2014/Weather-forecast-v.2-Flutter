@@ -14,8 +14,8 @@ import 'package:weather_v2_pepe/resources/resources.dart';
 class Details extends StatelessWidget {
   const Details({
     super.key,
-    required this.weather_info,
-    required this.pollution_info,
+    required this.weatherInfo,
+    required this.pollutionInfo,
     required this.windUnit,
     required this.pressureUnit,
     required this.precipitationUnit,
@@ -23,8 +23,8 @@ class Details extends StatelessWidget {
     required this.timeUnit,
   });
 
-  final Weather? weather_info;
-  final AirPollution? pollution_info;
+  final Weather? weatherInfo;
+  final AirPollution? pollutionInfo;
   final WindSpeed? windUnit;
   final Pressure? pressureUnit;
   final Precipitation? precipitationUnit;
@@ -43,7 +43,7 @@ class Details extends StatelessWidget {
                 Expanded(
                   child: _item(
                     head: 'AQI',
-                    description: pollution_info?.list
+                    description: pollutionInfo?.list
                             ?.firstWhereOrNull((element) => true)
                             ?.main
                             .airQuality
@@ -55,7 +55,7 @@ class Details extends StatelessWidget {
                 Expanded(
                   child: _item(
                     head: 'PM2.5',
-                    description: pollution_info?.list
+                    description: pollutionInfo?.list
                             ?.firstWhereOrNull((element) => true)
                             ?.components
                             .pm2_5
@@ -75,8 +75,8 @@ class Details extends StatelessWidget {
                   child: _itemTime(
                     head: 'Sunrise',
                     description: timeUnit?.convertTimeWithTimeZoneSun(
-                            (weather_info?.sys?.sunrise ?? 0),
-                            (weather_info?.timezone ?? 0)) ??
+                            (weatherInfo?.sys?.sunrise ?? 0),
+                            (weatherInfo?.timezone ?? 0)) ??
                         '',
                   ),
                 ),
@@ -84,8 +84,8 @@ class Details extends StatelessWidget {
                   child: _itemTime(
                     head: 'Sunset',
                     description: timeUnit?.convertTimeWithTimeZoneSun(
-                            (weather_info?.sys?.sunset ?? 0),
-                            (weather_info?.timezone ?? 0)) ??
+                            (weatherInfo?.sys?.sunset ?? 0),
+                            (weatherInfo?.timezone ?? 0)) ??
                         '',
                   ),
                 ),
@@ -100,19 +100,18 @@ class Details extends StatelessWidget {
                   child: _itemWind(
                     head: 'Wind',
                     description: windUnit
-                            ?.convertWind(weather_info?.wind?.speed ?? 0)
+                            ?.convertWind(weatherInfo?.wind?.speed ?? 0)
                             .toStringAsFixed(2) ??
                         '',
                     unitWind: windUnit?.windName ?? '',
-                    degree: ((weather_info?.wind?.deg) ?? 0 as num).toDouble(),
+                    degree: ((weatherInfo?.wind?.deg) ?? 0).toDouble(),
                   ),
                 ),
                 Expanded(
                   child: _itemPressure(
                     head: 'Pressure',
                     description: pressureUnit
-                            ?.convertPressture(
-                                weather_info?.main?.pressure ?? 0)
+                            ?.convertPressure(weatherInfo?.main?.pressure ?? 0)
                             .toStringAsFixed(0) ??
                         '',
                     unitPressure: pressureUnit?.pressureName ?? '',
@@ -129,7 +128,7 @@ class Details extends StatelessWidget {
                   child: _itemVisible(
                     head: 'Visibility',
                     description: distanceUnit
-                            ?.convertDistance(weather_info?.visibility ?? 0)
+                            ?.convertDistance(weatherInfo?.visibility ?? 0)
                             .toStringAsFixed(2) ??
                         '',
                     unitVisibility: distanceUnit?.distanceName ?? '',
@@ -138,7 +137,7 @@ class Details extends StatelessWidget {
                 Expanded(
                   child: _item(
                     head: 'Humidity',
-                    description: weather_info?.main?.humidity?.toString() ?? '',
+                    description: weatherInfo?.main?.humidity?.toString() ?? '',
                     unit: '%',
                   ),
                 ),
@@ -168,33 +167,6 @@ class Details extends StatelessWidget {
         ),
         Text(
           description + (unit ?? ''),
-          style: const TextStyle(
-            fontSize: 16,
-            color: AppColors.primaryNight,
-          ),
-        ),
-      ],
-    );
-  }
-
-  _itemPrecipitation({
-    required String head,
-    required String description,
-    String? unitPrecipitation,
-  }) {
-    return Column(
-      mainAxisAlignment: MainAxisAlignment.start,
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        Text(
-          head,
-          style: const TextStyle(
-            fontSize: 14,
-            color: AppColors.thirdaryNight,
-          ),
-        ),
-        Text(
-          description + (unitPrecipitation ?? ''),
           style: const TextStyle(
             fontSize: 16,
             color: AppColors.primaryNight,
@@ -311,16 +283,16 @@ class Details extends StatelessWidget {
                 color: AppColors.primaryNight,
               ),
             ),
-            Transform.rotate(
-              angle: degree * 3.14 / 180,
-              child: degree == 0
-                  ? const SizedBox()
-                  : Image.asset(
-                      ImageName.navigationBar,
-                      width: 20,
-                      height: 20,
-                      color: AppColors.primaryNight,
-                    ),
+            Padding(
+              padding: const EdgeInsets.only(left: 8),
+              child: Transform.rotate(
+                angle: degree * 3.14 / 180,
+                child: Image.asset(
+                  ImageName.navigationBar,
+                  width: 20,
+                  height: 20,
+                ),
+              ),
             ),
           ],
         ),

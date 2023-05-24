@@ -45,43 +45,43 @@ class SettingController extends GetxController {
     timeUnit.value = dataSetting.value?.timeFormat;
   }
 
-  void changeSettingTemp(Temperature? index) {
-    final result = Temperature.values.firstWhereOrNull((e) => e == index);
+  void changeSettingTemp(Temperature? value) {
+    final result = Temperature.values.firstWhereOrNull((e) => e == value);
     temperatureUnit.value = result;
     dataSetting.value?.temperature = result;
     _sessionManager.setChangeTemperature(result);
   }
 
-  void changeSettingWind(WindSpeed? index) {
-    final result = WindSpeed.values.firstWhereOrNull((e) => e == index);
+  void changeSettingWind(WindSpeed? value) {
+    final result = WindSpeed.values.firstWhereOrNull((e) => e == value);
     windUnit.value = result;
     dataSetting.value?.windSpeed = result;
     _sessionManager.setChangeWind(result);
   }
 
-  void changeSettingPressure(Pressure? index) {
-    final result = Pressure.values.firstWhereOrNull((e) => e == index);
+  void changeSettingPressure(Pressure? value) {
+    final result = Pressure.values.firstWhereOrNull((e) => e == value);
     pressureUnit.value = result;
     dataSetting.value?.pressure = result;
     _sessionManager.setChangePressure(result);
   }
 
-  void changeSettingPrecipitataion(Precipitation? index) {
-    final result = Precipitation.values.firstWhereOrNull((e) => e == index);
+  void changeSettingPrecipitataion(Precipitation? value) {
+    final result = Precipitation.values.firstWhereOrNull((e) => e == value);
     precipitationUnit.value = result;
     dataSetting.value?.precipitation = result;
     _sessionManager.setChangePrecipitataion(result);
   }
 
-  void changeSettingDistance(Distance? index) {
-    final result = Distance.values.firstWhereOrNull((e) => e == index);
+  void changeSettingDistance(Distance? value) {
+    final result = Distance.values.firstWhereOrNull((e) => e == value);
     distanceUnit.value = result;
     dataSetting.value?.distance = result;
     _sessionManager.setChangeDistance(result);
   }
 
-  void changeSettingTime(Time? index) {
-    final result = Time.values.firstWhereOrNull((e) => e == index);
+  void changeSettingTime(Time? value) {
+    final result = Time.values.firstWhereOrNull((e) => e == value);
     timeUnit.value = result;
     dataSetting.value?.timeFormat = result;
     _sessionManager.setChangeTimeFormat(result);

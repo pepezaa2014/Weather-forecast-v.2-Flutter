@@ -5,8 +5,6 @@ import 'package:weather_v2_pepe/app/core/handle_exceptions.dart';
 import 'package:weather_v2_pepe/app/core/routers/future_weather_router.dart';
 import 'package:weather_v2_pepe/app/data/models/future_weather_model.dart';
 
-import 'package:weather_v2_pepe/app/data/models/weather_model.dart';
-
 class FutureWeatherAPI {
   final DioClient _dioClient;
 

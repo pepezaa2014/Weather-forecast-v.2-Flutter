@@ -1,7 +1,6 @@
 import 'dart:ui';
 
 class AppColors {
-  static const primaryDay = Color(0XFF000000);
   static const primaryNight = Color(0XFFFFFAFA);
   static const secondaryNight = Color(0XFFE6E6FA);
   static const thirdaryNight = Color(0XFFBEBEBE);

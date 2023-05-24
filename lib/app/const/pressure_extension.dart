@@ -22,7 +22,7 @@ extension PressureExtension on Pressure {
     }
   }
 
-  double convertPressture(int pressure) {
+  double convertPressure(int pressure) {
     switch (this) {
       case Pressure.hpa:
         return (pressure).toDouble();

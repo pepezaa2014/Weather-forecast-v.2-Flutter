@@ -27,7 +27,7 @@ extension TempearatueExtension on Temperature {
     }
   }
 
-  double convertTemp(double tempInKelvin) {
+  double convertTemperature(double tempInKelvin) {
     switch (this) {
       case Temperature.celcius:
         return tempInKelvin - 273;

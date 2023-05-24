@@ -14,10 +14,13 @@ class MapController extends GetxController {
   void onInit() {
     super.onInit();
     latLon?.value = Get.arguments;
+
     selectLatLon =
         Rx<LatLng>(LatLng(latLon?.value?.lat ?? 0, latLon?.value?.lon ?? 0));
-    centerLatLng.value =
-        LatLng(latLon?.value?.lat ?? 0, latLon?.value?.lon ?? 0);
+    centerLatLng.value = LatLng(
+      latLon?.value?.lat ?? 0,
+      latLon?.value?.lon ?? 0,
+    );
   }
 
   @override

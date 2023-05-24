@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:intl/intl.dart';
 import 'package:weather_v2_pepe/app/const/app_colors.dart';
 import 'package:weather_v2_pepe/app/const/temperature_extension.dart';
 import 'package:weather_v2_pepe/app/const/time_extension.dart';
@@ -109,7 +108,7 @@ class WeatherCard extends StatelessWidget {
                       child: Column(
                         children: [
                           Text(
-                            '${tempUnit?.convertTemp(weatherInfo?.main?.temp ?? 0.0).toStringAsFixed(0) ?? ''} ${tempUnit?.tempName ?? ''}',
+                            '${tempUnit?.convertTemperature(weatherInfo?.main?.temp ?? 0.0).toStringAsFixed(0) ?? ''} ${tempUnit?.tempName ?? ''}',
                             style: const TextStyle(
                               fontSize: 40,
                               color: AppColors.primaryNight,
@@ -117,14 +116,14 @@ class WeatherCard extends StatelessWidget {
                             ),
                           ),
                           Text(
-                            'H:${tempUnit?.convertTemp(weatherInfo?.main?.tempMax ?? 0.0).toStringAsFixed(0) ?? ''} ${tempUnit?.tempName ?? ''} L:${tempUnit?.convertTemp(weatherInfo?.main?.tempMin ?? 0.0).toStringAsFixed(0) ?? ''} ${tempUnit?.tempName ?? ''}',
+                            'H:${tempUnit?.convertTemperature(weatherInfo?.main?.tempMax ?? 0.0).toStringAsFixed(0) ?? ''} ${tempUnit?.tempName ?? ''} L:${tempUnit?.convertTemperature(weatherInfo?.main?.tempMin ?? 0.0).toStringAsFixed(0) ?? ''} ${tempUnit?.tempName ?? ''}',
                             style: const TextStyle(
                               fontSize: 16,
                               color: AppColors.primaryNight,
                             ),
                           ),
                           Text(
-                            'Feels like ${tempUnit?.convertTemp(weatherInfo?.main?.feelsLike ?? 0.0).toStringAsFixed(0) ?? ''} ${tempUnit?.tempName ?? ''}',
+                            'Feels like ${tempUnit?.convertTemperature(weatherInfo?.main?.feelsLike ?? 0.0).toStringAsFixed(0) ?? ''} ${tempUnit?.tempName ?? ''}',
                             style: const TextStyle(
                               fontSize: 14,
                               color: AppColors.thirdaryNight,

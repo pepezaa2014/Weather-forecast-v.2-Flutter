@@ -1,5 +1,3 @@
-import 'dart:ffi';
-
 import 'package:get/get.dart';
 import 'package:intl/intl.dart';
 import 'package:weather_v2_pepe/app/const/distance_extension.dart';
@@ -47,14 +45,7 @@ class ShowDetailController extends GetxController {
     ].atLeastOneTrue.obs;
   }
 
-  final Rx<Temperature?> temperatureUnit = Temperature.celcius.obs;
-  final Rx<WindSpeed?> windUnit = WindSpeed.mph.obs;
-  final Rx<Pressure?> pressureUnit = Pressure.hpa.obs;
-  final Rx<Precipitation?> precipitationUnit = Precipitation.mm.obs;
-  final Rx<Distance?> distanceUnit = Distance.km.obs;
-  final Rx<Time?> timeUnit = Time.h24.obs;
   final Rxn<Setting?> dataSetting = Rxn();
-
   final RxList<FavoriteLocations?> dataFavoriteLocations = RxList();
 
   @override
@@ -62,13 +53,6 @@ class ShowDetailController extends GetxController {
     super.onInit();
     dataSetting.value = _sessionManager.decodedSetting.value;
     weatherInfo.value = Get.arguments;
-
-    temperatureUnit.value = dataSetting.value?.temperatureData;
-    windUnit.value = dataSetting.value?.windSpeedData;
-    pressureUnit.value = dataSetting.value?.pressureData;
-    precipitationUnit.value = dataSetting.value?.precipitationData;
-    distanceUnit.value = dataSetting.value?.distanceData;
-    timeUnit.value = dataSetting.value?.timeData;
 
     dataFavoriteLocations.value = _sessionManager.decodedFavoriteLocations;
   }

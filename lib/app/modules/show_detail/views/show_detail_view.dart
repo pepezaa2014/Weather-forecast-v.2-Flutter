@@ -96,32 +96,31 @@ class ShowDetailView extends GetView<ShowDetailController> {
                 (controller.weatherInfo.value?.lat ?? 0) &&
             (controller.dataFavoriteLocations[0]?.lon ?? 0) ==
                 (controller.weatherInfo.value?.lon ?? 0);
-    return Container(
-      child: Column(
-        children: [
-          TopView(
-            weather_info: currentWeather,
-            location_now: checkedCurrent
-                ? 'Current Location'
-                : controller.timeUnit.value?.convertTimeWithTimeZone(
-                    (currentWeather?.dt ?? 0), (currentWeather?.timezone ?? 0)),
-            unit: controller.temperatureUnit.value,
-          ),
-          FutureWeatherWidget(
-            futureWeather: futureWeather,
-            timeUnit: controller.timeUnit.value,
-          ),
-          Details(
-            weather_info: currentWeather,
-            pollution_info: airPollution,
-            timeUnit: controller.timeUnit.value,
-            windUnit: controller.windUnit.value,
-            distanceUnit: controller.distanceUnit.value,
-            pressureUnit: controller.pressureUnit.value,
-            precipitationUnit: controller.precipitationUnit.value,
-          ),
-        ],
-      ),
+    return Column(
+      children: [
+        TopView(
+          weatherInfo: currentWeather,
+          locationNow: checkedCurrent
+              ? 'Current Location'
+              : controller.dataSetting.value?.timeFormat
+                  ?.convertTimeWithTimeZone((currentWeather?.dt ?? 0),
+                      (currentWeather?.timezone ?? 0)),
+          unit: controller.dataSetting.value?.temperature,
+        ),
+        FutureWeatherWidget(
+          futureWeather: futureWeather,
+          timeUnit: controller.dataSetting.value?.timeFormat,
+        ),
+        Details(
+          weatherInfo: currentWeather,
+          pollutionInfo: airPollution,
+          timeUnit: controller.dataSetting.value?.timeFormat,
+          windUnit: controller.dataSetting.value?.windSpeed,
+          distanceUnit: controller.dataSetting.value?.distance,
+          pressureUnit: controller.dataSetting.value?.pressure,
+          precipitationUnit: controller.dataSetting.value?.precipitation,
+        ),
+      ],
     );
   }
 }
