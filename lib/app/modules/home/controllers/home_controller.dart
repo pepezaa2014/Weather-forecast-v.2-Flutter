@@ -96,7 +96,7 @@ class HomeController extends GetxController {
 
   @override
   Future<void> refresh() async {
-    _determinePosition();
+    await _getAllData();
   }
 
   Future<void> _getAllData() async {

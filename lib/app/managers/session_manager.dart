@@ -21,7 +21,6 @@ class SessionManager {
   final RxList<FavoriteLocations?> decodedFavoriteLocations = RxList();
 
   void loadSession() {
-    // _getStorage.remove(AppConstant.favoriteLocation);
     final waitToCheckSetting = _getStorage.read(AppConstant.setting);
     if (waitToCheckSetting == null) {
       final a = Setting.fromJson(

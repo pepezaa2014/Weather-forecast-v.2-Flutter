@@ -33,9 +33,22 @@ extension TimeExtension on Time {
 
     switch (this) {
       case Time.h24:
-        return DateFormat('dd MMM yyyy HH:mm').format(convertedDateTime);
+        return DateFormat('dd MMM yyyy H:mm').format(convertedDateTime);
       case Time.h12:
-        return DateFormat('dd MMM yyyy HH:mm a').format(convertedDateTime);
+        return DateFormat('dd MMM yyyy h:mm a').format(convertedDateTime);
+    }
+  }
+
+  String convertTimeWithTimeZoneSun(int time, int timeZone) {
+    final timeNow = DateTime.fromMillisecondsSinceEpoch((time) * 1000);
+    final offsetTimeZone = 25200 - (timeZone);
+    DateTime convertedDateTime = timeNow.add(Duration(seconds: offsetTimeZone));
+
+    switch (this) {
+      case Time.h24:
+        return DateFormat('H:mm').format(convertedDateTime);
+      case Time.h12:
+        return DateFormat('h:mm a').format(convertedDateTime);
     }
   }
 }

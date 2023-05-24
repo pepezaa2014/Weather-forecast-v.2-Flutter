@@ -83,7 +83,7 @@ class LocateLocationView extends GetView<LocateLocationController> {
                             fillColor: AppColors.secondaryBox,
                             prefixIcon: const Icon(Icons.search),
                             suffixIcon: IconButton(
-                              icon: Icon(Icons.close),
+                              icon: const Icon(Icons.close),
                               onPressed: () {
                                 controller.searchTextCityController.clear();
                               },

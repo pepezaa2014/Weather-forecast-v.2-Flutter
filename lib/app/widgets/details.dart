@@ -74,16 +74,18 @@ class Details extends StatelessWidget {
                 Expanded(
                   child: _itemTime(
                     head: 'Sunrise',
-                    description: timeUnit
-                            ?.convertTime((weather_info?.sys?.sunrise) ?? 0) ??
+                    description: timeUnit?.convertTimeWithTimeZoneSun(
+                            (weather_info?.sys?.sunrise ?? 0),
+                            (weather_info?.timezone ?? 0)) ??
                         '',
                   ),
                 ),
                 Expanded(
                   child: _itemTime(
                     head: 'Sunset',
-                    description: timeUnit
-                            ?.convertTime((weather_info?.sys?.sunset) ?? 0) ??
+                    description: timeUnit?.convertTimeWithTimeZoneSun(
+                            (weather_info?.sys?.sunset ?? 0),
+                            (weather_info?.timezone ?? 0)) ??
                         '',
                   ),
                 ),

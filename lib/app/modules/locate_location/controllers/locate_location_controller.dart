@@ -96,7 +96,7 @@ class LocateLocationController extends GetxController {
     Get.toNamed(
       Routes.MAP,
       arguments: item,
-    );
+    )?.then((value) => _updateWeatherLatLon());
   }
 
   void goSetting() {
