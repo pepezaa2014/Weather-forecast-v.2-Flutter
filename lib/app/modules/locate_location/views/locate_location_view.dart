@@ -142,9 +142,10 @@ class LocateLocationView extends GetView<LocateLocationController> {
                                       child: WeatherCard(
                                         boolFirst: index == 0 ? true : false,
                                         weatherInfo: weathers[index],
-                                        tempUnit:
-                                            controller.temperatureUnit.value,
-                                        timeUnit: controller.timeUnit.value,
+                                        tempUnit: controller
+                                            .dataSetting.value?.temperature,
+                                        timeUnit: controller
+                                            .dataSetting.value?.timeFormat,
                                         onTap: () => controller.goShowDetail(
                                             controller
                                                 .dataFavoriteLocations[index]),

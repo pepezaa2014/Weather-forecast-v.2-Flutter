@@ -58,46 +58,48 @@ class FutureWeatherWidget extends StatelessWidget {
     required String? description,
     required String? iconName,
   }) {
-    DateTime dateTime = DateTime.parse(date ?? '');
-    String formattedMonthDate = DateFormat('MMMM dd').format(dateTime);
+    if (date != '') {
+      DateTime dateTime = DateTime.parse(date ?? '');
+      String formattedMonthDate = DateFormat('MMMM dd').format(dateTime);
 
-    int unixTimestamp = dateTime.millisecondsSinceEpoch ~/ 1000;
-    String formattedTime = timeUnit?.convertTime(unixTimestamp) ?? '';
+      int unixTimestamp = dateTime.millisecondsSinceEpoch ~/ 1000;
+      String formattedTime = timeUnit?.convertTime(unixTimestamp) ?? '';
 
-    return Center(
-      child: Padding(
-        padding: const EdgeInsets.all(8),
-        child: Column(
-          children: [
-            Text(
-              formattedMonthDate,
-              style: const TextStyle(
-                fontSize: 14,
-                color: AppColors.secondaryNight,
+      return Center(
+        child: Padding(
+          padding: const EdgeInsets.all(8),
+          child: Column(
+            children: [
+              Text(
+                formattedMonthDate,
+                style: const TextStyle(
+                  fontSize: 14,
+                  color: AppColors.secondaryNight,
+                ),
               ),
-            ),
-            Text(
-              formattedTime,
-              style: const TextStyle(
-                fontSize: 14,
-                color: AppColors.secondaryNight,
+              Text(
+                formattedTime,
+                style: const TextStyle(
+                  fontSize: 14,
+                  color: AppColors.secondaryNight,
+                ),
               ),
-            ),
-            Image.asset(
-              iconName ?? '',
-              width: 32,
-              height: 32,
-            ),
-            Text(
-              description ?? '',
-              style: const TextStyle(
-                fontSize: 14,
-                color: AppColors.secondaryNight,
+              Image.asset(
+                iconName ?? '',
+                width: 32,
+                height: 32,
               ),
-            ),
-          ],
+              Text(
+                description ?? '',
+                style: const TextStyle(
+                  fontSize: 14,
+                  color: AppColors.secondaryNight,
+                ),
+              ),
+            ],
+          ),
         ),
-      ),
-    );
+      );
+    }
   }
 }

@@ -30,9 +30,6 @@ class LocateLocationController extends GetxController {
   final RxList<Geocoding?> geocoding = RxList();
   final Rxn<Setting?> dataSetting = Rxn();
 
-  final Rx<Temperature?> temperatureUnit = Temperature.celcius.obs;
-  final Rx<Time?> timeUnit = Time.h24.obs;
-
   final RxList<FavoriteLocations?> dataFavoriteLocations = RxList();
 
   final isLoadingGetWeather = false.obs;
@@ -47,9 +44,6 @@ class LocateLocationController extends GetxController {
     super.onInit();
     dataSetting.value = _sessionManager.decodedSetting.value;
     dataFavoriteLocations.value = _sessionManager.decodedFavoriteLocations;
-
-    temperatureUnit.value = dataSetting.value?.temperatureData;
-    timeUnit.value = dataSetting.value?.timeData;
 
     yourLocationNow.value = dataFavoriteLocations[0];
 
@@ -109,7 +103,7 @@ class LocateLocationController extends GetxController {
     FocusNode().unfocus();
     Get.toNamed(
       Routes.SETTING,
-    );
+    )?.then((value) => _updateWeatherLatLon());
   }
 
   void deleteFavoriteIndex(int index) {

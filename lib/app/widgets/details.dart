@@ -102,7 +102,7 @@ class Details extends StatelessWidget {
                             .toStringAsFixed(2) ??
                         '',
                     unitWind: windUnit?.windName ?? '',
-                    degree: (weather_info?.wind?.deg as num).toDouble(),
+                    degree: ((weather_info?.wind?.deg) ?? 0 as num).toDouble(),
                   ),
                 ),
                 Expanded(
@@ -311,12 +311,14 @@ class Details extends StatelessWidget {
             ),
             Transform.rotate(
               angle: degree * 3.14 / 180,
-              child: Image.asset(
-                ImageName.navigationBar,
-                width: 20,
-                height: 20,
-                color: AppColors.primaryNight,
-              ),
+              child: degree == 0
+                  ? const SizedBox()
+                  : Image.asset(
+                      ImageName.navigationBar,
+                      width: 20,
+                      height: 20,
+                      color: AppColors.primaryNight,
+                    ),
             ),
           ],
         ),

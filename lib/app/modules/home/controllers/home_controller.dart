@@ -72,17 +72,10 @@ class HomeController extends GetxController {
   }
 
   void goLocate() {
-    Get.toNamed(Routes.LOCATE_LOCATION);
+    Get.toNamed(Routes.LOCATE_LOCATION)?.then((value) => _getAllData());
   }
 
-  @override
-  Future<void> refresh() async {
-    _determinePosition();
-  }
-
-  Future<void> _getAllData() async {
-    await _determinePosition();
-
+  Future<void> _updateAll() async {
     for (int index = 1; index < dataFavoriteLocations.length; index++) {
       await _getWeatherLatLon(
         lat: dataFavoriteLocations[index]?.lat ?? 0,
@@ -99,6 +92,21 @@ class HomeController extends GetxController {
         lon: dataFavoriteLocations[index]?.lon ?? 0,
       );
     }
+  }
+
+  @override
+  Future<void> refresh() async {
+    _determinePosition();
+  }
+
+  Future<void> _getAllData() async {
+    weather.clear();
+    futureWeather.clear();
+    airPollution.clear();
+
+    await _determinePosition();
+
+    await _updateAll();
   }
 
   Future<void> _determinePosition() async {
