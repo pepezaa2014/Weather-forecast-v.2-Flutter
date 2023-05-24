@@ -86,7 +86,8 @@ class SettingView extends GetView<SettingController> {
                                 ),
                               ),
                             },
-                            groupValue: controller.temperatureUnit.value,
+                            groupValue:
+                                controller.dataSetting.value?.temperature,
                             onValueChanged: (value) {
                               controller.changeSettingTemp(value);
                             },
@@ -145,7 +146,7 @@ class SettingView extends GetView<SettingController> {
                                 ),
                               ),
                             },
-                            groupValue: controller.windUnit.value,
+                            groupValue: controller.dataSetting.value?.windSpeed,
                             onValueChanged: (value) {
                               controller.changeSettingWind(value);
                             },
@@ -197,7 +198,7 @@ class SettingView extends GetView<SettingController> {
                                 ),
                               ),
                             },
-                            groupValue: controller.pressureUnit.value,
+                            groupValue: controller.dataSetting.value?.pressure,
                             onValueChanged: (value) {
                               controller.changeSettingPressure(value);
                             },
@@ -249,7 +250,8 @@ class SettingView extends GetView<SettingController> {
                                 ),
                               ),
                             },
-                            groupValue: controller.precipitationUnit.value,
+                            groupValue:
+                                controller.dataSetting.value?.precipitation,
                             onValueChanged: (value) {
                               controller.changeSettingPrecipitataion(value);
                             },
@@ -301,7 +303,7 @@ class SettingView extends GetView<SettingController> {
                                 ),
                               ),
                             },
-                            groupValue: controller.distanceUnit.value,
+                            groupValue: controller.dataSetting.value?.distance,
                             onValueChanged: (value) {
                               controller.changeSettingDistance(value);
                             },
@@ -353,7 +355,8 @@ class SettingView extends GetView<SettingController> {
                                 ),
                               ),
                             },
-                            groupValue: controller.timeUnit.value,
+                            groupValue:
+                                controller.dataSetting.value?.timeFormat,
                             onValueChanged: (value) {
                               controller.changeSettingTime(value);
                             },

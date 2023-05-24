@@ -21,7 +21,10 @@ class SessionManager {
   final RxList<FavoriteLocations?> decodedFavoriteLocations = RxList();
 
   void loadSession() {
-    final waitToCheckSetting = _getStorage.read(AppConstant.setting);
+    // _getStorage.remove(AppConstant.setting);
+    // _getStorage.remove(AppConstant.favoriteLocation);
+
+    var waitToCheckSetting = _getStorage.read(AppConstant.setting);
     if (waitToCheckSetting == null) {
       final a = Setting.fromJson(
         {
@@ -36,11 +39,11 @@ class SessionManager {
 
       final aEncoded = json.encode(a.toJson());
       _getStorage.write(AppConstant.setting, aEncoded);
+      waitToCheckSetting = _getStorage.read(AppConstant.setting);
     }
     decodedSetting.value = Setting.fromJson(jsonDecode(waitToCheckSetting));
 
-    final waitToCheckFavorite = _getStorage.read(AppConstant.favoriteLocation);
-
+    var waitToCheckFavorite = _getStorage.read(AppConstant.favoriteLocation);
     if (waitToCheckFavorite == null) {
       final a = FavoriteLocations.fromJson(
         {
@@ -52,6 +55,9 @@ class SessionManager {
       b.add(a);
       final bEncoded = json.encode(b.toJson());
       _getStorage.write(AppConstant.favoriteLocation, bEncoded);
+      print('=============');
+      waitToCheckFavorite = _getStorage.read(AppConstant.favoriteLocation);
+      print(waitToCheckFavorite);
       final c = jsonDecode(waitToCheckFavorite);
 
       for (int i = 0; i < c.length; i++) {

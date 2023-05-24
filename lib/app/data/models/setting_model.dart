@@ -49,39 +49,3 @@ class Setting {
     return data;
   }
 }
-
-extension TemperatureExtension on Setting {
-  Temperature? get temperatureData {
-    return Temperature.values.firstWhereOrNull((e) => e == temperature);
-  }
-}
-
-extension WindSpeedExtension on Setting {
-  WindSpeed? get windSpeedData {
-    return WindSpeed.values.firstWhereOrNull((e) => e == windSpeed);
-  }
-}
-
-extension PressureExtension on Setting {
-  Pressure? get pressureData {
-    return Pressure.values.firstWhereOrNull((e) => e == pressure);
-  }
-}
-
-extension PrecipitationExtension on Setting {
-  Precipitation? get precipitationData {
-    return Precipitation.values.firstWhereOrNull((e) => e == precipitation);
-  }
-}
-
-extension DistanceExtension on Setting {
-  Distance? get distanceData {
-    return Distance.values.firstWhereOrNull((e) => e == distance);
-  }
-}
-
-extension TimeExtension on Setting {
-  Time? get timeData {
-    return Time.values.firstWhereOrNull((e) => e == timeFormat);
-  }
-}
