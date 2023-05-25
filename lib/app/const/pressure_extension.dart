@@ -4,15 +4,6 @@ enum Pressure {
 }
 
 extension PressureExtension on Pressure {
-  int get keyValue {
-    switch (this) {
-      case Pressure.hpa:
-        return 0;
-      case Pressure.inhg:
-        return 1;
-    }
-  }
-
   String get pressureName {
     switch (this) {
       case Pressure.hpa:

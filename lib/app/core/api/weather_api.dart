@@ -47,4 +47,22 @@ class WeatherAPI {
       throw HandleExceptions.handleError(e);
     }
   }
+
+  Future<Weather> getWeatherId({
+    required int id,
+  }) async {
+    try {
+      final Response response = await _dioClient.get(
+        WeatherRouter.getWeather,
+        queryParameters: {
+          'id': id,
+          'appid': AppConstant.appId,
+        },
+      );
+
+      return Weather.fromJson(response.data);
+    } catch (e) {
+      throw HandleExceptions.handleError(e);
+    }
+  }
 }

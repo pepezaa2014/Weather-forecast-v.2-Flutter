@@ -22,22 +22,23 @@ import 'package:weather_v2_pepe/app/utils/show_alert.dart';
 class ShowDetailController extends GetxController {
   final SessionManager _sessionManager = Get.find();
 
-  final WeatherAPI _weatherAPI = Get.find();
-  late final Rxn<Weather> weather = Rxn();
-
   final FutureWeatherAPI _futureWeatherAPI = Get.find();
   late final Rxn<FutureWeather> futureWeather = Rxn();
+  final RxString testText = ''.obs;
 
   final AirPollutionAPI _airPollutionAPI = Get.find();
   late final Rxn<AirPollution> airPollution = Rxn();
+  final Rxn<Weather> currentLocation = Rxn();
 
-  final Rxn<FavoriteLocations?> weatherInfo = Rxn();
+  final Rxn<Weather?> weatherInfo = Rxn();
 
   final isLoadingGetWeather = false.obs;
 
   DateTime now = DateTime.now();
   late final String formattedDate =
       DateFormat('dd MMMM yyyy HH:mm a').format(now);
+
+  final RxBool isInFav = false.obs;
 
   RxBool get isLoading {
     return [
@@ -46,15 +47,30 @@ class ShowDetailController extends GetxController {
   }
 
   final Rxn<Setting?> dataSetting = Rxn();
-  final RxList<FavoriteLocations?> dataFavoriteLocations = RxList();
+  final RxList<Weather?> dataFavoriteLocations = RxList();
 
   @override
   void onInit() {
     super.onInit();
+    isInFav.value = false;
     dataSetting.value = _sessionManager.decodedSetting.value;
     weatherInfo.value = Get.arguments;
+    currentLocation.value = _sessionManager.decodedCurrentLocation.value;
 
     dataFavoriteLocations.value = _sessionManager.decodedFavoriteLocations;
+
+    for (int index = 0; index < dataFavoriteLocations.length; index++) {
+      if (dataFavoriteLocations[index]?.id == weatherInfo.value?.id) {
+        isInFav.toggle();
+        print('==========================');
+        print(index);
+        print(dataFavoriteLocations[index]?.id);
+        print(weatherInfo.value?.id);
+        testText.value =
+            '$index ${dataFavoriteLocations[index]?.id.toString() ?? ''} ${weatherInfo.value?.id.toString() ?? ''}';
+        print('==========================');
+      }
+    }
   }
 
   @override
@@ -69,59 +85,25 @@ class ShowDetailController extends GetxController {
   }
 
   Future<void> _getLoadingAllData() async {
-    await _getWeatherLatLon(
-      lat: weatherInfo.value?.lat ?? 0,
-      lon: weatherInfo.value?.lon ?? 0,
-    );
     await _getFutureWeather(
-      lat: weather.value?.coord?.lat ?? 0.0,
-      lon: weather.value?.coord?.lon ?? 0.0,
+      lat: weatherInfo.value?.coord?.lat ?? 0.0,
+      lon: weatherInfo.value?.coord?.lon ?? 0.0,
     );
     await _getAirPollution(
-      lat: weather.value?.coord?.lat ?? 0.0,
-      lon: weather.value?.coord?.lon ?? 0.0,
+      lat: weatherInfo.value?.coord?.lat ?? 0.0,
+      lon: weatherInfo.value?.coord?.lon ?? 0.0,
     );
   }
 
   void addFavorite() {
-    final RxList<FavoriteLocations?> waitLocation = dataFavoriteLocations;
+    _sessionManager.setNewFavoriteLocation(weatherInfo.value);
 
-    final result = FavoriteLocations.fromJson(
-      {
-        'lat': ((weather.value?.coord?.lat ?? 0.0)).toDouble(),
-        'lon': ((weather.value?.coord?.lon ?? 0.0)).toDouble(),
-      },
-    );
-
-    waitLocation.add(result);
-    _sessionManager.setYourLocation(waitLocation);
     Future.delayed(
       Duration.zero,
       () {
         Get.back();
       },
     );
-  }
-
-  Future<void> _getWeatherLatLon({
-    required double lat,
-    required double lon,
-  }) async {
-    try {
-      isLoadingGetWeather(true);
-      final result = await _weatherAPI.getWeatherLatLon(
-        lat: lat,
-        lon: lon,
-      );
-      isLoadingGetWeather(false);
-      weather.value = result;
-    } catch (error) {
-      isLoadingGetWeather(false);
-      showAlert(
-        title: 'Error',
-        message: (error as AppError).message,
-      );
-    }
   }
 
   Future<void> _getFutureWeather({

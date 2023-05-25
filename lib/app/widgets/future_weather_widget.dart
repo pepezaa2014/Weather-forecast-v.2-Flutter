@@ -6,16 +6,17 @@ import 'package:weather_v2_pepe/app/const/app_colors.dart';
 import 'package:weather_v2_pepe/app/const/time_extension.dart';
 import 'package:weather_v2_pepe/app/data/models/future_weather_model.dart';
 import 'package:weather_v2_pepe/app/const/weather_icon_extension.dart';
+import 'package:weather_v2_pepe/app/data/models/setting_model.dart';
 
 class FutureWeatherWidget extends StatelessWidget {
   const FutureWeatherWidget({
     super.key,
     required this.futureWeather,
-    required this.timeUnit,
+    required this.setting,
   });
 
   final FutureWeather? futureWeather;
-  final Time? timeUnit;
+  final Setting? setting;
 
   @override
   Widget build(BuildContext context) {
@@ -63,7 +64,8 @@ class FutureWeatherWidget extends StatelessWidget {
       String formattedMonthDate = DateFormat('MMMM dd').format(dateTime);
 
       int unixTimestamp = dateTime.millisecondsSinceEpoch ~/ 1000;
-      String formattedTime = timeUnit?.convertTime(unixTimestamp) ?? '';
+      String formattedTime =
+          setting?.timeFormat.convertTime(unixTimestamp) ?? '';
 
       return Center(
         child: Padding(

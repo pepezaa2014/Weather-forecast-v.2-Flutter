@@ -18,17 +18,20 @@ class LocateLocationController extends GetxController {
   final GeocodingAPI _geocodingAPI = Get.find();
   final WeatherAPI _weatherAPI = Get.find();
 
-  final Rxn<FavoriteLocations?> yourLocationNow = Rxn();
+  final Rxn<Weather?> yourLocationNow = Rxn();
+  final Rxn<Weather?> weatherResult = Rxn();
 
   final TextEditingController searchTextCityController =
       TextEditingController();
   final RxString searchCityText = ''.obs;
 
-  final RxList<Weather?> weather = RxList();
   final RxList<Geocoding?> geocoding = RxList();
   final Rxn<Setting?> dataSetting = Rxn();
 
-  final RxList<FavoriteLocations?> dataFavoriteLocations = RxList();
+  final RxList<Weather?> dataFavoriteLocations = RxList();
+  final RxList<Weather?> allWeatherData = RxList();
+
+  late final Weather? currentLocation;
 
   final isLoadingGetWeather = false.obs;
   RxBool get isLoading {
@@ -38,23 +41,24 @@ class LocateLocationController extends GetxController {
   }
 
   @override
-  void onInit() async {
+  void onInit() {
     super.onInit();
     dataSetting.value = _sessionManager.decodedSetting.value;
     dataFavoriteLocations.value = _sessionManager.decodedFavoriteLocations;
 
-    yourLocationNow.value = dataFavoriteLocations[0];
-
-    await _updateWeatherLatLon();
+    yourLocationNow.value = _sessionManager.decodedCurrentLocation.value;
+    currentLocation = _sessionManager.decodedCurrentLocation.value;
+    _updateWeather();
   }
 
-  Future<void> _updateWeatherLatLon() async {
-    weather.clear();
+  void _updateWeather() {
+    allWeatherData.clear();
+    if (yourLocationNow != null) {
+      allWeatherData.add(yourLocationNow.value);
+    }
+
     for (int index = 0; index < dataFavoriteLocations.length; index++) {
-      await _getWeatherLatLon(
-        lat: dataFavoriteLocations[index]?.lat ?? 0,
-        lon: dataFavoriteLocations[index]?.lon ?? 0,
-      );
+      allWeatherData.add(dataFavoriteLocations[index]);
     }
   }
 
@@ -78,67 +82,69 @@ class LocateLocationController extends GetxController {
     super.onClose();
   }
 
-  void changeDataAndGoShowDetail(Geocoding? item) {
-    final result = FavoriteLocations.fromJson(
-      {
-        'lat': item?.lat,
-        'lon': item?.lon,
-      },
-    );
-    FocusNode().unfocus();
-    goShowDetail(result);
+  Future<void> _getWeatherLatLon({
+    required double lat,
+    required double lon,
+  }) async {
+    try {
+      isLoadingGetWeather(true);
+      final result = await _weatherAPI.getWeatherLatLon(
+        lat: lat,
+        lon: lon,
+      );
+      isLoadingGetWeather(false);
+      weatherResult.value = result;
+    } catch (error) {
+      isLoadingGetWeather(false);
+      showAlert(
+        title: 'Error',
+        message: (error as AppError).message,
+      );
+    }
   }
 
-  void goOpenMap(FavoriteLocations? item) {
+  Future<void> changeDataAndGoShowDetail(Geocoding? item) async {
+    await _getWeatherLatLon(
+      lat: item?.lat ?? 0.0,
+      lon: item?.lon ?? 0.0,
+    );
+
+    FocusNode().unfocus();
+    goShowDetail(weatherResult.value);
+  }
+
+  void goOpenMap(Weather? item) {
     FocusNode().unfocus();
     Get.toNamed(
       Routes.MAP,
       arguments: item,
-    )?.then((value) => _updateWeatherLatLon());
+    )?.then((value) => _updateWeather());
   }
 
   void goSetting() {
     FocusNode().unfocus();
     Get.toNamed(
       Routes.SETTING,
-    )?.then((value) => _updateWeatherLatLon());
+    )?.then((value) => _updateWeather());
   }
 
   void deleteFavoriteIndex(int index) {
     _sessionManager.decodedFavoriteLocations.removeAt(index);
     _sessionManager.setDeleteFavorite();
-    _updateWeatherLatLon();
+    _updateWeather();
   }
 
-  void goShowDetail(FavoriteLocations? item) {
+  void goShowDetail(Weather? item) {
     FocusNode().unfocus();
 
     Get.toNamed(
       Routes.SHOW_DETAIL,
       arguments: item,
-    )?.then((value) => _updateWeatherLatLon());
+    )?.then((value) => _updateWeather());
   }
 
   void clearTextField() {
     searchCityText.value = '';
-  }
-
-  Future<void> _getWeatherLatLon({
-    required double lat,
-    required double lon,
-  }) async {
-    try {
-      final result = await _weatherAPI.getWeatherLatLon(
-        lat: lat,
-        lon: lon,
-      );
-      weather.add(result);
-    } catch (error) {
-      showAlert(
-        title: 'Error',
-        message: (error as AppError).message,
-      );
-    }
   }
 
   void _getGeocoding({

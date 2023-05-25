@@ -39,7 +39,7 @@ class ShowDetailView extends GetView<ShowDetailController> {
           Obx(
             () {
               return Text(
-                controller.weather.value?.name.toString() ?? '',
+                controller.weatherInfo.value?.name.toString() ?? '',
               );
             },
           ),
@@ -50,10 +50,9 @@ class ShowDetailView extends GetView<ShowDetailController> {
         Obx(
           () {
             return Container(
-              child: controller.dataFavoriteLocations.any((e) =>
-                      e?.lat == controller.weatherInfo.value?.lat &&
-                      e?.lon == controller.weatherInfo.value?.lon)
-                  ? const SizedBox()
+              child: controller.isInFav.value == true
+                  // ? const SizedBox()
+                  ? Text(controller.testText.value)
                   : IconButton(
                       onPressed: controller.addFavorite,
                       icon: const Icon(
@@ -73,7 +72,7 @@ class ShowDetailView extends GetView<ShowDetailController> {
       height: double.infinity,
       child: Obx(
         () {
-          final currentWeather = controller.weather;
+          final currentWeather = controller.weatherInfo;
           final futureWeather = controller.futureWeather;
           final airPollution = controller.airPollution;
           return _detail(
@@ -91,34 +90,30 @@ class ShowDetailView extends GetView<ShowDetailController> {
     required FutureWeather? futureWeather,
     required AirPollution? airPollution,
   }) {
-    final bool checkedCurrent =
-        (controller.dataFavoriteLocations[0]?.lat ?? 0) ==
-                (controller.weatherInfo.value?.lat ?? 0) &&
-            (controller.dataFavoriteLocations[0]?.lon ?? 0) ==
-                (controller.weatherInfo.value?.lon ?? 0);
+    // final bool checkedCurrent =
+    //     (controller.dataFavoriteLocations[0]?.lat ?? 0) ==
+    //             (controller.weatherInfo.value?.lat ?? 0) &&
+    //         (controller.dataFavoriteLocations[0]?.lon ?? 0) ==
+    //             (controller.weatherInfo.value?.lon ?? 0);
+    final setting = controller.dataSetting.value;
     return Column(
       children: [
         TopView(
           weatherInfo: currentWeather,
-          locationNow: checkedCurrent
-              ? 'Current Location'
-              : controller.dataSetting.value?.timeFormat
-                  ?.convertTimeWithTimeZone((currentWeather?.dt ?? 0),
-                      (currentWeather?.timezone ?? 0)),
-          unit: controller.dataSetting.value?.temperature,
+          // locationNow: 'Current Location',
+          locationNow: controller.dataSetting.value?.timeFormat
+              .convertTimeWithTimeZone(
+                  (currentWeather?.dt ?? 0), (currentWeather?.timezone ?? 0)),
+          setting: setting,
         ),
         FutureWeatherWidget(
           futureWeather: futureWeather,
-          timeUnit: controller.dataSetting.value?.timeFormat,
+          setting: setting,
         ),
         Details(
           weatherInfo: currentWeather,
           pollutionInfo: airPollution,
-          timeUnit: controller.dataSetting.value?.timeFormat,
-          windUnit: controller.dataSetting.value?.windSpeed,
-          distanceUnit: controller.dataSetting.value?.distance,
-          pressureUnit: controller.dataSetting.value?.pressure,
-          precipitationUnit: controller.dataSetting.value?.precipitation,
+          setting: setting,
         ),
       ],
     );

@@ -18,6 +18,15 @@ class Weather {
   String? name;
   int? cod;
   String? message;
+  String? dtTxt;
+
+  Weather({this.name});
+
+  Map<String, dynamic> toJson() {
+    final data = <String, dynamic>{};
+    data['name'] = name;
+    return data;
+  }
 
   Weather.fromJson(Map<String, dynamic> json) {
     coord = json['coord'] != null ? Coord?.fromJson(json['coord']) : null;
@@ -27,6 +36,8 @@ class Weather {
         weather?.add(WeatherDetail.fromJson(v));
       });
     }
+
+    dtTxt = json['dt_txt'];
 
     main = json['main'] != null ? Main?.fromJson(json['main']) : null;
 

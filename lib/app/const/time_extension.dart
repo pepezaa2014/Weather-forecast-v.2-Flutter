@@ -6,15 +6,6 @@ enum Time {
 }
 
 extension TimeExtension on Time {
-  int get keyValue {
-    switch (this) {
-      case Time.h24:
-        return 0;
-      case Time.h12:
-        return 1;
-    }
-  }
-
   String convertTime(int time) {
     final afterTime =
         DateTime.fromMillisecondsSinceEpoch((time.toInt()) * 1000);

@@ -56,29 +56,29 @@ class HomeView extends GetView<HomeController> {
       onRefresh: controller.refresh,
       child: Obx(
         () {
-          final currentWeather = controller.weather;
-          final futureWeather = controller.futureWeather;
-          final airPollution = controller.airPollution;
+          final allDataWeather = controller.allWeatherData;
+          final allFutureWeather = controller.allFutureWeather;
+          final allAirPollution = controller.allAirPollution;
 
           return Container(
-            child: airPollution.length !=
-                    controller.dataFavoriteLocations.length
+            child: allDataWeather.isEmpty
                 ? Container(
                     color: AppColors.backgroundColor,
                   )
                 : Stack(
+                    // child: Stack(
                     children: [
                       PageView.builder(
                         controller: controller.pageController,
-                        itemCount: controller.dataFavoriteLocations.length,
+                        itemCount: controller.allWeatherData.length,
                         itemBuilder: (context, index) {
                           return Container(
                             color: AppColors.backgroundColor,
                             height: double.infinity,
                             child: _detail(
-                              currentWeather: currentWeather[index],
-                              futureWeather: futureWeather[index],
-                              airPollution: airPollution[index],
+                              allDataWeather: allDataWeather[index],
+                              // allFutureWeather: allFutureWeather[index],
+                              // allAirPollution: allAirPollution[index],
                             ),
                           );
                         },
@@ -93,7 +93,7 @@ class HomeView extends GetView<HomeController> {
                             padding: const EdgeInsets.only(bottom: 16),
                             child: SmoothPageIndicator(
                               controller: controller.pageController,
-                              count: controller.dataFavoriteLocations.length,
+                              count: allDataWeather.length,
                               effect: const WormEffect(
                                 dotHeight: 16,
                                 dotWidth: 16,
@@ -113,36 +113,31 @@ class HomeView extends GetView<HomeController> {
   }
 
   _detail({
-    required Weather? currentWeather,
-    required FutureWeather? futureWeather,
-    required AirPollution? airPollution,
+    required Weather? allDataWeather,
+    // required FutureWeather? allFutureWeather,
+    // required AirPollution? allAirPollution,
   }) {
     final setting = controller.dataSetting.value;
 
     return Column(
       children: [
         TopView(
-          weatherInfo: currentWeather,
-          locationNow: (currentWeather == controller.weather[0])
+          weatherInfo: allDataWeather,
+          locationNow: controller.currentLocation != null
               ? 'Current Location'
-              : controller.dataSetting.value?.timeFormat
-                  ?.convertTimeWithTimeZone(
-                      (currentWeather?.dt ?? 0), currentWeather?.timezone ?? 0),
-          unit: controller.dataSetting.value?.temperature,
+              : setting.timeFormat.convertTimeWithTimeZone(
+                  (allDataWeather?.dt ?? 0), allDataWeather?.timezone ?? 0),
+          setting: setting,
         ),
-        FutureWeatherWidget(
-          futureWeather: futureWeather,
-          timeUnit: controller.dataSetting.value?.timeFormat,
-        ),
-        Details(
-          weatherInfo: currentWeather,
-          pollutionInfo: airPollution,
-          timeUnit: setting?.timeFormat,
-          windUnit: setting?.windSpeed,
-          distanceUnit: setting?.distance,
-          pressureUnit: setting?.pressure,
-          precipitationUnit: setting?.precipitation,
-        ),
+        // FutureWeatherWidget(
+        //   futureWeather: allFutureWeather,
+        //   setting: setting,
+        // ),
+        // Details(
+        //   weatherInfo: allDataWeather,
+        //   pollutionInfo: allAirPollution,
+        //   setting: setting,
+        // ),
       ],
     );
   }

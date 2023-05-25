@@ -5,17 +5,6 @@ enum Temperature {
 }
 
 extension TempearatueExtension on Temperature {
-  int get keyValue {
-    switch (this) {
-      case Temperature.celcius:
-        return 0;
-      case Temperature.fahrenheit:
-        return 1;
-      case Temperature.kelvin:
-        return 2;
-    }
-  }
-
   String get tempName {
     switch (this) {
       case Temperature.celcius:

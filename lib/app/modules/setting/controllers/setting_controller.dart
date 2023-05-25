@@ -11,12 +11,21 @@ import 'package:weather_v2_pepe/app/managers/session_manager.dart';
 class SettingController extends GetxController {
   final SessionManager _sessionManager = Get.find();
 
-  final Rxn<Setting?> dataSetting = Rxn();
+  final Rx<Temperature> temperatureUnit = Temperature.celcius.obs;
+  final Rx<WindSpeed> windUnit = WindSpeed.mph.obs;
+  final Rx<Pressure> pressureUnit = Pressure.hpa.obs;
+  final Rx<Precipitation> precipitationUnit = Precipitation.mm.obs;
+  final Rx<Distance> distanceUnit = Distance.km.obs;
+  final Rx<Time> timeUnit = Time.h24.obs;
+
+  late final Rx<Setting> dataSetting;
 
   @override
   void onInit() {
     super.onInit();
-    dataSetting.value = _sessionManager.decodedSetting.value;
+    dataSetting = _sessionManager.decodedSetting;
+
+    updateData();
   }
 
   @override
@@ -29,39 +38,48 @@ class SettingController extends GetxController {
     super.onClose();
   }
 
-  void changeSettingTemp(Temperature? value) {
-    final result = Temperature.values.firstWhereOrNull((e) => e == value);
-    dataSetting.value?.temperature = result;
-    _sessionManager.setChangeTemperature(result);
+  void updateData() {
+    temperatureUnit.value = dataSetting.value.temperature;
+    windUnit.value = dataSetting.value.windSpeed;
+    pressureUnit.value = dataSetting.value.pressure;
+    precipitationUnit.value = dataSetting.value.precipitation;
+    distanceUnit.value = dataSetting.value.distance;
+    timeUnit.value = dataSetting.value.timeFormat;
   }
 
-  void changeSettingWind(WindSpeed? value) {
-    final result = WindSpeed.values.firstWhereOrNull((e) => e == value);
-    dataSetting.value?.windSpeed = result;
-    _sessionManager.setChangeWind(result);
+  void changeSettingTemp(Temperature value) {
+    temperatureUnit.value = value;
+    dataSetting.value.temperature = value;
+    _sessionManager.setChangeTemperature(value);
   }
 
-  void changeSettingPressure(Pressure? value) {
-    final result = Pressure.values.firstWhereOrNull((e) => e == value);
-    dataSetting.value?.pressure = result;
-    _sessionManager.setChangePressure(result);
+  void changeSettingWind(WindSpeed value) {
+    windUnit.value = value;
+    dataSetting.value.windSpeed = value;
+    _sessionManager.setChangeWind(value);
   }
 
-  void changeSettingPrecipitataion(Precipitation? value) {
-    final result = Precipitation.values.firstWhereOrNull((e) => e == value);
-    dataSetting.value?.precipitation = result;
-    _sessionManager.setChangePrecipitataion(result);
+  void changeSettingPressure(Pressure value) {
+    pressureUnit.value = value;
+    dataSetting.value.pressure = value;
+    _sessionManager.setChangePressure(value);
   }
 
-  void changeSettingDistance(Distance? value) {
-    final result = Distance.values.firstWhereOrNull((e) => e == value);
-    dataSetting.value?.distance = result;
-    _sessionManager.setChangeDistance(result);
+  void changeSettingPrecipitataion(Precipitation value) {
+    precipitationUnit.value = value;
+    dataSetting.value.precipitation = value;
+    _sessionManager.setChangePrecipitataion(value);
   }
 
-  void changeSettingTime(Time? value) {
-    final result = Time.values.firstWhereOrNull((e) => e == value);
-    dataSetting.value?.timeFormat = result;
-    _sessionManager.setChangeTimeFormat(result);
+  void changeSettingDistance(Distance value) {
+    distanceUnit.value = value;
+    dataSetting.value.distance = value;
+    _sessionManager.setChangeDistance(value);
+  }
+
+  void changeSettingTime(Time value) {
+    timeUnit.value = value;
+    dataSetting.value.timeFormat = value;
+    _sessionManager.setChangeTimeFormat(value);
   }
 }

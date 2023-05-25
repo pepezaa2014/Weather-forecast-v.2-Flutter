@@ -1,11 +1,18 @@
 import 'package:get/get.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
+import 'package:weather_v2_pepe/app/core/api/weather_api.dart';
+import 'package:weather_v2_pepe/app/data/models/app_error_model.dart';
 import 'package:weather_v2_pepe/app/data/models/favorite_locations_model.dart';
+import 'package:weather_v2_pepe/app/data/models/weather_model.dart';
 import 'package:weather_v2_pepe/app/routes/app_pages.dart';
+import 'package:weather_v2_pepe/app/utils/show_alert.dart';
 
 class MapController extends GetxController {
   late final GoogleMapController mapController;
-  final Rxn<FavoriteLocations>? latLon = Rxn();
+  final WeatherAPI _weatherAPI = Get.find();
+
+  final Rxn<Weather>? getLatLon = Rxn();
+  final Rxn<Weather?> weather = Rxn();
   late final Rx<LatLng> selectLatLon;
 
   final centerLatLng = LatLng(0, 0).obs;
@@ -13,13 +20,13 @@ class MapController extends GetxController {
   @override
   void onInit() {
     super.onInit();
-    latLon?.value = Get.arguments;
+    getLatLon?.value = Get.arguments;
 
-    selectLatLon =
-        Rx<LatLng>(LatLng(latLon?.value?.lat ?? 0, latLon?.value?.lon ?? 0));
+    selectLatLon = Rx<LatLng>(LatLng(
+        getLatLon?.value?.coord?.lat ?? 0, getLatLon?.value?.coord?.lon ?? 0));
     centerLatLng.value = LatLng(
-      latLon?.value?.lat ?? 0,
-      latLon?.value?.lon ?? 0,
+      getLatLon?.value?.coord?.lat ?? 0,
+      getLatLon?.value?.coord?.lon ?? 0,
     );
   }
 
@@ -41,19 +48,33 @@ class MapController extends GetxController {
     centerLatLng.value = latLng;
   }
 
-  FavoriteLocations? convertLatLon() {
-    return FavoriteLocations.fromJson(
-      {
-        'lat': centerLatLng.value.latitude,
-        'lon': centerLatLng.value.longitude,
-      },
-    );
+  Future<void> _getWeatherLatLon({
+    required double lat,
+    required double lon,
+  }) async {
+    try {
+      final result = await _weatherAPI.getWeatherLatLon(
+        lat: lat,
+        lon: lon,
+      );
+      weather.value = result;
+    } catch (error) {
+      showAlert(
+        title: 'Error',
+        message: (error as AppError).message,
+      );
+    }
   }
 
-  void goShowDetail(FavoriteLocations? item) {
+  Future<void> goShowDetail() async {
+    await _getWeatherLatLon(
+      lat: centerLatLng.value.latitude,
+      lon: centerLatLng.value.longitude,
+    );
+
     Get.toNamed(
       Routes.SHOW_DETAIL,
-      arguments: item,
+      arguments: weather.value,
     );
   }
 }

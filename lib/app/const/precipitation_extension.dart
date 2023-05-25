@@ -4,15 +4,6 @@ enum Precipitation {
 }
 
 extension PrecipitationExtension on Precipitation {
-  int get keyValue {
-    switch (this) {
-      case Precipitation.mm:
-        return 0;
-      case Precipitation.inn:
-        return 1;
-    }
-  }
-
   String get precipitationName {
     switch (this) {
       case Precipitation.mm:

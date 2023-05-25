@@ -9,7 +9,7 @@ import 'package:collection/collection.dart';
 class WeatherCard extends StatelessWidget {
   const WeatherCard({
     super.key,
-    required this.boolFirst,
+    required this.currentLocation,
     required this.weatherInfo,
     required this.tempUnit,
     required this.timeUnit,
@@ -17,7 +17,7 @@ class WeatherCard extends StatelessWidget {
     required this.onTapDel,
   });
 
-  final bool boolFirst;
+  final Weather? currentLocation;
   final Weather? weatherInfo;
   final Temperature? tempUnit;
   final Time? timeUnit;
@@ -57,7 +57,7 @@ class WeatherCard extends StatelessWidget {
                         Align(
                           alignment: Alignment.centerLeft,
                           child: Text(
-                            boolFirst
+                            currentLocation == weatherInfo
                                 ? 'Current Location'
                                 : timeUnit?.convertTimeWithTimeZone(
                                         (weatherInfo?.dt ?? 0),
@@ -140,7 +140,7 @@ class WeatherCard extends StatelessWidget {
         ),
         Align(
           alignment: Alignment.centerRight,
-          child: boolFirst
+          child: currentLocation == weatherInfo
               ? const SizedBox()
               : IconButton(
                   onPressed: onTapDel,

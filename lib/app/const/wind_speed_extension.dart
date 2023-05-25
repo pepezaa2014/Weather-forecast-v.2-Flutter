@@ -5,17 +5,6 @@ enum WindSpeed {
 }
 
 extension WindSpeedExtension on WindSpeed {
-  int get keyValue {
-    switch (this) {
-      case WindSpeed.ms:
-        return 0;
-      case WindSpeed.kmh:
-        return 1;
-      case WindSpeed.mph:
-        return 2;
-    }
-  }
-
   String get windName {
     switch (this) {
       case WindSpeed.ms:

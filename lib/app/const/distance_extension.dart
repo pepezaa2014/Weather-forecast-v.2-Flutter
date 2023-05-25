@@ -4,15 +4,6 @@ enum Distance {
 }
 
 extension DistanceExtension on Distance {
-  int get keyValue {
-    switch (this) {
-      case Distance.km:
-        return 0;
-      case Distance.mi:
-        return 1;
-    }
-  }
-
   String get distanceName {
     switch (this) {
       case Distance.km:

@@ -7,6 +7,7 @@ import 'package:weather_v2_pepe/app/const/pressure_extension.dart';
 import 'package:weather_v2_pepe/app/const/time_extension.dart';
 import 'package:weather_v2_pepe/app/const/wind_speed_extension.dart';
 import 'package:weather_v2_pepe/app/data/models/air_pollution_model.dart';
+import 'package:weather_v2_pepe/app/data/models/setting_model.dart';
 import 'package:weather_v2_pepe/app/data/models/weather_model.dart';
 import 'package:weather_v2_pepe/app/const/aqi_extension.dart';
 import 'package:weather_v2_pepe/resources/resources.dart';
@@ -16,20 +17,12 @@ class Details extends StatelessWidget {
     super.key,
     required this.weatherInfo,
     required this.pollutionInfo,
-    required this.windUnit,
-    required this.pressureUnit,
-    required this.precipitationUnit,
-    required this.distanceUnit,
-    required this.timeUnit,
+    required this.setting,
   });
 
+  final Setting? setting;
   final Weather? weatherInfo;
   final AirPollution? pollutionInfo;
-  final WindSpeed? windUnit;
-  final Pressure? pressureUnit;
-  final Precipitation? precipitationUnit;
-  final Distance? distanceUnit;
-  final Time? timeUnit;
 
   @override
   Widget build(BuildContext context) {
@@ -74,7 +67,7 @@ class Details extends StatelessWidget {
                 Expanded(
                   child: _itemTime(
                     head: 'Sunrise',
-                    description: timeUnit?.convertTimeWithTimeZoneSun(
+                    description: setting?.timeFormat.convertTimeWithTimeZoneSun(
                             (weatherInfo?.sys?.sunrise ?? 0),
                             (weatherInfo?.timezone ?? 0)) ??
                         '',
@@ -83,7 +76,7 @@ class Details extends StatelessWidget {
                 Expanded(
                   child: _itemTime(
                     head: 'Sunset',
-                    description: timeUnit?.convertTimeWithTimeZoneSun(
+                    description: setting?.timeFormat.convertTimeWithTimeZoneSun(
                             (weatherInfo?.sys?.sunset ?? 0),
                             (weatherInfo?.timezone ?? 0)) ??
                         '',
@@ -99,22 +92,22 @@ class Details extends StatelessWidget {
                 Expanded(
                   child: _itemWind(
                     head: 'Wind',
-                    description: windUnit
-                            ?.convertWind(weatherInfo?.wind?.speed ?? 0)
+                    description: setting?.windSpeed
+                            .convertWind(weatherInfo?.wind?.speed ?? 0)
                             .toStringAsFixed(2) ??
                         '',
-                    unitWind: windUnit?.windName ?? '',
+                    unitWind: setting?.windSpeed.windName ?? '',
                     degree: ((weatherInfo?.wind?.deg) ?? 0).toDouble(),
                   ),
                 ),
                 Expanded(
                   child: _itemPressure(
                     head: 'Pressure',
-                    description: pressureUnit
-                            ?.convertPressure(weatherInfo?.main?.pressure ?? 0)
+                    description: setting?.pressure
+                            .convertPressure(weatherInfo?.main?.pressure ?? 0)
                             .toStringAsFixed(0) ??
                         '',
-                    unitPressure: pressureUnit?.pressureName ?? '',
+                    unitPressure: setting?.pressure.pressureName ?? '',
                   ),
                 ),
               ],
@@ -127,11 +120,11 @@ class Details extends StatelessWidget {
                 Expanded(
                   child: _itemVisible(
                     head: 'Visibility',
-                    description: distanceUnit
-                            ?.convertDistance(weatherInfo?.visibility ?? 0)
+                    description: setting?.distance
+                            .convertDistance(weatherInfo?.visibility ?? 0)
                             .toStringAsFixed(2) ??
                         '',
-                    unitVisibility: distanceUnit?.distanceName ?? '',
+                    unitVisibility: setting?.distance.distanceName ?? '',
                   ),
                 ),
                 Expanded(

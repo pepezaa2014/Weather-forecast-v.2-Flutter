@@ -86,10 +86,10 @@ class SettingView extends GetView<SettingController> {
                                 ),
                               ),
                             },
-                            groupValue:
-                                controller.dataSetting.value?.temperature,
+                            groupValue: controller.temperatureUnit.value,
                             onValueChanged: (value) {
-                              controller.changeSettingTemp(value);
+                              controller.changeSettingTemp(
+                                  value ?? Temperature.celcius);
                             },
                           );
                         },
@@ -146,9 +146,10 @@ class SettingView extends GetView<SettingController> {
                                 ),
                               ),
                             },
-                            groupValue: controller.dataSetting.value?.windSpeed,
+                            groupValue: controller.windUnit.value,
                             onValueChanged: (value) {
-                              controller.changeSettingWind(value);
+                              controller
+                                  .changeSettingWind(value ?? WindSpeed.ms);
                             },
                           );
                         },
@@ -198,9 +199,10 @@ class SettingView extends GetView<SettingController> {
                                 ),
                               ),
                             },
-                            groupValue: controller.dataSetting.value?.pressure,
+                            groupValue: controller.pressureUnit.value,
                             onValueChanged: (value) {
-                              controller.changeSettingPressure(value);
+                              controller
+                                  .changeSettingPressure(value ?? Pressure.hpa);
                             },
                           );
                         },
@@ -250,10 +252,10 @@ class SettingView extends GetView<SettingController> {
                                 ),
                               ),
                             },
-                            groupValue:
-                                controller.dataSetting.value?.precipitation,
+                            groupValue: controller.precipitationUnit.value,
                             onValueChanged: (value) {
-                              controller.changeSettingPrecipitataion(value);
+                              controller.changeSettingPrecipitataion(
+                                  value ?? Precipitation.mm);
                             },
                           );
                         },
@@ -303,9 +305,10 @@ class SettingView extends GetView<SettingController> {
                                 ),
                               ),
                             },
-                            groupValue: controller.dataSetting.value?.distance,
+                            groupValue: controller.distanceUnit.value,
                             onValueChanged: (value) {
-                              controller.changeSettingDistance(value);
+                              controller
+                                  .changeSettingDistance(value ?? Distance.km);
                             },
                           );
                         },
@@ -355,10 +358,9 @@ class SettingView extends GetView<SettingController> {
                                 ),
                               ),
                             },
-                            groupValue:
-                                controller.dataSetting.value?.timeFormat,
+                            groupValue: controller.timeUnit.value,
                             onValueChanged: (value) {
-                              controller.changeSettingTime(value);
+                              controller.changeSettingTime(value ?? Time.h24);
                             },
                           );
                         },
