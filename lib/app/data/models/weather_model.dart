@@ -48,7 +48,7 @@ class Weather {
     clouds = json['clouds'] != null ? Clouds?.fromJson(json['clouds']) : null;
 
     sys = json['sys'] != null ? Sys?.fromJson(json['sys']) : null;
-
+    id = json['id'];
     name = json['name'];
     visibility = json['visibility'];
 

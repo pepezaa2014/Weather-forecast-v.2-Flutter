@@ -57,7 +57,7 @@ class WeatherCard extends StatelessWidget {
                         Align(
                           alignment: Alignment.centerLeft,
                           child: Text(
-                            currentLocation == weatherInfo
+                            currentLocation?.id == weatherInfo?.id
                                 ? 'Current Location'
                                 : timeUnit?.convertTimeWithTimeZone(
                                         (weatherInfo?.dt ?? 0),
@@ -140,7 +140,7 @@ class WeatherCard extends StatelessWidget {
         ),
         Align(
           alignment: Alignment.centerRight,
-          child: currentLocation == weatherInfo
+          child: currentLocation?.id == weatherInfo?.id
               ? const SizedBox()
               : IconButton(
                   onPressed: onTapDel,

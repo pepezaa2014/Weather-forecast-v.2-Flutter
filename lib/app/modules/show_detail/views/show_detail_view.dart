@@ -51,8 +51,10 @@ class ShowDetailView extends GetView<ShowDetailController> {
           () {
             return Container(
               child: controller.isInFav.value == true
-                  // ? const SizedBox()
-                  ? Text(controller.testText.value)
+                  // ||
+                  //         controller.currentLocation.value?.id ==
+                  //             controller.weatherInfo.value?.id
+                  ? const SizedBox()
                   : IconButton(
                       onPressed: controller.addFavorite,
                       icon: const Icon(
@@ -90,19 +92,16 @@ class ShowDetailView extends GetView<ShowDetailController> {
     required FutureWeather? futureWeather,
     required AirPollution? airPollution,
   }) {
-    // final bool checkedCurrent =
-    //     (controller.dataFavoriteLocations[0]?.lat ?? 0) ==
-    //             (controller.weatherInfo.value?.lat ?? 0) &&
-    //         (controller.dataFavoriteLocations[0]?.lon ?? 0) ==
-    //             (controller.weatherInfo.value?.lon ?? 0);
     final setting = controller.dataSetting.value;
     return Column(
       children: [
         TopView(
           weatherInfo: currentWeather,
-          // locationNow: 'Current Location',
-          locationNow: controller.dataSetting.value?.timeFormat
-              .convertTimeWithTimeZone(
+          locationNow:
+              // controller.currentLocation.value?.id == currentWeather?.id
+              //     ? 'Current Location'
+              //     :
+              controller.dataSetting.value?.timeFormat.convertTimeWithTimeZone(
                   (currentWeather?.dt ?? 0), (currentWeather?.timezone ?? 0)),
           setting: setting,
         ),

@@ -6,12 +6,8 @@ class AppConstant {
 
   static const limitGeocoding = '5';
 
-  static const favoriteLocation = 'favoriteLocation';
-  static const setting = 'setting';
-  static const currentLocation = 'currentLocation';
-  static const future = 'future';
-  static const airpollution = 'airpollution';
-  static const weather = 'weather';
+  static const favoriteLocation = 'keyValueFavoriteLocation';
+  static const setting = 'keyValueSetting';
 
   static const mapAPI = 'AIzaSyCtE2nxnG_y86GS_KZezYrlcDNq9FAfQt8';
 }

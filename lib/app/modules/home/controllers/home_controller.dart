@@ -3,11 +3,9 @@ import 'package:get/get.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:weather_v2_pepe/app/core/api/air_pollution_api.dart';
 import 'package:weather_v2_pepe/app/core/api/future_weather_api.dart';
-
 import 'package:weather_v2_pepe/app/core/api/weather_api.dart';
 import 'package:weather_v2_pepe/app/data/models/air_pollution_model.dart';
 import 'package:weather_v2_pepe/app/data/models/app_error_model.dart';
-import 'package:weather_v2_pepe/app/data/models/favorite_locations_model.dart';
 import 'package:weather_v2_pepe/app/data/models/future_weather_model.dart';
 import 'package:weather_v2_pepe/app/data/models/setting_model.dart';
 import 'package:weather_v2_pepe/app/data/models/weather_model.dart';
@@ -24,17 +22,19 @@ class HomeController extends GetxController {
   final FutureWeatherAPI _futureWeatherAPI = Get.find();
   final AirPollutionAPI _airPollutionAPI = Get.find();
 
-  late final Rxn<Weather> currentLocation;
-  late final Rx<Setting> dataSetting;
+  final Rxn<Weather> currentLocation = Rxn();
+  final Rxn<FutureWeather> currentFutureWeather = Rxn();
+  final Rxn<AirPollution> currentAirPollution = Rxn();
 
+  late final Rx<Setting> dataSetting;
   late final RxList<Weather?> dataFavoriteLocations;
-  late final RxList<FutureWeather?> dataFutureWeather;
-  late final RxList<AirPollution?> dataAirPollution;
-  final RxList<Weather?> allWeatherInFavorite = RxList();
+
+  final RxList<FutureWeather?> waitAllFutureWeather = RxList();
+  final RxList<AirPollution?> waitAllAirPollution = RxList();
 
   final RxList<Weather?> allWeatherData = RxList();
-  final RxList<FutureWeather> allFutureWeather = RxList();
-  final RxList<AirPollution> allAirPollution = RxList();
+  final RxList<FutureWeather?> allFutureWeather = RxList();
+  final RxList<AirPollution?> allAirPollution = RxList();
 
   final isLoadingGetWeather = false.obs;
 
@@ -53,18 +53,8 @@ class HomeController extends GetxController {
   void onInit() {
     super.onInit();
 
-    currentLocation = _sessionManager.decodedCurrentLocation;
-
     dataSetting = _sessionManager.decodedSetting;
-
     dataFavoriteLocations = _sessionManager.decodedFavoriteLocations;
-
-    if (dataFavoriteLocations[0]?.id == null) {
-      dataFavoriteLocations.removeAt(0);
-    }
-
-    dataAirPollution = _sessionManager.decodedAirpollution;
-    dataFutureWeather = _sessionManager.decodedFuture;
   }
 
   @override
@@ -79,7 +69,10 @@ class HomeController extends GetxController {
   }
 
   void goLocate() {
-    Get.toNamed(Routes.LOCATE_LOCATION)?.then((value) => _updateWeather());
+    Get.toNamed(
+      Routes.LOCATE_LOCATION,
+      arguments: currentLocation,
+    )?.then((value) => _updateWeather());
   }
 
   @override
@@ -88,31 +81,37 @@ class HomeController extends GetxController {
   }
 
   Future<void> _getAllData() async {
+    await _getYourLocation();
+
+    for (int index = 0; index < dataFavoriteLocations.length; index++) {
+      allWeatherData.add(dataFavoriteLocations[index]);
+      _getFutureWeather(
+        lat: dataFavoriteLocations[index]?.coord?.lat ?? 0.0,
+        lon: dataFavoriteLocations[index]?.coord?.lon ?? 0.0,
+      );
+      _getAirPollution(
+        lat: dataFavoriteLocations[index]?.coord?.lat ?? 0.0,
+        lon: dataFavoriteLocations[index]?.coord?.lon ?? 0.0,
+      );
+    }
+  }
+
+  Future<void> _getYourLocation() async {
     await _determinePosition();
     if (currentLocation != null) {
       allWeatherData.add(currentLocation.value);
-
-      // _sessionManager.setNewCurrentLocation(currentLocation.value);
-
-      // _getFutureWeather(
-      //   lat: currentLocation.value?.coord?.lat ?? 0,
-      //   lon: currentLocation.value?.coord?.lon ?? 0,
-      //   index: 0,
-      // );
-      // _getAirPollution(
-      //   lat: currentLocation.value?.coord?.lat ?? 0.0,
-      //   lon: currentLocation.value?.coord?.lon ?? 0.0,
-      //   index: 0,
-      // );
+      allAirPollution.add(currentAirPollution.value);
+      allFutureWeather.add(currentFutureWeather.value);
     }
-    for (int index = 0; index < dataFavoriteLocations.length; index++) {
-      allWeatherData.add(dataFavoriteLocations[index]);
-    }
-    // print(allWeatherData[1]);
+    allWeatherData.refresh();
+    allAirPollution.refresh();
+    allFutureWeather.refresh();
   }
 
   Future<void> _updateWeather() async {
     allWeatherData.clear();
+    allAirPollution.clear();
+    allFutureWeather.clear();
     _getAllData();
   }
 
@@ -146,7 +145,17 @@ class HomeController extends GetxController {
     }
     final location = await Geolocator.getCurrentPosition();
 
-    await _getCurrentLocation(
+    _getCurrentLocation(
+      lat: location.latitude,
+      lon: location.longitude,
+    );
+
+    _getCurrentFutureWeather(
+      lat: location.latitude,
+      lon: location.longitude,
+    );
+
+    _getCurrentAirPollution(
       lat: location.latitude,
       lon: location.longitude,
     );
@@ -174,10 +183,52 @@ class HomeController extends GetxController {
     }
   }
 
+  Future<void> _getCurrentFutureWeather({
+    required double lat,
+    required double lon,
+  }) async {
+    try {
+      isLoadingGetWeather(true);
+      final result = await _futureWeatherAPI.getWeatherLatLon(
+        lat: lat,
+        lon: lon,
+      );
+      isLoadingGetWeather(false);
+      currentFutureWeather.value = result;
+    } catch (error) {
+      isLoadingGetWeather(false);
+      showAlert(
+        title: 'Error',
+        message: (error as AppError).message,
+      );
+    }
+  }
+
+  Future<void> _getCurrentAirPollution({
+    required double lat,
+    required double lon,
+  }) async {
+    try {
+      isLoadingGetWeather(true);
+      final result = await _airPollutionAPI.getWeatherLatLon(
+        lat: lat,
+        lon: lon,
+      );
+      isLoadingGetWeather(false);
+
+      currentAirPollution.value = result;
+    } catch (error) {
+      isLoadingGetWeather(false);
+      showAlert(
+        title: 'Error',
+        message: (error as AppError).message,
+      );
+    }
+  }
+
   Future<void> _getFutureWeather({
     required double lat,
     required double lon,
-    required int index,
   }) async {
     try {
       isLoadingGetWeather(true);
@@ -199,7 +250,6 @@ class HomeController extends GetxController {
   Future<void> _getAirPollution({
     required double lat,
     required double lon,
-    required int index,
   }) async {
     try {
       isLoadingGetWeather(true);

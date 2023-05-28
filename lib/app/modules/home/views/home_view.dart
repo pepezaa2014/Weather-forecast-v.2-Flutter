@@ -61,24 +61,33 @@ class HomeView extends GetView<HomeController> {
           final allAirPollution = controller.allAirPollution;
 
           return Container(
-            child: allDataWeather.isEmpty
+            child: allDataWeather.isEmpty &&
+                    allFutureWeather.isEmpty &&
+                    allAirPollution.isEmpty
                 ? Container(
                     color: AppColors.backgroundColor,
                   )
                 : Stack(
-                    // child: Stack(
                     children: [
                       PageView.builder(
                         controller: controller.pageController,
-                        itemCount: controller.allWeatherData.length,
+                        itemCount: allDataWeather.length,
                         itemBuilder: (context, index) {
                           return Container(
                             color: AppColors.backgroundColor,
                             height: double.infinity,
                             child: _detail(
-                              allDataWeather: allDataWeather[index],
-                              // allFutureWeather: allFutureWeather[index],
-                              // allAirPollution: allAirPollution[index],
+                              weatherData: allDataWeather[index],
+                              futureWeatherData: allFutureWeather.firstWhere(
+                                  (element) =>
+                                      element?.city?.id ==
+                                      allDataWeather[index]?.id),
+                              allAirPollution: allAirPollution.firstWhere(
+                                  (element) =>
+                                      element?.coord?.lat ==
+                                          allDataWeather[index]?.coord?.lat &&
+                                      element?.coord?.lon ==
+                                          allDataWeather[index]?.coord?.lon),
                             ),
                           );
                         },
@@ -113,31 +122,31 @@ class HomeView extends GetView<HomeController> {
   }
 
   _detail({
-    required Weather? allDataWeather,
-    // required FutureWeather? allFutureWeather,
-    // required AirPollution? allAirPollution,
+    required Weather? weatherData,
+    required FutureWeather? futureWeatherData,
+    required AirPollution? allAirPollution,
   }) {
     final setting = controller.dataSetting.value;
 
     return Column(
       children: [
         TopView(
-          weatherInfo: allDataWeather,
-          locationNow: controller.currentLocation != null
+          weatherInfo: weatherData,
+          locationNow: controller.currentLocation.value?.id == weatherData?.id
               ? 'Current Location'
               : setting.timeFormat.convertTimeWithTimeZone(
-                  (allDataWeather?.dt ?? 0), allDataWeather?.timezone ?? 0),
+                  (weatherData?.dt ?? 0), weatherData?.timezone ?? 0),
           setting: setting,
         ),
-        // FutureWeatherWidget(
-        //   futureWeather: allFutureWeather,
-        //   setting: setting,
-        // ),
-        // Details(
-        //   weatherInfo: allDataWeather,
-        //   pollutionInfo: allAirPollution,
-        //   setting: setting,
-        // ),
+        FutureWeatherWidget(
+          futureWeather: futureWeatherData,
+          setting: setting,
+        ),
+        Details(
+          weatherInfo: weatherData,
+          pollutionInfo: allAirPollution,
+          setting: setting,
+        ),
       ],
     );
   }

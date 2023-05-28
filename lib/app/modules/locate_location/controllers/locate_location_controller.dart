@@ -3,7 +3,6 @@ import 'package:get/get.dart';
 import 'package:weather_v2_pepe/app/core/api/geocoding_api.dart';
 import 'package:weather_v2_pepe/app/core/api/weather_api.dart';
 import 'package:weather_v2_pepe/app/data/models/app_error_model.dart';
-import 'package:weather_v2_pepe/app/data/models/favorite_locations_model.dart';
 import 'package:weather_v2_pepe/app/data/models/geocoding_model.dart';
 import 'package:weather_v2_pepe/app/data/models/setting_model.dart';
 import 'package:weather_v2_pepe/app/data/models/weather_model.dart';
@@ -18,20 +17,19 @@ class LocateLocationController extends GetxController {
   final GeocodingAPI _geocodingAPI = Get.find();
   final WeatherAPI _weatherAPI = Get.find();
 
-  final Rxn<Weather?> yourLocationNow = Rxn();
-  final Rxn<Weather?> weatherResult = Rxn();
-
   final TextEditingController searchTextCityController =
       TextEditingController();
   final RxString searchCityText = ''.obs;
 
-  final RxList<Geocoding?> geocoding = RxList();
   final Rxn<Setting?> dataSetting = Rxn();
-
   final RxList<Weather?> dataFavoriteLocations = RxList();
+
   final RxList<Weather?> allWeatherData = RxList();
 
-  late final Weather? currentLocation;
+  late final Rxn<Weather?> currentLocation;
+
+  final RxList<Geocoding?> geocoding = RxList();
+  final Rxn<Weather> selectedCountry = Rxn();
 
   final isLoadingGetWeather = false.obs;
   RxBool get isLoading {
@@ -43,18 +41,17 @@ class LocateLocationController extends GetxController {
   @override
   void onInit() {
     super.onInit();
+    currentLocation = Get.arguments;
+
     dataSetting.value = _sessionManager.decodedSetting.value;
     dataFavoriteLocations.value = _sessionManager.decodedFavoriteLocations;
-
-    yourLocationNow.value = _sessionManager.decodedCurrentLocation.value;
-    currentLocation = _sessionManager.decodedCurrentLocation.value;
     _updateWeather();
   }
 
   void _updateWeather() {
     allWeatherData.clear();
-    if (yourLocationNow != null) {
-      allWeatherData.add(yourLocationNow.value);
+    if (currentLocation != null) {
+      allWeatherData.add(currentLocation.value);
     }
 
     for (int index = 0; index < dataFavoriteLocations.length; index++) {
@@ -93,7 +90,7 @@ class LocateLocationController extends GetxController {
         lon: lon,
       );
       isLoadingGetWeather(false);
-      weatherResult.value = result;
+      selectedCountry.value = result;
     } catch (error) {
       isLoadingGetWeather(false);
       showAlert(
@@ -108,9 +105,7 @@ class LocateLocationController extends GetxController {
       lat: item?.lat ?? 0.0,
       lon: item?.lon ?? 0.0,
     );
-
-    FocusNode().unfocus();
-    goShowDetail(weatherResult.value);
+    goShowDetail(selectedCountry.value);
   }
 
   void goOpenMap(Weather? item) {

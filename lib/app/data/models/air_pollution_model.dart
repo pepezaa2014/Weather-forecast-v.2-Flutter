@@ -1,20 +1,30 @@
 import 'package:get/get_utils/get_utils.dart';
 import 'package:weather_v2_pepe/app/const/aqi_extension.dart';
+import 'package:weather_v2_pepe/app/data/models/future_weather_model.dart';
 
 class AirPollution {
-  List<double>? coord;
+  Coord? coord;
   List<AirPollutionData>? list;
 
   AirPollution.fromJson(Map<String, dynamic> json) {
-    if (json['coord'] is List<dynamic>) {
-      coord = (json['coord'] as List<dynamic>).cast<double>();
-    }
+    coord = json['coord'] != null ? Coord?.fromJson(json['coord']) : null;
+
     if (json['list'] != null) {
       list = <AirPollutionData>[];
       json['list'].forEach((v) {
         list?.add(AirPollutionData.fromJson(v));
       });
     }
+  }
+}
+
+class Coord {
+  double? lat;
+  double? lon;
+
+  Coord.fromJson(Map<String, dynamic> json) {
+    lat = (json['lat'] as num).toDouble();
+    lon = (json['lon'] as num).toDouble();
   }
 }
 

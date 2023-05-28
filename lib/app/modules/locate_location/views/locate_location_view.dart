@@ -66,7 +66,7 @@ class LocateLocationView extends GetView<LocateLocationController> {
                         ),
                         onPressed: () {
                           controller
-                              .goOpenMap(controller.yourLocationNow.value);
+                              .goOpenMap(controller.currentLocation.value);
                         },
                       ),
                       SizedBox(
@@ -140,7 +140,7 @@ class LocateLocationView extends GetView<LocateLocationController> {
                                       ),
                                       child: WeatherCard(
                                         currentLocation:
-                                            controller.currentLocation,
+                                            controller.currentLocation.value,
                                         weatherInfo: weathers[index],
                                         tempUnit: controller
                                             .dataSetting.value?.temperature,

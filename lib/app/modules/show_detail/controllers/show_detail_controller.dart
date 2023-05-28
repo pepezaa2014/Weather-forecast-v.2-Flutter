@@ -23,20 +23,14 @@ class ShowDetailController extends GetxController {
   final SessionManager _sessionManager = Get.find();
 
   final FutureWeatherAPI _futureWeatherAPI = Get.find();
-  late final Rxn<FutureWeather> futureWeather = Rxn();
-  final RxString testText = ''.obs;
-
   final AirPollutionAPI _airPollutionAPI = Get.find();
+
   late final Rxn<AirPollution> airPollution = Rxn();
-  final Rxn<Weather> currentLocation = Rxn();
+  late final Rxn<FutureWeather> futureWeather = Rxn();
 
   final Rxn<Weather?> weatherInfo = Rxn();
 
   final isLoadingGetWeather = false.obs;
-
-  DateTime now = DateTime.now();
-  late final String formattedDate =
-      DateFormat('dd MMMM yyyy HH:mm a').format(now);
 
   final RxBool isInFav = false.obs;
 
@@ -55,20 +49,12 @@ class ShowDetailController extends GetxController {
     isInFav.value = false;
     dataSetting.value = _sessionManager.decodedSetting.value;
     weatherInfo.value = Get.arguments;
-    currentLocation.value = _sessionManager.decodedCurrentLocation.value;
 
     dataFavoriteLocations.value = _sessionManager.decodedFavoriteLocations;
 
     for (int index = 0; index < dataFavoriteLocations.length; index++) {
       if (dataFavoriteLocations[index]?.id == weatherInfo.value?.id) {
         isInFav.toggle();
-        print('==========================');
-        print(index);
-        print(dataFavoriteLocations[index]?.id);
-        print(weatherInfo.value?.id);
-        testText.value =
-            '$index ${dataFavoriteLocations[index]?.id.toString() ?? ''} ${weatherInfo.value?.id.toString() ?? ''}';
-        print('==========================');
       }
     }
   }
@@ -96,7 +82,9 @@ class ShowDetailController extends GetxController {
   }
 
   void addFavorite() {
-    _sessionManager.setNewFavoriteLocation(weatherInfo.value);
+    _sessionManager.setNewFavoriteLocation(
+      weatherInfo.value,
+    );
 
     Future.delayed(
       Duration.zero,
