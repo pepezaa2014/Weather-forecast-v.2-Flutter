@@ -10,6 +10,7 @@ import 'package:weather_v2_pepe/app/data/models/air_pollution_model.dart';
 import 'package:weather_v2_pepe/app/data/models/setting_model.dart';
 import 'package:weather_v2_pepe/app/data/models/weather_model.dart';
 import 'package:weather_v2_pepe/app/const/aqi_extension.dart';
+import 'package:weather_v2_pepe/generated/locales.g.dart';
 import 'package:weather_v2_pepe/resources/resources.dart';
 
 class Details extends StatelessWidget {
@@ -66,7 +67,7 @@ class Details extends StatelessWidget {
               children: [
                 Expanded(
                   child: _itemTime(
-                    head: 'Sunrise',
+                    head: LocaleKeys.home_sunrise.tr,
                     description: setting?.timeFormat.convertTimeWithTimeZoneSun(
                             (weatherInfo?.sys?.sunrise ?? 0),
                             (weatherInfo?.timezone ?? 0)) ??
@@ -75,7 +76,7 @@ class Details extends StatelessWidget {
                 ),
                 Expanded(
                   child: _itemTime(
-                    head: 'Sunset',
+                    head: LocaleKeys.home_sunset.tr,
                     description: setting?.timeFormat.convertTimeWithTimeZoneSun(
                             (weatherInfo?.sys?.sunset ?? 0),
                             (weatherInfo?.timezone ?? 0)) ??
@@ -91,7 +92,7 @@ class Details extends StatelessWidget {
               children: [
                 Expanded(
                   child: _itemWind(
-                    head: 'Wind',
+                    head: LocaleKeys.home_wind.tr,
                     description: setting?.windSpeed
                             .convertWind(weatherInfo?.wind?.speed ?? 0)
                             .toStringAsFixed(2) ??
@@ -102,7 +103,7 @@ class Details extends StatelessWidget {
                 ),
                 Expanded(
                   child: _itemPressure(
-                    head: 'Pressure',
+                    head: LocaleKeys.home_pressure.tr,
                     description: setting?.pressure
                             .convertPressure(weatherInfo?.main?.pressure ?? 0)
                             .toStringAsFixed(0) ??
@@ -119,7 +120,7 @@ class Details extends StatelessWidget {
               children: [
                 Expanded(
                   child: _itemVisible(
-                    head: 'Visibility',
+                    head: LocaleKeys.home_visibility.tr,
                     description: setting?.distance
                             .convertDistance(weatherInfo?.visibility ?? 0)
                             .toStringAsFixed(2) ??
@@ -129,7 +130,7 @@ class Details extends StatelessWidget {
                 ),
                 Expanded(
                   child: _item(
-                    head: 'Humidity',
+                    head: LocaleKeys.home_humidity.tr,
                     description: weatherInfo?.main?.humidity?.toString() ?? '',
                     unit: '%',
                   ),

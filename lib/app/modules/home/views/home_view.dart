@@ -11,6 +11,7 @@ import 'package:weather_v2_pepe/app/utils/loading_indicator.dart';
 import 'package:weather_v2_pepe/app/widgets/details.dart';
 import 'package:weather_v2_pepe/app/widgets/future_weather_widget.dart';
 import 'package:weather_v2_pepe/app/widgets/top_view.dart';
+import 'package:weather_v2_pepe/generated/locales.g.dart';
 
 import '../controllers/home_controller.dart';
 
@@ -36,8 +37,8 @@ class HomeView extends GetView<HomeController> {
   _appbar() {
     return AppBar(
       automaticallyImplyLeading: false,
-      title: const Text(
-        'Weather',
+      title: Text(
+        LocaleKeys.home_title.tr,
       ),
       centerTitle: true,
       actions: [
@@ -63,7 +64,8 @@ class HomeView extends GetView<HomeController> {
         return Container(
           child: getAllWeather.isEmpty &&
                   allFutureWeather.isEmpty &&
-                  allAirPollution.isEmpty
+                  allAirPollution.isEmpty &&
+                  allDataWeather.isEmpty
               ? Container(
                   color: AppColors.backgroundColor,
                 )
@@ -139,7 +141,7 @@ class HomeView extends GetView<HomeController> {
               weatherInfo: weatherData,
               locationNow:
                   controller.currentLocation.value?.id == weatherData?.id
-                      ? 'Current Location'
+                      ? LocaleKeys.home_location.tr
                       : setting.timeFormat.convertTimeWithTimeZone(
                           (weatherData?.dt ?? 0), weatherData?.timezone ?? 0),
               setting: setting,

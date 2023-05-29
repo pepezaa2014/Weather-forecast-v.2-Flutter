@@ -9,6 +9,7 @@ import 'package:weather_v2_pepe/app/const/pressure_extension.dart';
 import 'package:weather_v2_pepe/app/const/temperature_extension.dart';
 import 'package:weather_v2_pepe/app/const/time_extension.dart';
 import 'package:weather_v2_pepe/app/const/wind_speed_extension.dart';
+import 'package:weather_v2_pepe/generated/locales.g.dart';
 
 import '../controllers/setting_controller.dart';
 
@@ -24,7 +25,9 @@ class SettingView extends GetView<SettingController> {
 
   _appbar() {
     return AppBar(
-      title: const Text('Settings'),
+      title: Text(
+        LocaleKeys.setting_title.tr,
+      ),
       centerTitle: true,
     );
   }
@@ -43,13 +46,13 @@ class SettingView extends GetView<SettingController> {
             children: [
               Row(
                 children: [
-                  const Expanded(
+                  Expanded(
                     flex: 1,
                     child: Padding(
-                      padding: EdgeInsets.all(16),
+                      padding: const EdgeInsets.all(16),
                       child: Text(
-                        'Temperature',
-                        style: TextStyle(
+                        LocaleKeys.setting_temperature.tr,
+                        style: const TextStyle(
                           fontSize: 16,
                           color: AppColors.primaryNight,
                         ),
@@ -103,13 +106,13 @@ class SettingView extends GetView<SettingController> {
               ),
               Row(
                 children: [
-                  const Expanded(
+                  Expanded(
                     flex: 1,
                     child: Padding(
-                      padding: EdgeInsets.all(16),
+                      padding: const EdgeInsets.all(16),
                       child: Text(
-                        'Wind Speed',
-                        style: TextStyle(
+                        LocaleKeys.setting_windSpeed.tr,
+                        style: const TextStyle(
                           fontSize: 16,
                           color: AppColors.primaryNight,
                         ),
@@ -163,13 +166,13 @@ class SettingView extends GetView<SettingController> {
               ),
               Row(
                 children: [
-                  const Expanded(
+                  Expanded(
                     flex: 1,
                     child: Padding(
-                      padding: EdgeInsets.all(16),
+                      padding: const EdgeInsets.all(16),
                       child: Text(
-                        'Pressure',
-                        style: TextStyle(
+                        LocaleKeys.setting_pressure.tr,
+                        style: const TextStyle(
                           fontSize: 16,
                           color: AppColors.primaryNight,
                         ),
@@ -216,13 +219,13 @@ class SettingView extends GetView<SettingController> {
               ),
               Row(
                 children: [
-                  const Expanded(
+                  Expanded(
                     flex: 1,
                     child: Padding(
-                      padding: EdgeInsets.all(16),
+                      padding: const EdgeInsets.all(16),
                       child: Text(
-                        'Precipitation',
-                        style: TextStyle(
+                        LocaleKeys.setting_precipitation.tr,
+                        style: const TextStyle(
                           fontSize: 16,
                           color: AppColors.primaryNight,
                         ),
@@ -269,13 +272,13 @@ class SettingView extends GetView<SettingController> {
               ),
               Row(
                 children: [
-                  const Expanded(
+                  Expanded(
                     flex: 1,
                     child: Padding(
-                      padding: EdgeInsets.all(16),
+                      padding: const EdgeInsets.all(16),
                       child: Text(
-                        'Distance',
-                        style: TextStyle(
+                        LocaleKeys.setting_distance.tr,
+                        style: const TextStyle(
                           fontSize: 16,
                           color: AppColors.primaryNight,
                         ),
@@ -322,13 +325,13 @@ class SettingView extends GetView<SettingController> {
               ),
               Row(
                 children: [
-                  const Expanded(
+                  Expanded(
                     flex: 1,
                     child: Padding(
-                      padding: EdgeInsets.all(16),
+                      padding: const EdgeInsets.all(16),
                       child: Text(
-                        'Time Format',
-                        style: TextStyle(
+                        LocaleKeys.setting_timeFormat.tr,
+                        style: const TextStyle(
                           fontSize: 16,
                           color: AppColors.primaryNight,
                         ),
@@ -342,17 +345,17 @@ class SettingView extends GetView<SettingController> {
                       child: Obx(
                         () {
                           return CupertinoSlidingSegmentedControl(
-                            children: const {
+                            children: {
                               Time.h24: Text(
-                                '24-hour',
-                                style: TextStyle(
+                                LocaleKeys.setting_h24.tr,
+                                style: const TextStyle(
                                   fontSize: 16,
                                   color: AppColors.fourthNight,
                                 ),
                               ),
                               Time.h12: Text(
-                                '12-hour',
-                                style: TextStyle(
+                                LocaleKeys.setting_h12.tr,
+                                style: const TextStyle(
                                   fontSize: 16,
                                   color: AppColors.fourthNight,
                                 ),

@@ -5,6 +5,7 @@ import 'package:weather_v2_pepe/app/const/app_colors.dart';
 import 'package:weather_v2_pepe/app/utils/loading_indicator.dart';
 import 'package:weather_v2_pepe/app/modules/locate_location/widgets/show_list.dart';
 import 'package:weather_v2_pepe/app/modules/locate_location/widgets/weather_card.dart';
+import 'package:weather_v2_pepe/generated/locales.g.dart';
 
 import '../controllers/locate_location_controller.dart';
 
@@ -31,7 +32,9 @@ class LocateLocationView extends GetView<LocateLocationController> {
 
   _appbar(BuildContext context) {
     return AppBar(
-      title: const Text('Weather'),
+      title: Text(
+        LocaleKeys.home_title.tr,
+      ),
       centerTitle: true,
       actions: [
         IconButton(

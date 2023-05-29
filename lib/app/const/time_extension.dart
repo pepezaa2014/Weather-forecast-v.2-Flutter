@@ -1,3 +1,4 @@
+import 'package:get/get.dart';
 import 'package:intl/intl.dart';
 
 enum Time {
@@ -24,9 +25,11 @@ extension TimeExtension on Time {
 
     switch (this) {
       case Time.h24:
-        return DateFormat('dd MMM yyyy H:mm').format(convertedDateTime);
+        return DateFormat('dd MMM yyyy H:mm', Get.locale?.languageCode)
+            .format(convertedDateTime);
       case Time.h12:
-        return DateFormat('dd MMM yyyy h:mm a').format(convertedDateTime);
+        return DateFormat('dd MMM yyyy h:mm a', Get.locale?.languageCode)
+            .format(convertedDateTime);
     }
   }
 

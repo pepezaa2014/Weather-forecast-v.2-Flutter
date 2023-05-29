@@ -1,4 +1,6 @@
+import 'package:flutter/cupertino.dart';
 import 'package:get/get.dart';
+import 'package:intl/date_symbol_data_local.dart';
 import 'package:weather_v2_pepe/app/managers/session_manager.dart';
 import 'package:weather_v2_pepe/app/routes/app_pages.dart';
 import 'package:weather_v2_pepe/resources/resources.dart';
@@ -24,6 +26,8 @@ class SplashController extends GetxController {
 
   void _goFirstScreen() {
     _sessionManager.loadSession();
+    Get.updateLocale(const Locale('th'));
+    initializeDateFormatting(Get.locale?.languageCode);
 
     Future.delayed(
       const Duration(milliseconds: 400),

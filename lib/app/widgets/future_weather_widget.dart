@@ -61,7 +61,8 @@ class FutureWeatherWidget extends StatelessWidget {
   }) {
     if (date != '') {
       DateTime dateTime = DateTime.parse(date ?? '');
-      String formattedMonthDate = DateFormat('MMMM dd').format(dateTime);
+      String formattedMonthDate =
+          DateFormat('MMM dd', Get.locale?.languageCode).format(dateTime);
 
       int unixTimestamp = dateTime.millisecondsSinceEpoch ~/ 1000;
       String formattedTime =

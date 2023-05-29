@@ -20,6 +20,9 @@ class SessionManager {
   final Rx<Setting> decodedSetting = Setting().obs;
 
   void loadSession() {
+    // _getStorage.remove(AppConstant.setting);
+    // _getStorage.remove(AppConstant.favoriteLocation);
+
     var checkedSetting = _getStorage.read(AppConstant.setting);
     if (checkedSetting != null) {
       decodedSetting.value = Setting.fromJson(jsonDecode(checkedSetting));

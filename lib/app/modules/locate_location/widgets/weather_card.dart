@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:get/get_utils/get_utils.dart';
 import 'package:weather_v2_pepe/app/const/app_colors.dart';
 import 'package:weather_v2_pepe/app/const/temperature_extension.dart';
 import 'package:weather_v2_pepe/app/const/time_extension.dart';
@@ -6,6 +7,7 @@ import 'package:weather_v2_pepe/app/data/models/setting_model.dart';
 import 'package:weather_v2_pepe/app/data/models/weather_model.dart';
 import 'package:weather_v2_pepe/app/const/weather_icon_extension.dart';
 import 'package:collection/collection.dart';
+import 'package:weather_v2_pepe/generated/locales.g.dart';
 
 class WeatherCard extends StatelessWidget {
   const WeatherCard({
@@ -57,7 +59,7 @@ class WeatherCard extends StatelessWidget {
                           alignment: Alignment.centerLeft,
                           child: Text(
                             currentLocation?.id == weatherInfo?.id
-                                ? 'Current Location'
+                                ? LocaleKeys.home_location.tr
                                 : setting?.timeFormat.convertTimeWithTimeZone(
                                         (weatherInfo?.dt ?? 0),
                                         (weatherInfo?.timezone ?? 0)) ??
@@ -115,14 +117,14 @@ class WeatherCard extends StatelessWidget {
                             ),
                           ),
                           Text(
-                            'H:${setting?.temperature.convertTemperature(weatherInfo?.main?.tempMax ?? 0.0).toStringAsFixed(0) ?? ''} ${setting?.temperature.tempName ?? ''} L:${setting?.temperature.convertTemperature(weatherInfo?.main?.tempMin ?? 0.0).toStringAsFixed(0) ?? ''} ${setting?.temperature.tempName ?? ''}',
+                            '${LocaleKeys.home_high.tr}${setting?.temperature.convertTemperature(weatherInfo?.main?.tempMax ?? 0.0).toStringAsFixed(0) ?? ''} ${setting?.temperature.tempName ?? ''}\t\t${LocaleKeys.home_high.tr}${setting?.temperature.convertTemperature(weatherInfo?.main?.tempMin ?? 0.0).toStringAsFixed(0) ?? ''} ${setting?.temperature.tempName ?? ''}',
                             style: const TextStyle(
-                              fontSize: 16,
+                              fontSize: 14,
                               color: AppColors.primaryNight,
                             ),
                           ),
                           Text(
-                            'Feels like ${setting?.temperature.convertTemperature(weatherInfo?.main?.feelsLike ?? 0.0).toStringAsFixed(0) ?? ''} ${setting?.temperature.tempName ?? ''}',
+                            '${LocaleKeys.home_feelLike.tr} ${setting?.temperature.convertTemperature(weatherInfo?.main?.feelsLike ?? 0.0).toStringAsFixed(0) ?? ''} ${setting?.temperature.tempName ?? ''}',
                             style: const TextStyle(
                               fontSize: 14,
                               color: AppColors.thirdaryNight,

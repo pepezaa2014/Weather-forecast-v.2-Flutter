@@ -11,6 +11,7 @@ import 'package:weather_v2_pepe/app/core/api/geocoding_api.dart';
 import 'package:weather_v2_pepe/app/core/api/weather_api.dart';
 import 'package:weather_v2_pepe/app/core/dio_client.dart';
 import 'package:weather_v2_pepe/app/managers/session_manager.dart';
+import 'package:weather_v2_pepe/generated/locales.g.dart';
 
 import 'app/routes/app_pages.dart';
 
@@ -22,6 +23,9 @@ void main() async {
       debugShowCheckedModeBanner: false,
       title: "Application",
       initialRoute: AppPages.INITIAL,
+      translationsKeys: AppTranslation.translations,
+      locale: Get.deviceLocale,
+      fallbackLocale: const Locale('en'),
       getPages: AppPages.routes,
       theme: ThemeData(
         primarySwatch: generateMaterialColor(color: AppColors.appColor),
