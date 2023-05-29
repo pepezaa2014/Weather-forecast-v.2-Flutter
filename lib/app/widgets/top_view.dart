@@ -116,7 +116,7 @@ class TopView extends StatelessWidget {
                   ),
                 ),
                 Text(
-                  'H:${setting?.temperature.convertTemperature(weatherInfo?.main?.tempMax ?? 0.0).toStringAsFixed(0) ?? ''} ${setting?.temperature.tempName ?? ''} L:${setting?.temperature.convertTemperature(weatherInfo?.main?.tempMin ?? 0.0).toStringAsFixed(0) ?? ''} ${setting?.temperature.tempName ?? ''}',
+                  'H:${setting?.temperature.convertTemperature(weatherInfo?.main?.tempMax ?? 0.0).toStringAsFixed(0) ?? ''} ${setting?.temperature.tempName ?? ''}\t\tL:${setting?.temperature.convertTemperature(weatherInfo?.main?.tempMin ?? 0.0).toStringAsFixed(0) ?? ''} ${setting?.temperature.tempName ?? ''}',
                   style: const TextStyle(
                     fontSize: 16,
                     color: AppColors.primaryNight,

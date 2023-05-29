@@ -20,9 +20,6 @@ class SessionManager {
   final Rx<Setting> decodedSetting = Setting().obs;
 
   void loadSession() {
-    _getStorage.remove(AppConstant.setting);
-    _getStorage.remove(AppConstant.favoriteLocation);
-
     var checkedSetting = _getStorage.read(AppConstant.setting);
     if (checkedSetting != null) {
       decodedSetting.value = Setting.fromJson(jsonDecode(checkedSetting));
@@ -34,16 +31,12 @@ class SessionManager {
         decodedFavoriteLocations
             .add(Weather.fromJson(jsonDecode(checkedFavorite[i])));
       }
+    } else {
+      final RxList<Weather?> result = RxList();
+      _getStorage.write(AppConstant.favoriteLocation, result);
+      decodedFavoriteLocations.value =
+          _getStorage.read(AppConstant.favoriteLocation);
     }
-    // } else {
-    //   final aItem = Weather.fromJson(
-    //     {
-    //       'name': 'Phayao',
-    //     },
-    //   );
-    //   final aEncoded = json.encode(aItem.toJson());
-    //   decodedFavoriteLocations.add(Weather.fromJson(jsonDecode(aEncoded)));
-    // }
   }
 
   void setChangeTemperature(Temperature index) {
@@ -90,16 +83,18 @@ class SessionManager {
 
   void setNewFavoriteLocation(Weather? weatherItem) {
     final checkDataFav = decodedFavoriteLocations;
+    final RxList result = RxList();
 
-    if (checkDataFav != null) {
-      checkDataFav.add(weatherItem);
-      _getStorage.write(AppConstant.favoriteLocation, checkDataFav);
-    } else {
-      final RxList<Weather?> aItem = RxList();
-      aItem.add(weatherItem);
-      _getStorage.write(AppConstant.favoriteLocation, aItem);
+    if (checkDataFav.isNotEmpty) {
+      for (int index = 0; index < checkDataFav.length; index++) {
+        result.add(checkDataFav[index]);
+      }
     }
-    decodedFavoriteLocations.refresh();
+    result.add(json.encode(weatherItem));
+    print(json.encode(weatherItem));
+    print(result);
+    _getStorage.write(AppConstant.favoriteLocation, result);
+    decodedFavoriteLocations.add(weatherItem);
   }
 
   void setDeleteFavorite() {
@@ -108,7 +103,7 @@ class SessionManager {
       final a = jsonEncode(decodedFavoriteLocations[i]);
       dataFavorite.add(a);
     }
-    _getStorage.write(AppConstant.favoriteLocation, decodedFavoriteLocations);
+    _getStorage.write(AppConstant.favoriteLocation, dataFavorite);
     decodedFavoriteLocations.refresh();
   }
 }

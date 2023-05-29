@@ -56,10 +56,9 @@ class HomeView extends GetView<HomeController> {
       onRefresh: controller.refresh,
       child: Obx(
         () {
-          final allDataWeather = controller.allWeatherData;
-          final allFutureWeather = controller.allFutureWeather;
-          final allAirPollution = controller.allAirPollution;
-
+          final allDataWeather = controller.allWeatherData.value;
+          final allFutureWeather = controller.allFutureWeather.value;
+          final allAirPollution = controller.allAirPollution.value;
           return Container(
             child: allDataWeather.isEmpty &&
                     allFutureWeather.isEmpty &&
@@ -78,11 +77,11 @@ class HomeView extends GetView<HomeController> {
                             height: double.infinity,
                             child: _detail(
                               weatherData: allDataWeather[index],
-                              futureWeatherData: allFutureWeather.firstWhere(
-                                  (element) =>
+                              futureWeatherData:
+                                  allFutureWeather.firstWhereOrNull((element) =>
                                       element?.city?.id ==
                                       allDataWeather[index]?.id),
-                              allAirPollution: allAirPollution.firstWhere(
+                              allAirPollution: allAirPollution.firstWhereOrNull(
                                   (element) =>
                                       element?.coord?.lat ==
                                           allDataWeather[index]?.coord?.lat &&

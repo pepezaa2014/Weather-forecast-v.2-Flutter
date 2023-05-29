@@ -145,17 +145,17 @@ class HomeController extends GetxController {
     }
     final location = await Geolocator.getCurrentPosition();
 
-    _getCurrentLocation(
+    await _getCurrentLocation(
       lat: location.latitude,
       lon: location.longitude,
     );
 
-    _getCurrentFutureWeather(
+    await _getCurrentFutureWeather(
       lat: location.latitude,
       lon: location.longitude,
     );
 
-    _getCurrentAirPollution(
+    await _getCurrentAirPollution(
       lat: location.latitude,
       lon: location.longitude,
     );

@@ -47,8 +47,9 @@ class LocateLocationView extends GetView<LocateLocationController> {
   _body() {
     return Obx(
       () {
-        final weathers = controller.allWeatherData;
+        final weathers = controller.allWeatherData.value;
         final geocoding = controller.geocoding;
+        final currentLocation = controller.currentLocation.value;
         return Container(
           color: AppColors.backgroundColor,
           height: double.infinity,
@@ -139,13 +140,9 @@ class LocateLocationView extends GetView<LocateLocationController> {
                                         bottom: 4,
                                       ),
                                       child: WeatherCard(
-                                        currentLocation:
-                                            controller.currentLocation.value,
+                                        currentLocation: currentLocation,
                                         weatherInfo: weathers[index],
-                                        tempUnit: controller
-                                            .dataSetting.value?.temperature,
-                                        timeUnit: controller
-                                            .dataSetting.value?.timeFormat,
+                                        setting: controller.dataSetting.value,
                                         onTap: () => controller
                                             .goShowDetail(weathers[index]),
                                         onTapDel: () => controller

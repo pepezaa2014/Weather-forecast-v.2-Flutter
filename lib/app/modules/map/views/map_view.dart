@@ -54,7 +54,7 @@ class MapView extends GetView<MapController> {
               },
               style: TextButton.styleFrom(
                 padding: const EdgeInsets.symmetric(vertical: 16),
-                backgroundColor: Colors.blue,
+                backgroundColor: AppColors.thirdaryBox,
               ),
               child: const Text(
                 'Select',
