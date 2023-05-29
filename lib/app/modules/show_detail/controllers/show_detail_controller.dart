@@ -1,17 +1,8 @@
 import 'package:get/get.dart';
-import 'package:intl/intl.dart';
-import 'package:weather_v2_pepe/app/const/distance_extension.dart';
-import 'package:weather_v2_pepe/app/const/precipitation_extension.dart';
-import 'package:weather_v2_pepe/app/const/pressure_extension.dart';
-import 'package:weather_v2_pepe/app/const/temperature_extension.dart';
-import 'package:weather_v2_pepe/app/const/time_extension.dart';
-import 'package:weather_v2_pepe/app/const/wind_speed_extension.dart';
 import 'package:weather_v2_pepe/app/core/api/air_pollution_api.dart';
 import 'package:weather_v2_pepe/app/core/api/future_weather_api.dart';
-import 'package:weather_v2_pepe/app/core/api/weather_api.dart';
 import 'package:weather_v2_pepe/app/data/models/air_pollution_model.dart';
 import 'package:weather_v2_pepe/app/data/models/app_error_model.dart';
-import 'package:weather_v2_pepe/app/data/models/favorite_locations_model.dart';
 import 'package:weather_v2_pepe/app/data/models/future_weather_model.dart';
 import 'package:weather_v2_pepe/app/data/models/setting_model.dart';
 import 'package:weather_v2_pepe/app/data/models/weather_model.dart';
@@ -25,10 +16,9 @@ class ShowDetailController extends GetxController {
   final FutureWeatherAPI _futureWeatherAPI = Get.find();
   final AirPollutionAPI _airPollutionAPI = Get.find();
 
+  final Rxn<Weather?> getWeatherInfo = Rxn();
   late final Rxn<AirPollution> airPollution = Rxn();
   late final Rxn<FutureWeather> futureWeather = Rxn();
-
-  final Rxn<Weather?> weatherInfo = Rxn();
 
   final isLoadingGetWeather = false.obs;
 
@@ -48,12 +38,12 @@ class ShowDetailController extends GetxController {
     super.onInit();
     isInFav.value = false;
     dataSetting.value = _sessionManager.decodedSetting.value;
-    weatherInfo.value = Get.arguments;
+    getWeatherInfo.value = Get.arguments;
 
     dataFavoriteLocations.value = _sessionManager.decodedFavoriteLocations;
 
     for (int index = 0; index < dataFavoriteLocations.length; index++) {
-      if (dataFavoriteLocations[index]?.id == weatherInfo.value?.id) {
+      if (dataFavoriteLocations[index]?.id == getWeatherInfo.value?.id) {
         isInFav.toggle();
       }
     }
@@ -72,18 +62,18 @@ class ShowDetailController extends GetxController {
 
   Future<void> _getLoadingAllData() async {
     await _getFutureWeather(
-      lat: weatherInfo.value?.coord?.lat ?? 0.0,
-      lon: weatherInfo.value?.coord?.lon ?? 0.0,
+      lat: getWeatherInfo.value?.coord?.lat ?? 0.0,
+      lon: getWeatherInfo.value?.coord?.lon ?? 0.0,
     );
     await _getAirPollution(
-      lat: weatherInfo.value?.coord?.lat ?? 0.0,
-      lon: weatherInfo.value?.coord?.lon ?? 0.0,
+      lat: getWeatherInfo.value?.coord?.lat ?? 0.0,
+      lon: getWeatherInfo.value?.coord?.lon ?? 0.0,
     );
   }
 
   void addFavorite() {
     _sessionManager.setNewFavoriteLocation(
-      weatherInfo.value,
+      getWeatherInfo.value,
     );
 
     Future.delayed(

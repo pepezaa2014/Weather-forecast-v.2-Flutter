@@ -13,5 +13,6 @@ class AppColors {
   static const loadingIndicator = Color(0XFF778899);
   static const backgroundColor = Color(0XFF778899);
   static const marker = Color(0XFFFF0000);
-  static const dotColor = Color(0XFFE2C044);
+  static const activeDotColor = Color(0XFF99CCFF);
+  static const dotColor = Color(0XFF003366);
 }

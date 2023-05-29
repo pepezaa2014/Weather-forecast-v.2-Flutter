@@ -17,8 +17,8 @@ class LocateLocationView extends GetView<LocateLocationController> {
         GestureDetector(
           onTap: () => FocusScope.of(context).unfocus(),
           child: Scaffold(
-            appBar: _appbar(),
-            body: _body(),
+            appBar: _appbar(context),
+            body: _body(context),
           ),
         ),
         Obx(
@@ -29,13 +29,16 @@ class LocateLocationView extends GetView<LocateLocationController> {
     );
   }
 
-  _appbar() {
+  _appbar(BuildContext context) {
     return AppBar(
       title: const Text('Weather'),
       centerTitle: true,
       actions: [
         IconButton(
-          onPressed: controller.goSetting,
+          onPressed: () {
+            FocusScope.of(context).unfocus();
+            controller.goSetting();
+          },
           icon: const Icon(
             Icons.settings,
           ),
@@ -44,7 +47,7 @@ class LocateLocationView extends GetView<LocateLocationController> {
     );
   }
 
-  _body() {
+  _body(BuildContext context) {
     return Obx(
       () {
         final weathers = controller.allWeatherData.value;
@@ -66,6 +69,7 @@ class LocateLocationView extends GetView<LocateLocationController> {
                           size: 24,
                         ),
                         onPressed: () {
+                          FocusScope.of(context).unfocus();
                           controller
                               .goOpenMap(controller.currentLocation.value);
                         },
@@ -143,8 +147,11 @@ class LocateLocationView extends GetView<LocateLocationController> {
                                         currentLocation: currentLocation,
                                         weatherInfo: weathers[index],
                                         setting: controller.dataSetting.value,
-                                        onTap: () => controller
-                                            .goShowDetail(weathers[index]),
+                                        onTap: () {
+                                          FocusScope.of(context).unfocus();
+                                          controller
+                                              .goShowDetail(weathers[index]);
+                                        },
                                         onTapDel: () => controller
                                             .deleteFavoriteIndex(index),
                                       ),

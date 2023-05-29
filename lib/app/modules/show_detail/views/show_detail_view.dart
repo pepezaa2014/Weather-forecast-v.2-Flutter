@@ -39,7 +39,7 @@ class ShowDetailView extends GetView<ShowDetailController> {
           Obx(
             () {
               return Text(
-                controller.weatherInfo.value?.name.toString() ?? '',
+                controller.getWeatherInfo.value?.name.toString() ?? '',
               );
             },
           ),
@@ -51,9 +51,6 @@ class ShowDetailView extends GetView<ShowDetailController> {
           () {
             return Container(
               child: controller.isInFav.value == true
-                  // ||
-                  //         controller.currentLocation.value?.id ==
-                  //             controller.weatherInfo.value?.id
                   ? const SizedBox()
                   : IconButton(
                       onPressed: controller.addFavorite,
@@ -74,7 +71,7 @@ class ShowDetailView extends GetView<ShowDetailController> {
       height: double.infinity,
       child: Obx(
         () {
-          final currentWeather = controller.weatherInfo;
+          final currentWeather = controller.getWeatherInfo;
           final futureWeather = controller.futureWeather;
           final airPollution = controller.airPollution;
           return _detail(
@@ -97,11 +94,8 @@ class ShowDetailView extends GetView<ShowDetailController> {
       children: [
         TopView(
           weatherInfo: currentWeather,
-          locationNow:
-              // controller.currentLocation.value?.id == currentWeather?.id
-              //     ? 'Current Location'
-              //     :
-              controller.dataSetting.value?.timeFormat.convertTimeWithTimeZone(
+          locationNow: controller.dataSetting.value?.timeFormat
+              .convertTimeWithTimeZone(
                   (currentWeather?.dt ?? 0), (currentWeather?.timezone ?? 0)),
           setting: setting,
         ),

@@ -52,71 +52,73 @@ class HomeView extends GetView<HomeController> {
   }
 
   _body() {
-    return RefreshIndicator(
-      onRefresh: controller.refresh,
-      child: Obx(
-        () {
-          final allDataWeather = controller.allWeatherData.value;
-          final allFutureWeather = controller.allFutureWeather.value;
-          final allAirPollution = controller.allAirPollution.value;
-          return Container(
-            child: allDataWeather.isEmpty &&
-                    allFutureWeather.isEmpty &&
-                    allAirPollution.isEmpty
-                ? Container(
-                    color: AppColors.backgroundColor,
-                  )
-                : Stack(
-                    children: [
-                      PageView.builder(
-                        controller: controller.pageController,
-                        itemCount: allDataWeather.length,
-                        itemBuilder: (context, index) {
-                          return Container(
-                            color: AppColors.backgroundColor,
-                            height: double.infinity,
-                            child: _detail(
-                              weatherData: allDataWeather[index],
-                              futureWeatherData:
-                                  allFutureWeather.firstWhereOrNull((element) =>
-                                      element?.city?.id ==
-                                      allDataWeather[index]?.id),
-                              allAirPollution: allAirPollution.firstWhereOrNull(
-                                  (element) =>
-                                      element?.coord?.lat ==
-                                          allDataWeather[index]?.coord?.lat &&
-                                      element?.coord?.lon ==
-                                          allDataWeather[index]?.coord?.lon),
-                            ),
-                          );
-                        },
-                      ),
-                      Positioned(
-                        bottom: 0,
-                        left: 0,
-                        right: 0,
-                        child: Align(
-                          alignment: Alignment.bottomCenter,
-                          child: Padding(
-                            padding: const EdgeInsets.only(bottom: 16),
-                            child: SmoothPageIndicator(
-                              controller: controller.pageController,
-                              count: allDataWeather.length,
-                              effect: const WormEffect(
-                                dotHeight: 16,
-                                dotWidth: 16,
-                                dotColor: AppColors.primaryBox,
-                                activeDotColor: AppColors.dotColor,
-                              ),
+    return Obx(
+      () {
+        final allDataWeather = controller.allWeatherData.value;
+
+        final getAllWeather = controller.getAllWeather.value;
+        final allFutureWeather = controller.allFutureWeather.value;
+        final allAirPollution = controller.allAirPollution.value;
+
+        return Container(
+          child: getAllWeather.isEmpty &&
+                  allFutureWeather.isEmpty &&
+                  allAirPollution.isEmpty
+              ? Container(
+                  color: AppColors.backgroundColor,
+                )
+              : Stack(
+                  children: [
+                    PageView.builder(
+                      controller: controller.pageController,
+                      itemCount: allDataWeather.length,
+                      itemBuilder: (context, index) {
+                        return Container(
+                          color: AppColors.backgroundColor,
+                          height: double.infinity,
+                          child: _detail(
+                            weatherData: getAllWeather.firstWhereOrNull(
+                                (element) =>
+                                    element?.id == allDataWeather[index]?.id),
+                            futureWeatherData:
+                                allFutureWeather.firstWhereOrNull((element) =>
+                                    element?.city?.id ==
+                                    allDataWeather[index]?.id),
+                            allAirPollution: allAirPollution.firstWhereOrNull(
+                                (element) =>
+                                    element?.coord?.lat ==
+                                        allDataWeather[index]?.coord?.lat &&
+                                    element?.coord?.lon ==
+                                        allDataWeather[index]?.coord?.lon),
+                          ),
+                        );
+                      },
+                    ),
+                    Positioned(
+                      bottom: 0,
+                      left: 0,
+                      right: 0,
+                      child: Align(
+                        alignment: Alignment.bottomCenter,
+                        child: Padding(
+                          padding: const EdgeInsets.only(bottom: 16),
+                          child: SmoothPageIndicator(
+                            controller: controller.pageController,
+                            count: allDataWeather.length,
+                            effect: const WormEffect(
+                              dotHeight: 16,
+                              dotWidth: 16,
+                              dotColor: AppColors.dotColor,
+                              activeDotColor: AppColors.activeDotColor,
                             ),
                           ),
                         ),
                       ),
-                    ],
-                  ),
-          );
-        },
-      ),
+                    ),
+                  ],
+                ),
+        );
+      },
     );
   }
 
@@ -127,26 +129,33 @@ class HomeView extends GetView<HomeController> {
   }) {
     final setting = controller.dataSetting.value;
 
-    return Column(
-      children: [
-        TopView(
-          weatherInfo: weatherData,
-          locationNow: controller.currentLocation.value?.id == weatherData?.id
-              ? 'Current Location'
-              : setting.timeFormat.convertTimeWithTimeZone(
-                  (weatherData?.dt ?? 0), weatherData?.timezone ?? 0),
-          setting: setting,
+    return RefreshIndicator(
+      onRefresh: controller.refresh,
+      child: SingleChildScrollView(
+        physics: const ClampingScrollPhysics(),
+        child: Column(
+          children: [
+            TopView(
+              weatherInfo: weatherData,
+              locationNow:
+                  controller.currentLocation.value?.id == weatherData?.id
+                      ? 'Current Location'
+                      : setting.timeFormat.convertTimeWithTimeZone(
+                          (weatherData?.dt ?? 0), weatherData?.timezone ?? 0),
+              setting: setting,
+            ),
+            FutureWeatherWidget(
+              futureWeather: futureWeatherData,
+              setting: setting,
+            ),
+            Details(
+              weatherInfo: weatherData,
+              pollutionInfo: allAirPollution,
+              setting: setting,
+            ),
+          ],
         ),
-        FutureWeatherWidget(
-          futureWeather: futureWeatherData,
-          setting: setting,
-        ),
-        Details(
-          weatherInfo: weatherData,
-          pollutionInfo: allAirPollution,
-          setting: setting,
-        ),
-      ],
+      ),
     );
   }
 }

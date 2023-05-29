@@ -91,8 +91,6 @@ class SessionManager {
       }
     }
     result.add(json.encode(weatherItem));
-    print(json.encode(weatherItem));
-    print(result);
     _getStorage.write(AppConstant.favoriteLocation, result);
     decodedFavoriteLocations.add(weatherItem);
   }
