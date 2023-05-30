@@ -37,6 +37,12 @@ class HomeView extends GetView<HomeController> {
 
   _appbar() {
     return AppBar(
+      leading: IconButton(
+        onPressed: controller.printData,
+        icon: const Icon(
+          Icons.face_2,
+        ),
+      ),
       automaticallyImplyLeading: false,
       title: Text(
         LocaleKeys.home_title.tr,
@@ -57,16 +63,15 @@ class HomeView extends GetView<HomeController> {
     return Obx(
       () {
         final allDataWeather = controller.allWeatherData.value;
-
-        final getAllWeather = controller.getAllWeather.value;
         final allFutureWeather = controller.allFutureWeather.value;
         final allAirPollution = controller.allAirPollution.value;
+
+        final currentLocation = controller.currentLocation.value;
 
         final setting = controller.dataSetting.value;
 
         return Container(
-          child: getAllWeather.isEmpty &&
-                  allFutureWeather.isEmpty &&
+          child: allFutureWeather.isEmpty &&
                   allAirPollution.isEmpty &&
                   allDataWeather.isEmpty
               ? Container(
@@ -82,20 +87,31 @@ class HomeView extends GetView<HomeController> {
                           color: AppColors.backgroundColor,
                           height: double.infinity,
                           child: _detail(
+                            weatherData: index == 0 && currentLocation != null
+                                ? allDataWeather.firstWhereOrNull((element) =>
+                                    element.id == currentLocation.id)
+                                : allDataWeather.firstWhereOrNull((element) =>
+                                    element.id ==
+                                    controller
+                                        .dataFavoriteLocations[index - 1].id),
+                            futureWeatherData: index == 0 &&
+                                    currentLocation != null
+                                ? allFutureWeather.firstWhereOrNull((element) =>
+                                    element.city?.id == currentLocation.id)
+                                : allFutureWeather.firstWhereOrNull((element) =>
+                                    element.city?.id ==
+                                    allDataWeather[index - 1].id),
+                            allAirPollution: index == 0 &&
+                                    currentLocation != null
+                                ? allAirPollution.firstWhereOrNull((element) =>
+                                    element.coord?.lon ==
+                                    currentLocation.coord?.lon)
+                                : allAirPollution.firstWhereOrNull((element) =>
+                                    element.coord?.lat ==
+                                        allDataWeather[index].coord?.lat &&
+                                    element.coord?.lon ==
+                                        allDataWeather[index].coord?.lon),
                             setting: setting,
-                            weatherData: getAllWeather.firstWhereOrNull(
-                                (element) =>
-                                    element?.id == allDataWeather[index]?.id),
-                            futureWeatherData:
-                                allFutureWeather.firstWhereOrNull((element) =>
-                                    element?.city?.id ==
-                                    allDataWeather[index]?.id),
-                            allAirPollution: allAirPollution.firstWhereOrNull(
-                                (element) =>
-                                    element?.coord?.lat ==
-                                        allDataWeather[index]?.coord?.lat &&
-                                    element?.coord?.lon ==
-                                        allDataWeather[index]?.coord?.lon),
                           ),
                         );
                       },
@@ -143,7 +159,7 @@ class HomeView extends GetView<HomeController> {
             TopView(
               weatherInfo: weatherData,
               locationNow:
-                  controller.currentLocation.value?.id == weatherData?.id
+                  controller.currentLocation.value.id == weatherData?.id
                       ? LocaleKeys.home_location.tr
                       : setting.timeFormat.convertTimeWithTimeZone(
                           (weatherData?.dt ?? 0), weatherData?.timezone ?? 0),

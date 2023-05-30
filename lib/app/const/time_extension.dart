@@ -12,9 +12,9 @@ extension TimeExtension on Time {
         DateTime.fromMillisecondsSinceEpoch((time.toInt()) * 1000);
     switch (this) {
       case Time.h24:
-        return DateFormat('H:mm').format(afterTime);
+        return DateFormat('H:mm', Get.locale?.languageCode).format(afterTime);
       case Time.h12:
-        return DateFormat('h:mm a').format(afterTime);
+        return DateFormat('h:mm a', Get.locale?.languageCode).format(afterTime);
     }
   }
 
@@ -40,9 +40,11 @@ extension TimeExtension on Time {
 
     switch (this) {
       case Time.h24:
-        return DateFormat('H:mm').format(convertedDateTime);
+        return DateFormat('H:mm', Get.locale?.languageCode)
+            .format(convertedDateTime);
       case Time.h12:
-        return DateFormat('h:mm a').format(convertedDateTime);
+        return DateFormat('h:mm a', Get.locale?.languageCode)
+            .format(convertedDateTime);
     }
   }
 }

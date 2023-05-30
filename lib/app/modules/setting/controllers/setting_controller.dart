@@ -23,7 +23,7 @@ class SettingController extends GetxController {
   @override
   void onInit() {
     super.onInit();
-    dataSetting = _sessionManager.decodedSetting;
+    dataSetting = _sessionManager.dataSetting;
 
     updateData();
   }

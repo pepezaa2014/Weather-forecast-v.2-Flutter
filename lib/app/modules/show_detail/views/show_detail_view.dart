@@ -39,7 +39,7 @@ class ShowDetailView extends GetView<ShowDetailController> {
           Obx(
             () {
               return Text(
-                controller.getWeatherInfo.value?.name.toString() ?? '',
+                controller.getWeatherInfo.value.name.toString(),
               );
             },
           ),
@@ -50,7 +50,10 @@ class ShowDetailView extends GetView<ShowDetailController> {
         Obx(
           () {
             return Container(
-              child: controller.isInFav.value == true
+              child: controller.getWeatherInfo.value.id ==
+                          controller.currentLocation.value.id ||
+                      controller.dataFavoriteLocations.any((element) =>
+                          element.id == controller.getWeatherInfo.value.id)
                   ? const SizedBox()
                   : IconButton(
                       onPressed: controller.addFavorite,
@@ -94,7 +97,7 @@ class ShowDetailView extends GetView<ShowDetailController> {
       children: [
         TopView(
           weatherInfo: currentWeather,
-          locationNow: controller.dataSetting.value?.timeFormat
+          locationNow: controller.dataSetting.value.timeFormat
               .convertTimeWithTimeZone(
                   (currentWeather?.dt ?? 0), (currentWeather?.timezone ?? 0)),
           setting: setting,

@@ -53,9 +53,11 @@ class LocateLocationView extends GetView<LocateLocationController> {
   _body(BuildContext context) {
     return Obx(
       () {
-        final weathers = controller.allWeatherData.value;
+        final allWeatherData = controller.allWeatherData.value;
         final geocoding = controller.geocoding;
         final currentLocation = controller.currentLocation.value;
+        final dataFavorite = controller.dataFavoriteLocations.value;
+
         return Container(
           color: AppColors.backgroundColor,
           height: double.infinity,
@@ -137,9 +139,9 @@ class LocateLocationView extends GetView<LocateLocationController> {
                       : SizedBox(
                           width: double.infinity,
                           height: 600,
-                          child: weathers.isNotEmpty
+                          child: allWeatherData.isNotEmpty
                               ? ListView.builder(
-                                  itemCount: weathers.length,
+                                  itemCount: allWeatherData.length,
                                   itemBuilder: (context, index) {
                                     return Padding(
                                       padding: const EdgeInsets.only(
@@ -148,12 +150,21 @@ class LocateLocationView extends GetView<LocateLocationController> {
                                       ),
                                       child: WeatherCard(
                                         currentLocation: currentLocation,
-                                        weatherInfo: weathers[index],
+                                        weatherInfo: index == 0 ||
+                                                currentLocation != null
+                                            ? allWeatherData.firstWhereOrNull(
+                                                (element) =>
+                                                    element.id ==
+                                                    currentLocation.id)
+                                            : allWeatherData.firstWhereOrNull(
+                                                (element) =>
+                                                    element.id ==
+                                                    dataFavorite[index].id),
                                         setting: controller.dataSetting.value,
                                         onTap: () {
                                           FocusScope.of(context).unfocus();
-                                          controller
-                                              .goShowDetail(weathers[index]);
+                                          controller.goShowDetail(
+                                              allWeatherData[index]);
                                         },
                                         onTapDel: () => controller
                                             .deleteFavoriteIndex(index),

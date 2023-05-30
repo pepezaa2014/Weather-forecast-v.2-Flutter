@@ -16,13 +16,15 @@ class ShowDetailController extends GetxController {
   final FutureWeatherAPI _futureWeatherAPI = Get.find();
   final AirPollutionAPI _airPollutionAPI = Get.find();
 
-  final Rxn<Weather?> getWeatherInfo = Rxn();
-  late final Rxn<AirPollution> airPollution = Rxn();
-  late final Rxn<FutureWeather> futureWeather = Rxn();
+  final Rx<Weather> getWeatherInfo = Rx<Weather>(Weather());
+  final Rxn<AirPollution> airPollution = Rxn();
+  final Rxn<FutureWeather> futureWeather = Rxn();
+
+  late final Rx<Weather> currentLocation;
+  late final Rx<Setting> dataSetting;
+  late final RxList<Weather> dataFavoriteLocations;
 
   final isLoadingGetWeather = false.obs;
-
-  final RxBool isInFav = false.obs;
 
   RxBool get isLoading {
     return [
@@ -30,23 +32,16 @@ class ShowDetailController extends GetxController {
     ].atLeastOneTrue.obs;
   }
 
-  final Rxn<Setting?> dataSetting = Rxn();
-  final RxList<Weather?> dataFavoriteLocations = RxList();
-
   @override
   void onInit() {
     super.onInit();
-    isInFav.value = false;
-    dataSetting.value = _sessionManager.decodedSetting.value;
     getWeatherInfo.value = Get.arguments;
+    print(getWeatherInfo);
+    print(getWeatherInfo.value);
 
-    dataFavoriteLocations.value = _sessionManager.decodedFavoriteLocations;
-
-    for (int index = 0; index < dataFavoriteLocations.length; index++) {
-      if (dataFavoriteLocations[index]?.id == getWeatherInfo.value?.id) {
-        isInFav.toggle();
-      }
-    }
+    currentLocation = _sessionManager.currentLocation;
+    dataSetting = _sessionManager.dataSetting;
+    dataFavoriteLocations = _sessionManager.dataFavoriteLocations;
   }
 
   @override
@@ -62,12 +57,12 @@ class ShowDetailController extends GetxController {
 
   Future<void> _getLoadingAllData() async {
     await _getFutureWeather(
-      lat: getWeatherInfo.value?.coord?.lat ?? 0.0,
-      lon: getWeatherInfo.value?.coord?.lon ?? 0.0,
+      lat: getWeatherInfo.value.coord?.lat ?? 0.0,
+      lon: getWeatherInfo.value.coord?.lon ?? 0.0,
     );
     await _getAirPollution(
-      lat: getWeatherInfo.value?.coord?.lat ?? 0.0,
-      lon: getWeatherInfo.value?.coord?.lon ?? 0.0,
+      lat: getWeatherInfo.value.coord?.lat ?? 0.0,
+      lon: getWeatherInfo.value.coord?.lon ?? 0.0,
     );
   }
 
@@ -75,13 +70,7 @@ class ShowDetailController extends GetxController {
     _sessionManager.setNewFavoriteLocation(
       getWeatherInfo.value,
     );
-
-    Future.delayed(
-      Duration.zero,
-      () {
-        Get.back();
-      },
-    );
+    Get.back();
   }
 
   Future<void> _getFutureWeather({
