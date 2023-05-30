@@ -50,36 +50,36 @@ class SettingController extends GetxController {
   void changeSettingTemp(Temperature value) {
     temperatureUnit.value = value;
     dataSetting.value.temperature = value;
-    _sessionManager.setChangeTemperature(value);
+    _sessionManager.dataSetting.refresh();
   }
 
   void changeSettingWind(WindSpeed value) {
     windUnit.value = value;
     dataSetting.value.windSpeed = value;
-    _sessionManager.setChangeWind(value);
+    _sessionManager.dataSetting.refresh();
   }
 
   void changeSettingPressure(Pressure value) {
     pressureUnit.value = value;
     dataSetting.value.pressure = value;
-    _sessionManager.setChangePressure(value);
+    _sessionManager.dataSetting.refresh();
   }
 
   void changeSettingPrecipitataion(Precipitation value) {
     precipitationUnit.value = value;
     dataSetting.value.precipitation = value;
-    _sessionManager.setChangePrecipitataion(value);
+    _sessionManager.dataSetting.refresh();
   }
 
   void changeSettingDistance(Distance value) {
     distanceUnit.value = value;
     dataSetting.value.distance = value;
-    _sessionManager.setChangeDistance(value);
+    _sessionManager.dataSetting.refresh();
   }
 
   void changeSettingTime(Time value) {
     timeUnit.value = value;
     dataSetting.value.timeFormat = value;
-    _sessionManager.setChangeTimeFormat(value);
+    _sessionManager.dataSetting.refresh();
   }
 }

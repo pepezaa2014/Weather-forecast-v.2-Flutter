@@ -3,14 +3,17 @@ import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:weather_v2_pepe/app/core/api/weather_api.dart';
 import 'package:weather_v2_pepe/app/data/models/app_error_model.dart';
 import 'package:weather_v2_pepe/app/data/models/weather_model.dart';
+import 'package:weather_v2_pepe/app/managers/session_manager.dart';
 import 'package:weather_v2_pepe/app/routes/app_pages.dart';
 import 'package:weather_v2_pepe/app/utils/show_alert.dart';
 
 class MapController extends GetxController {
+  final SessionManager _sessionManager = Get.find();
+
   late final GoogleMapController mapController;
   final WeatherAPI _weatherAPI = Get.find();
 
-  final Rxn<Weather>? getLatLon = Rxn();
+  late final Rx<Weather> currentLocation;
   final Rxn<Weather?> weather = Rxn();
   late final Rx<LatLng> selectLatLon;
 
@@ -19,13 +22,13 @@ class MapController extends GetxController {
   @override
   void onInit() {
     super.onInit();
-    getLatLon?.value = Get.arguments;
+    currentLocation = _sessionManager.currentLocation;
 
-    selectLatLon = Rx<LatLng>(LatLng(
-        getLatLon?.value?.coord?.lat ?? 0, getLatLon?.value?.coord?.lon ?? 0));
+    selectLatLon = Rx<LatLng>(LatLng(currentLocation.value.coord?.lat ?? 0,
+        currentLocation.value.coord?.lon ?? 0));
     centerLatLng.value = LatLng(
-      getLatLon?.value?.coord?.lat ?? 0,
-      getLatLon?.value?.coord?.lon ?? 0,
+      currentLocation.value.coord?.lat ?? 0,
+      currentLocation.value.coord?.lon ?? 0,
     );
   }
 

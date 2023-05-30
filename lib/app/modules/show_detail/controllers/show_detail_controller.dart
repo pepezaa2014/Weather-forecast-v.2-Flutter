@@ -36,8 +36,6 @@ class ShowDetailController extends GetxController {
   void onInit() {
     super.onInit();
     getWeatherInfo.value = Get.arguments;
-    print(getWeatherInfo);
-    print(getWeatherInfo.value);
 
     currentLocation = _sessionManager.currentLocation;
     dataSetting = _sessionManager.dataSetting;
@@ -67,9 +65,7 @@ class ShowDetailController extends GetxController {
   }
 
   void addFavorite() {
-    _sessionManager.setNewFavoriteLocation(
-      getWeatherInfo.value,
-    );
+    dataFavoriteLocations.add(getWeatherInfo.value);
     Get.back();
   }
 

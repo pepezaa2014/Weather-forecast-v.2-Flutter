@@ -31,12 +31,12 @@ class HomeController extends GetxController {
 
   final RxList<Weather> allWeatherData = RxList();
 
-  final isLoadingGetWeather = false.obs;
   final pageController = PageController(
     viewportFraction: 1.0,
     keepPage: true,
   );
 
+  final isLoadingGetWeather = false.obs;
   RxBool get isLoading {
     return [
       isLoadingGetWeather.value,
@@ -46,7 +46,6 @@ class HomeController extends GetxController {
   @override
   void onInit() {
     super.onInit();
-
     dataSetting = _sessionManager.dataSetting;
     dataFavoriteLocations = _sessionManager.dataFavoriteLocations;
 
@@ -162,27 +161,6 @@ class HomeController extends GetxController {
     );
   }
 
-  Future<void> _getWeatherLatLon({
-    required double lat,
-    required double lon,
-  }) async {
-    try {
-      isLoadingGetWeather(true);
-      final result = await _weatherAPI.getWeatherLatLon(
-        lat: lat,
-        lon: lon,
-      );
-      isLoadingGetWeather(false);
-      allWeatherData.add(result);
-    } catch (error) {
-      isLoadingGetWeather(false);
-      showAlert(
-        title: 'Error',
-        message: (error as AppError).message,
-      );
-    }
-  }
-
   Future<void> _getCurrentWeatherLatLon({
     required double lat,
     required double lon,
@@ -195,48 +173,6 @@ class HomeController extends GetxController {
       );
       isLoadingGetWeather(false);
       currentLocation.value = result;
-    } catch (error) {
-      isLoadingGetWeather(false);
-      showAlert(
-        title: 'Error',
-        message: (error as AppError).message,
-      );
-    }
-  }
-
-  Future<void> _getFutureWeather({
-    required double lat,
-    required double lon,
-  }) async {
-    try {
-      isLoadingGetWeather(true);
-      final result = await _futureWeatherAPI.getWeatherLatLon(
-        lat: lat,
-        lon: lon,
-      );
-      isLoadingGetWeather(false);
-      allFutureWeather.add(result);
-    } catch (error) {
-      isLoadingGetWeather(false);
-      showAlert(
-        title: 'Error',
-        message: (error as AppError).message,
-      );
-    }
-  }
-
-  Future<void> _getAirPollution({
-    required double lat,
-    required double lon,
-  }) async {
-    try {
-      isLoadingGetWeather(true);
-      final result = await _airPollutionAPI.getWeatherLatLon(
-        lat: lat,
-        lon: lon,
-      );
-      isLoadingGetWeather(false);
-      allAirPollution.add(result);
     } catch (error) {
       isLoadingGetWeather(false);
       showAlert(

@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 
 import 'package:get/get.dart';
 import 'package:weather_v2_pepe/app/const/app_colors.dart';
+import 'package:weather_v2_pepe/app/data/models/setting_model.dart';
 import 'package:weather_v2_pepe/app/utils/loading_indicator.dart';
 import 'package:weather_v2_pepe/app/modules/locate_location/widgets/show_list.dart';
 import 'package:weather_v2_pepe/app/modules/locate_location/widgets/weather_card.dart';
@@ -57,6 +58,8 @@ class LocateLocationView extends GetView<LocateLocationController> {
         final geocoding = controller.geocoding;
         final currentLocation = controller.currentLocation.value;
         final dataFavorite = controller.dataFavoriteLocations.value;
+        final setting = controller.dataSetting.value;
+        final serchText = controller.searchTextCityController;
 
         return Container(
           color: AppColors.backgroundColor,
@@ -75,15 +78,14 @@ class LocateLocationView extends GetView<LocateLocationController> {
                         ),
                         onPressed: () {
                           FocusScope.of(context).unfocus();
-                          controller
-                              .goOpenMap(controller.currentLocation.value);
+                          controller.goOpenMap();
                         },
                       ),
                       SizedBox(
                         width: 300,
                         child: TextField(
                           cursorColor: AppColors.primaryNight,
-                          controller: controller.searchTextCityController,
+                          controller: serchText,
                           style: const TextStyle(
                             color: AppColors.primaryNight,
                           ),
@@ -94,7 +96,7 @@ class LocateLocationView extends GetView<LocateLocationController> {
                             suffixIcon: IconButton(
                               icon: const Icon(Icons.close),
                               onPressed: () {
-                                controller.searchTextCityController.clear();
+                                serchText.clear();
                               },
                             ),
                             contentPadding: const EdgeInsets.symmetric(
@@ -150,7 +152,7 @@ class LocateLocationView extends GetView<LocateLocationController> {
                                       ),
                                       child: WeatherCard(
                                         currentLocation: currentLocation,
-                                        weatherInfo: index == 0 ||
+                                        weatherInfo: index == 0 &&
                                                 currentLocation != null
                                             ? allWeatherData.firstWhereOrNull(
                                                 (element) =>
@@ -159,8 +161,8 @@ class LocateLocationView extends GetView<LocateLocationController> {
                                             : allWeatherData.firstWhereOrNull(
                                                 (element) =>
                                                     element.id ==
-                                                    dataFavorite[index].id),
-                                        setting: controller.dataSetting.value,
+                                                    dataFavorite[index - 1].id),
+                                        setting: setting,
                                         onTap: () {
                                           FocusScope.of(context).unfocus();
                                           controller.goShowDetail(

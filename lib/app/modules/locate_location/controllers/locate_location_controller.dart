@@ -135,12 +135,9 @@ class LocateLocationController extends GetxController {
     goShowDetail(selectedCountry.value);
   }
 
-  void goOpenMap(Weather? item) {
+  void goOpenMap() {
     FocusNode().unfocus();
-    Get.toNamed(
-      Routes.MAP,
-      arguments: item,
-    );
+    Get.toNamed(Routes.MAP);
   }
 
   void goSetting() {
@@ -152,7 +149,6 @@ class LocateLocationController extends GetxController {
 
   void deleteFavoriteIndex(int index) {
     _sessionManager.dataFavoriteLocations.removeAt(index - 1);
-    _sessionManager.setDeleteFavorite();
     _updateWeather();
   }
 

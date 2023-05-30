@@ -1,5 +1,5 @@
 import 'package:dio/dio.dart';
-import 'package:weather_v2_pepe/app/const/app_constant.dart';
+import 'package:weather_v2_pepe/app/const/app_constants.dart';
 import 'package:weather_v2_pepe/app/core/dio_client.dart';
 import 'package:weather_v2_pepe/app/core/handle_exceptions.dart';
 import 'package:weather_v2_pepe/app/core/routers/future_weather_router.dart';
@@ -20,7 +20,7 @@ class FutureWeatherAPI {
         queryParameters: {
           'lat': lat,
           'lon': lon,
-          'appid': AppConstant.appId,
+          'appid': AppConstants.appId,
         },
       );
 
@@ -38,7 +38,7 @@ class FutureWeatherAPI {
         FutureWeatherRouter.getFutureWeather,
         queryParameters: {
           'id': id,
-          'appid': AppConstant.appId,
+          'appid': AppConstants.appId,
         },
       );
 

@@ -1,5 +1,5 @@
 import 'package:dio/dio.dart';
-import 'package:weather_v2_pepe/app/const/app_constant.dart';
+import 'package:weather_v2_pepe/app/const/app_constants.dart';
 import 'package:weather_v2_pepe/app/core/dio_client.dart';
 import 'package:weather_v2_pepe/app/core/handle_exceptions.dart';
 import 'package:weather_v2_pepe/app/core/routers/geocoding_router.dart';
@@ -18,8 +18,8 @@ class GeocodingAPI {
         GeocodingRouter.geocodingURL,
         queryParameters: {
           'q': city,
-          'limit': AppConstant.limitGeocoding,
-          'appid': AppConstant.appId,
+          'limit': AppConstants.limitGeocoding,
+          'appid': AppConstants.appId,
         },
       );
 

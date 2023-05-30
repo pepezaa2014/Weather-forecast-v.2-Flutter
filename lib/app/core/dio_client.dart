@@ -1,7 +1,7 @@
 import 'package:dio/dio.dart';
 import 'package:flutter/foundation.dart';
 import 'package:weather_v2_pepe/app/core/curl_logger.dart';
-import 'package:weather_v2_pepe/app/const/app_constant.dart';
+import 'package:weather_v2_pepe/app/const/app_constants.dart';
 import 'package:pretty_dio_logger/pretty_dio_logger.dart';
 
 class DioClient {
@@ -11,7 +11,7 @@ class DioClient {
     this._dio,
   ) {
     _dio
-      ..options.baseUrl = AppConstant.baseWeatherUrl
+      ..options.baseUrl = AppConstants.baseWeatherUrl
       ..options.connectTimeout = const Duration(seconds: 15)
       ..options.receiveTimeout = const Duration(seconds: 15)
       ..options.contentType = Headers.jsonContentType
