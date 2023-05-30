@@ -6,6 +6,7 @@ import 'package:weather_v2_pepe/app/const/app_colors.dart';
 import 'package:weather_v2_pepe/app/const/time_extension.dart';
 import 'package:weather_v2_pepe/app/data/models/air_pollution_model.dart';
 import 'package:weather_v2_pepe/app/data/models/future_weather_model.dart';
+import 'package:weather_v2_pepe/app/data/models/setting_model.dart';
 import 'package:weather_v2_pepe/app/data/models/weather_model.dart';
 import 'package:weather_v2_pepe/app/utils/loading_indicator.dart';
 import 'package:weather_v2_pepe/app/widgets/details.dart';
@@ -61,6 +62,8 @@ class HomeView extends GetView<HomeController> {
         final allFutureWeather = controller.allFutureWeather.value;
         final allAirPollution = controller.allAirPollution.value;
 
+        final setting = controller.dataSetting.value;
+
         return Container(
           child: getAllWeather.isEmpty &&
                   allFutureWeather.isEmpty &&
@@ -79,6 +82,7 @@ class HomeView extends GetView<HomeController> {
                           color: AppColors.backgroundColor,
                           height: double.infinity,
                           child: _detail(
+                            setting: setting,
                             weatherData: getAllWeather.firstWhereOrNull(
                                 (element) =>
                                     element?.id == allDataWeather[index]?.id),
@@ -128,9 +132,8 @@ class HomeView extends GetView<HomeController> {
     required Weather? weatherData,
     required FutureWeather? futureWeatherData,
     required AirPollution? allAirPollution,
+    required Setting setting,
   }) {
-    final setting = controller.dataSetting.value;
-
     return RefreshIndicator(
       onRefresh: controller.refresh,
       child: SingleChildScrollView(

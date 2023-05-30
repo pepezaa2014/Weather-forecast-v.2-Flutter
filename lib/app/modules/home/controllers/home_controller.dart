@@ -29,9 +29,9 @@ class HomeController extends GetxController {
   late final Rx<Setting> dataSetting;
   late final RxList<Weather?> dataFavoriteLocations;
 
-  final RxList<Weather?> getAllWeather = RxList();
-
   final RxList<Weather?> allWeatherData = RxList();
+
+  final RxList<Weather?> getAllWeather = RxList();
   final RxList<FutureWeather?> allFutureWeather = RxList();
   final RxList<AirPollution?> allAirPollution = RxList();
 
@@ -54,11 +54,13 @@ class HomeController extends GetxController {
 
     dataSetting = _sessionManager.decodedSetting;
     dataFavoriteLocations = _sessionManager.decodedFavoriteLocations;
+    _updateWeather();
   }
 
   @override
   void onReady() {
     super.onReady();
+
     _getAllData();
   }
 
@@ -71,7 +73,8 @@ class HomeController extends GetxController {
     Get.toNamed(
       Routes.LOCATE_LOCATION,
       arguments: currentLocation,
-    )?.then((value) => _updateWeather());
+    );
+    //?.then((value) => _updateWeather())
   }
 
   @override

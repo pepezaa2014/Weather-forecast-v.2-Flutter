@@ -113,14 +113,16 @@ class LocateLocationController extends GetxController {
     Get.toNamed(
       Routes.MAP,
       arguments: item,
-    )?.then((value) => _updateWeather());
+    );
+    //?.then((value) => _updateWeather())
   }
 
   void goSetting() {
     FocusNode().unfocus();
     Get.toNamed(
       Routes.SETTING,
-    )?.then((value) => _updateWeather());
+    );
+    //?.then((value) => _updateWeather())
   }
 
   void deleteFavoriteIndex(int index) {
@@ -135,7 +137,8 @@ class LocateLocationController extends GetxController {
     Get.toNamed(
       Routes.SHOW_DETAIL,
       arguments: item,
-    )?.then((value) => _updateWeather());
+    );
+    //?.then((value) => _updateWeather())
   }
 
   void clearTextField() {

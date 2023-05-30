@@ -5,8 +5,8 @@ class AppConstant {
 
   static const limitGeocoding = '5';
 
-  static const favoriteLocation = 'keyValueFavoriteLocation';
-  static const setting = 'keyValueSetting';
+  static const keyValueFavoriteLocation = 'keyValueFavoriteLocation';
+  static const keyValueSetting = 'keyValueSetting';
 
   static const mapAPI = 'AIzaSyCtE2nxnG_y86GS_KZezYrlcDNq9FAfQt8';
 }

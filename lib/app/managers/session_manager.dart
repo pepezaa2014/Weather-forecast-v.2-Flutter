@@ -14,21 +14,43 @@ import 'package:weather_v2_pepe/app/data/models/weather_model.dart';
 
 class SessionManager {
   late final GetStorage _getStorage;
-  SessionManager(this._getStorage);
-
   final RxList<Weather?> decodedFavoriteLocations = RxList();
   final Rx<Setting> decodedSetting = Setting().obs;
 
-  void loadSession() {
-    // _getStorage.remove(AppConstant.setting);
-    // _getStorage.remove(AppConstant.favoriteLocation);
+  SessionManager(this._getStorage) {
+    decodedSetting.listen(
+      (p0) {
+        final unitSettingsString = json.encode(p0.toJson());
+        _getStorage.write(AppConstant.keyValueSetting, unitSettingsString);
+      },
+    );
 
-    var checkedSetting = _getStorage.read(AppConstant.setting);
+    decodedFavoriteLocations.listen(
+      (p0) {
+        final weatherListString =
+            p0.map((e) => json.encode(e?.toJson())).toList();
+        _getStorage.write(
+            AppConstant.keyValueFavoriteLocation, weatherListString);
+      },
+    );
+  }
+
+  void refreshData() {
+    decodedSetting.refresh();
+    decodedFavoriteLocations.refresh();
+  }
+
+  void loadSession() {
+    _getStorage.remove(AppConstant.keyValueSetting);
+    _getStorage.remove(AppConstant.keyValueFavoriteLocation);
+
+    var checkedSetting = _getStorage.read(AppConstant.keyValueSetting);
     if (checkedSetting != null) {
       decodedSetting.value = Setting.fromJson(jsonDecode(checkedSetting));
     }
 
-    final checkedFavorite = _getStorage.read(AppConstant.favoriteLocation);
+    final checkedFavorite =
+        _getStorage.read(AppConstant.keyValueFavoriteLocation);
     if (checkedFavorite != null) {
       for (int i = 0; i < checkedFavorite.length; i++) {
         decodedFavoriteLocations
@@ -36,51 +58,52 @@ class SessionManager {
       }
     } else {
       final RxList<Weather?> result = RxList();
-      _getStorage.write(AppConstant.favoriteLocation, result);
-      decodedFavoriteLocations.value =
-          _getStorage.read(AppConstant.favoriteLocation);
+      _getStorage.write(AppConstant.keyValueFavoriteLocation, result);
+      decodedFavoriteLocations.refresh();
+      // decodedFavoriteLocations.value =
+      //     _getStorage.read(AppConstant.keyValueFavoriteLocation);
     }
   }
 
   void setChangeTemperature(Temperature index) {
     decodedSetting.value.temperature = index;
     final dataEncoded = json.encode(decodedSetting);
-    _getStorage.write(AppConstant.setting, dataEncoded);
+    _getStorage.write(AppConstant.keyValueSetting, dataEncoded);
     decodedSetting.refresh();
   }
 
   void setChangeWind(WindSpeed index) {
     decodedSetting.value.windSpeed = index;
     final dataEncoded = json.encode(decodedSetting);
-    _getStorage.write(AppConstant.setting, dataEncoded);
+    _getStorage.write(AppConstant.keyValueSetting, dataEncoded);
     decodedSetting.refresh();
   }
 
   void setChangePressure(Pressure index) {
     decodedSetting.value.pressure = index;
     final dataEncoded = json.encode(decodedSetting);
-    _getStorage.write(AppConstant.setting, dataEncoded);
+    _getStorage.write(AppConstant.keyValueSetting, dataEncoded);
     decodedSetting.refresh();
   }
 
   void setChangePrecipitataion(Precipitation index) {
     decodedSetting.value.precipitation = index;
     final dataEncoded = json.encode(decodedSetting);
-    _getStorage.write(AppConstant.setting, dataEncoded);
+    _getStorage.write(AppConstant.keyValueSetting, dataEncoded);
     decodedSetting.refresh();
   }
 
   void setChangeDistance(Distance index) {
     decodedSetting.value.distance = index;
     final dataEncoded = json.encode(decodedSetting);
-    _getStorage.write(AppConstant.setting, dataEncoded);
+    _getStorage.write(AppConstant.keyValueSetting, dataEncoded);
     decodedSetting.refresh();
   }
 
   void setChangeTimeFormat(Time index) {
     decodedSetting.value.timeFormat = index;
     final dataEncoded = json.encode(decodedSetting);
-    _getStorage.write(AppConstant.setting, dataEncoded);
+    _getStorage.write(AppConstant.keyValueSetting, dataEncoded);
     decodedSetting.refresh();
   }
 
@@ -94,7 +117,7 @@ class SessionManager {
       }
     }
     result.add(json.encode(weatherItem));
-    _getStorage.write(AppConstant.favoriteLocation, result);
+    _getStorage.write(AppConstant.keyValueFavoriteLocation, result);
     decodedFavoriteLocations.add(weatherItem);
   }
 
@@ -104,7 +127,7 @@ class SessionManager {
       final a = jsonEncode(decodedFavoriteLocations[i]);
       dataFavorite.add(a);
     }
-    _getStorage.write(AppConstant.favoriteLocation, dataFavorite);
+    _getStorage.write(AppConstant.keyValueFavoriteLocation, dataFavorite);
     decodedFavoriteLocations.refresh();
   }
 }
