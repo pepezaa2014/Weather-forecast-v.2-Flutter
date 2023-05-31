@@ -124,9 +124,12 @@ class LocateLocationView extends GetView<LocateLocationController> {
                             itemCount: geocoding.length,
                             itemBuilder: (context, index) {
                               return GestureDetector(
-                                onTap: () =>
-                                    controller.changeDataAndGoShowDetail(
-                                        geocoding[index]),
+                                onTap: () {
+                                  FocusScope.of(context).unfocus();
+                                  serchText.clear();
+                                  controller.changeDataAndGoShowDetail(
+                                      geocoding[index]);
+                                },
                                 child: Container(
                                   color: AppColors.backgroundColor,
                                   child: ShowList(
