@@ -17,15 +17,18 @@ class ShowDetailController extends GetxController {
   final AirPollutionAPI _airPollutionAPI = Get.find();
 
   final Rx<Weather> getWeatherInfo = Rx<Weather>(Weather());
-  final Rxn<AirPollution> airPollution = Rxn();
-  final Rxn<FutureWeather> futureWeather = Rxn();
+  final Rx<AirPollution> airPollution = Rx<AirPollution>(AirPollution());
+  final Rx<FutureWeather> futureWeather = Rx<FutureWeather>(FutureWeather());
 
   late final Rx<Weather> currentLocation;
   late final Rx<Setting> dataSetting;
   late final RxList<Weather> dataFavoriteLocations;
+  late final RxList<FutureWeather> allFutureWeather;
+  late final RxList<AirPollution> allAirpollution;
+
+  late final RxList<Weather> allweatherData;
 
   final isLoadingGetWeather = false.obs;
-
   RxBool get isLoading {
     return [
       isLoadingGetWeather.value,
@@ -40,6 +43,10 @@ class ShowDetailController extends GetxController {
     currentLocation = _sessionManager.currentLocation;
     dataSetting = _sessionManager.dataSetting;
     dataFavoriteLocations = _sessionManager.dataFavoriteLocations;
+
+    allweatherData = _sessionManager.allWeatherData;
+    allFutureWeather = _sessionManager.allFutureWeather;
+    allAirpollution = _sessionManager.allAirPollution;
   }
 
   @override
@@ -66,6 +73,10 @@ class ShowDetailController extends GetxController {
 
   void addFavorite() {
     dataFavoriteLocations.add(getWeatherInfo.value);
+    allweatherData.add(getWeatherInfo.value);
+    allFutureWeather.add(futureWeather.value);
+    allAirpollution.add(airPollution.value);
+
     Get.back();
   }
 

@@ -9,6 +9,14 @@ class FutureWeather {
   List<Weather>? list;
   City? city;
 
+  FutureWeather({
+    this.cod,
+    this.message,
+    this.cnt,
+    this.list,
+    this.city,
+  });
+
   FutureWeather.fromJson(Map<String, dynamic> json) {
     cod = json['cod'];
     message = json['message'];
@@ -41,6 +49,17 @@ class City {
   int? sunrise;
   int? sunset;
 
+  City({
+    this.id,
+    this.name,
+    this.coord,
+    this.country,
+    this.population,
+    this.timezone,
+    this.sunrise,
+    this.sunset,
+  });
+
   City.fromJson(Map<String, dynamic> json) {
     id = json['id'];
     name = json['name'];
@@ -69,6 +88,11 @@ class City {
 class Coord {
   double? lat;
   double? lon;
+
+  Coord({
+    this.lat,
+    this.lon,
+  });
 
   Coord.fromJson(Map<String, dynamic> json) {
     lat = (json['lat'] as num).toDouble();

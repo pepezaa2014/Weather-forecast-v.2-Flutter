@@ -1,3 +1,5 @@
+import 'dart:ffi';
+
 import 'package:flutter/cupertino.dart';
 import 'package:get/get.dart';
 import 'package:geolocator/geolocator.dart';
@@ -29,7 +31,8 @@ class HomeController extends GetxController {
   late final RxList<FutureWeather> allFutureWeather;
   late final RxList<AirPollution> allAirPollution;
 
-  final RxList<Weather> allWeatherData = RxList();
+  // final RxList<Weather> allWeatherData = RxList();
+  late final RxList<Weather> allWeatherData;
 
   final isLoadingGetWeather = false.obs;
   RxBool get isLoading {
@@ -52,13 +55,16 @@ class HomeController extends GetxController {
     currentLocation = _sessionManager.currentLocation;
     allFutureWeather = _sessionManager.allFutureWeather;
     allAirPollution = _sessionManager.allAirPollution;
-    _updateWeather();
+
+    allWeatherData = _sessionManager.allWeatherData;
   }
 
   @override
   void onReady() {
     super.onReady();
-    _getAllData();
+    _updateWeather();
+
+    // _getAllData();
   }
 
   @override
@@ -68,7 +74,7 @@ class HomeController extends GetxController {
 
   @override
   Future<void> refresh() async {
-    await _getAllData();
+    _updateWeather();
   }
 
   void printData() {
@@ -84,8 +90,14 @@ class HomeController extends GetxController {
 
   void _updateWeather() {
     allWeatherData.clear();
+    allFutureWeather.clear();
+    allAirPollution.clear();
 
     _getAllData();
+
+    allWeatherData.refresh();
+    allFutureWeather.refresh();
+    allAirPollution.refresh();
   }
 
   void goLocate() {
@@ -93,12 +105,12 @@ class HomeController extends GetxController {
   }
 
   Future<void> _getAllData() async {
-    await _determinePosition();
+    _determinePosition();
     allWeatherData.refresh();
     allFutureWeather.refresh();
     allAirPollution.refresh();
 
-    await _getAllWeatherInFavorite();
+    _getAllWeatherInFavorite();
     allWeatherData.refresh();
     allFutureWeather.refresh();
     allAirPollution.refresh();

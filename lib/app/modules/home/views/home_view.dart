@@ -62,7 +62,7 @@ class HomeView extends GetView<HomeController> {
   _body() {
     return Obx(
       () {
-        final allDataWeather = controller.allWeatherData.value;
+        final allDataWeather = controller.allWeatherData;
         final allFutureWeather = controller.allFutureWeather.value;
         final allAirPollution = controller.allAirPollution.value;
 

@@ -5,6 +5,11 @@ class AirPollution {
   Coord? coord;
   List<AirPollutionData>? list;
 
+  AirPollution({
+    this.coord,
+    this.list,
+  });
+
   AirPollution.fromJson(Map<String, dynamic> json) {
     coord = json['coord'] != null ? Coord?.fromJson(json['coord']) : null;
 
@@ -20,6 +25,11 @@ class AirPollution {
 class Coord {
   double? lat;
   double? lon;
+
+  Coord({
+    this.lat,
+    this.lon,
+  });
 
   Coord.fromJson(Map<String, dynamic> json) {
     lat = (json['lat'] as num).toDouble();

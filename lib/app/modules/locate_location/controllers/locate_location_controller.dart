@@ -41,12 +41,11 @@ class LocateLocationController extends GetxController {
   void onInit() {
     super.onInit();
 
-    currentLocation = _sessionManager.currentLocation;
     dataSetting = _sessionManager.dataSetting;
     dataFavoriteLocations = _sessionManager.dataFavoriteLocations;
+    currentLocation = _sessionManager.currentLocation;
 
     allWeatherData = _sessionManager.allWeatherData;
-    _updateWeather();
   }
 
   void _updateWeather() {
@@ -65,6 +64,7 @@ class LocateLocationController extends GetxController {
         lon: dataFavoriteLocations[index].coord?.lon ?? 0.0,
       );
     }
+    allWeatherData.refresh();
   }
 
   @override
@@ -80,6 +80,7 @@ class LocateLocationController extends GetxController {
         }
       },
     );
+    _updateWeather();
   }
 
   @override
