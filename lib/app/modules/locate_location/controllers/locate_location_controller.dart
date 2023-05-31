@@ -144,9 +144,7 @@ class LocateLocationController extends GetxController {
 
   void goSetting() {
     FocusNode().unfocus();
-    Get.toNamed(
-      Routes.SETTING,
-    );
+    Get.toNamed(Routes.SETTING);
   }
 
   void deleteFavoriteIndex(int index) {
@@ -154,7 +152,7 @@ class LocateLocationController extends GetxController {
     _updateWeather();
   }
 
-  void goShowDetail(Weather item) {
+  void goShowDetail(Weather? item) {
     FocusNode().unfocus();
 
     Get.toNamed(

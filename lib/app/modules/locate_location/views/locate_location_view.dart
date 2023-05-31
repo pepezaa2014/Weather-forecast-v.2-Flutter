@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 
 import 'package:get/get.dart';
 import 'package:weather_v2_pepe/app/const/app_colors.dart';
-import 'package:weather_v2_pepe/app/data/models/setting_model.dart';
 import 'package:weather_v2_pepe/app/utils/loading_indicator.dart';
 import 'package:weather_v2_pepe/app/modules/locate_location/widgets/show_list.dart';
 import 'package:weather_v2_pepe/app/modules/locate_location/widgets/weather_card.dart';
@@ -165,8 +164,25 @@ class LocateLocationView extends GetView<LocateLocationController> {
                                         setting: setting,
                                         onTap: () {
                                           FocusScope.of(context).unfocus();
+
                                           controller.goShowDetail(
-                                              allWeatherData[index]);
+                                            index == 0 &&
+                                                    currentLocation != null
+                                                ? allWeatherData
+                                                    .firstWhereOrNull(
+                                                        (element) =>
+                                                            element
+                                                                .id ==
+                                                            currentLocation.id)
+                                                : allWeatherData
+                                                    .firstWhereOrNull(
+                                                        (element) =>
+                                                            element
+                                                                .id ==
+                                                            dataFavorite[
+                                                                    index - 1]
+                                                                .id),
+                                          );
                                         },
                                         onTapDel: () => controller
                                             .deleteFavoriteIndex(index),

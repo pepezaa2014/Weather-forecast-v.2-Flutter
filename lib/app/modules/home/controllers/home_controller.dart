@@ -52,18 +52,13 @@ class HomeController extends GetxController {
     currentLocation = _sessionManager.currentLocation;
     allFutureWeather = _sessionManager.allFutureWeather;
     allAirPollution = _sessionManager.allAirPollution;
+    _updateWeather();
   }
 
   @override
   void onReady() {
     super.onReady();
     _getAllData();
-
-    dataFavoriteLocations.listen(
-      (e) {
-        _getAllData();
-      },
-    );
   }
 
   @override
@@ -78,13 +73,19 @@ class HomeController extends GetxController {
 
   void printData() {
     print(dataFavoriteLocations.length);
-    print(dataFavoriteLocations[0].name);
+    print(dataFavoriteLocations[0].name ?? '');
     print('=============');
     print(allWeatherData.length);
     print(allWeatherData[0].id);
     print(allFutureWeather[0].city?.name);
     print(allAirPollution[0].coord);
     print(allFutureWeather.length);
+  }
+
+  void _updateWeather() {
+    allWeatherData.clear();
+
+    _getAllData();
   }
 
   void goLocate() {
