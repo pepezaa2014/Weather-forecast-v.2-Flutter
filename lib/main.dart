@@ -55,6 +55,5 @@ Future<void> _setupInstance() async {
   Get.put(FutureWeatherAPI(dioClient));
   Get.put(AirPollutionAPI(dioClient));
   Get.put(GeocodingAPI(dioClient));
-
   return;
 }

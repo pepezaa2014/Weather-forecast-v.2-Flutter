@@ -25,7 +25,7 @@ class LocateLocationController extends GetxController {
   late final Rx<Setting> dataSetting;
   late final RxList<Weather> dataFavoriteLocations;
 
-  final RxList<Weather> allWeatherData = RxList();
+  late final RxList<Weather> allWeatherData;
 
   final RxList<Geocoding> geocoding = RxList();
   final Rx<Weather> selectedCountry = Rx<Weather>(Weather());
@@ -44,6 +44,8 @@ class LocateLocationController extends GetxController {
     currentLocation = _sessionManager.currentLocation;
     dataSetting = _sessionManager.dataSetting;
     dataFavoriteLocations = _sessionManager.dataFavoriteLocations;
+
+    allWeatherData = _sessionManager.allWeatherData;
     _updateWeather();
   }
 
@@ -148,8 +150,7 @@ class LocateLocationController extends GetxController {
   }
 
   void deleteFavoriteIndex(int index) {
-    _sessionManager.dataFavoriteLocations.removeAt(index - 1);
-    _updateWeather();
+    _sessionManager.dataFavoriteLocations.removeAt(index);
   }
 
   void goShowDetail(Weather item) {

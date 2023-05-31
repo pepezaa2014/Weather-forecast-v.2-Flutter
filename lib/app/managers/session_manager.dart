@@ -3,6 +3,7 @@ import 'dart:convert';
 import 'package:get/get.dart';
 import 'package:get_storage/get_storage.dart';
 import 'package:weather_v2_pepe/app/const/app_constants.dart';
+
 import 'package:weather_v2_pepe/app/data/models/air_pollution_model.dart';
 import 'package:weather_v2_pepe/app/data/models/future_weather_model.dart';
 import 'package:weather_v2_pepe/app/data/models/setting_model.dart';
@@ -16,6 +17,8 @@ class SessionManager {
   final Rx<Weather> currentLocation = Rx<Weather>(Weather());
   final RxList<FutureWeather> allFutureWeather = RxList();
   final RxList<AirPollution> allAirPollution = RxList();
+
+  final RxList<Weather> allWeatherData = RxList();
 
   SessionManager(this._getStorage) {
     dataSetting.listen(
@@ -36,7 +39,6 @@ class SessionManager {
   }
 
   void loadSession() {
-    _getStorage.remove(AppConstants.keyValueSetting);
     _getStorage.remove(AppConstants.keyValueFavoriteLocation);
 
     var checkedSetting = _getStorage.read(AppConstants.keyValueSetting);

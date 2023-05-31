@@ -18,22 +18,22 @@ class Setting {
 
   Setting.fromJson(Map<String, dynamic> json) {
     temperature = Temperature.values
-            .firstWhereOrNull((e) => e == (json['temperature'])) ??
+            .firstWhereOrNull((e) => e.name == (json['temperature'])) ??
         Temperature.celcius;
-    windSpeed =
-        WindSpeed.values.firstWhereOrNull((e) => e == (json['windSpeed'])) ??
-            WindSpeed.ms;
+    windSpeed = WindSpeed.values
+            .firstWhereOrNull((e) => e.name == (json['windSpeed'])) ??
+        WindSpeed.ms;
     pressure =
-        Pressure.values.firstWhereOrNull((e) => e == (json['pressure'])) ??
+        Pressure.values.firstWhereOrNull((e) => e.name == (json['pressure'])) ??
             Pressure.hpa;
     precipitation = Precipitation.values
-            .firstWhereOrNull((e) => e == (json['precipitation'])) ??
+            .firstWhereOrNull((e) => e.name == (json['precipitation'])) ??
         Precipitation.mm;
     distance =
-        Distance.values.firstWhereOrNull((e) => e == (json['distance'])) ??
+        Distance.values.firstWhereOrNull((e) => e.name == (json['distance'])) ??
             Distance.km;
     timeFormat =
-        Time.values.firstWhereOrNull((e) => e == (json['timeFormat'])) ??
+        Time.values.firstWhereOrNull((e) => e.name == (json['timeFormat'])) ??
             Time.h24;
   }
 
