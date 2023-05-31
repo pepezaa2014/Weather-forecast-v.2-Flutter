@@ -53,11 +53,12 @@ class LocateLocationView extends GetView<LocateLocationController> {
   _body(BuildContext context) {
     return Obx(
       () {
-        final allWeatherData = controller.allWeatherData.value;
         final geocoding = controller.geocoding;
+
         final currentLocation = controller.currentLocation.value;
         final dataFavorite = controller.dataFavoriteLocations.value;
         final setting = controller.dataSetting.value;
+
         final serchText = controller.searchTextCityController;
 
         return Container(
@@ -143,9 +144,12 @@ class LocateLocationView extends GetView<LocateLocationController> {
                       : SizedBox(
                           width: double.infinity,
                           height: 600,
-                          child: allWeatherData.isNotEmpty
+                          child: dataFavorite.isNotEmpty ||
+                                  currentLocation != null
                               ? ListView.builder(
-                                  itemCount: allWeatherData.length,
+                                  itemCount: currentLocation != null
+                                      ? dataFavorite.length + 1
+                                      : dataFavorite.length,
                                   itemBuilder: (context, index) {
                                     return Padding(
                                       padding: const EdgeInsets.only(
@@ -154,37 +158,21 @@ class LocateLocationView extends GetView<LocateLocationController> {
                                       ),
                                       child: WeatherCard(
                                         currentLocation: currentLocation,
-                                        weatherInfo: index == 0 &&
-                                                currentLocation != null
-                                            ? allWeatherData.firstWhereOrNull(
-                                                (element) =>
-                                                    element.id ==
-                                                    currentLocation.id)
-                                            : allWeatherData.firstWhereOrNull(
-                                                (element) =>
-                                                    element.id ==
-                                                    dataFavorite[index - 1].id),
+                                        weatherInfo: currentLocation != null
+                                            ? index == 0
+                                                ? currentLocation
+                                                : dataFavorite[index - 1]
+                                            : dataFavorite[index],
                                         setting: setting,
                                         onTap: () {
                                           FocusScope.of(context).unfocus();
 
                                           controller.goShowDetail(
-                                            index == 0 &&
-                                                    currentLocation != null
-                                                ? allWeatherData
-                                                    .firstWhereOrNull(
-                                                        (element) =>
-                                                            element
-                                                                .id ==
-                                                            currentLocation.id)
-                                                : allWeatherData
-                                                    .firstWhereOrNull(
-                                                        (element) =>
-                                                            element
-                                                                .id ==
-                                                            dataFavorite[
-                                                                    index - 1]
-                                                                .id),
+                                            currentLocation != null
+                                                ? index == 0
+                                                    ? currentLocation
+                                                    : dataFavorite[index - 1]
+                                                : dataFavorite[index],
                                           );
                                         },
                                         onTapDel: () => controller

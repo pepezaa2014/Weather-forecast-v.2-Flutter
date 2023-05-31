@@ -13,7 +13,7 @@ class MapController extends GetxController {
   late final GoogleMapController mapController;
   final WeatherAPI _weatherAPI = Get.find();
 
-  late final Rx<Weather> currentLocation;
+  late final Rxn<Weather> currentLocation;
   final Rxn<Weather?> weather = Rxn();
   late final Rx<LatLng> selectLatLon;
 
@@ -24,11 +24,11 @@ class MapController extends GetxController {
     super.onInit();
     currentLocation = _sessionManager.currentLocation;
 
-    selectLatLon = Rx<LatLng>(LatLng(currentLocation.value.coord?.lat ?? 0,
-        currentLocation.value.coord?.lon ?? 0));
+    selectLatLon = Rx<LatLng>(LatLng(currentLocation.value?.coord?.lat ?? 0,
+        currentLocation.value?.coord?.lon ?? 0));
     centerLatLng.value = LatLng(
-      currentLocation.value.coord?.lat ?? 0,
-      currentLocation.value.coord?.lon ?? 0,
+      currentLocation.value?.coord?.lat ?? 0,
+      currentLocation.value?.coord?.lon ?? 0,
     );
   }
 

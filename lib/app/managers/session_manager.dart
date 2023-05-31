@@ -13,12 +13,12 @@ class SessionManager {
   late final GetStorage _getStorage;
 
   final Rx<Setting> dataSetting = Setting().obs;
+
+  final Rxn<Weather> currentLocation = Rxn();
+
   final RxList<Weather> dataFavoriteLocations = RxList();
-  final Rx<Weather> currentLocation = Rx<Weather>(Weather());
   final RxList<FutureWeather> allFutureWeather = RxList();
   final RxList<AirPollution> allAirPollution = RxList();
-
-  final RxList<Weather> allWeatherData = RxList();
 
   SessionManager(this._getStorage) {
     dataSetting.listen(
@@ -39,6 +39,7 @@ class SessionManager {
   }
 
   void loadSession() {
+    // _getStorage.remove(AppConstants.keyValueFavoriteLocation);
     var checkedSetting = _getStorage.read(AppConstants.keyValueSetting);
     if (checkedSetting != null) {
       dataSetting.value = Setting.fromJson(jsonDecode(checkedSetting));

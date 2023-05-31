@@ -27,12 +27,9 @@ class HomeController extends GetxController {
   late final Rx<Setting> dataSetting;
   late final RxList<Weather> dataFavoriteLocations;
 
-  late final Rx<Weather> currentLocation;
+  late final Rxn<Weather> currentLocation;
   late final RxList<FutureWeather> allFutureWeather;
   late final RxList<AirPollution> allAirPollution;
-
-  // final RxList<Weather> allWeatherData = RxList();
-  late final RxList<Weather> allWeatherData;
 
   final isLoadingGetWeather = false.obs;
   RxBool get isLoading {
@@ -55,16 +52,12 @@ class HomeController extends GetxController {
     currentLocation = _sessionManager.currentLocation;
     allFutureWeather = _sessionManager.allFutureWeather;
     allAirPollution = _sessionManager.allAirPollution;
-
-    allWeatherData = _sessionManager.allWeatherData;
   }
 
   @override
   void onReady() {
     super.onReady();
     _updateWeather();
-
-    // _getAllData();
   }
 
   @override
@@ -77,25 +70,12 @@ class HomeController extends GetxController {
     _updateWeather();
   }
 
-  void printData() {
-    print(dataFavoriteLocations.length);
-    print(dataFavoriteLocations[0].name ?? '');
-    print('=============');
-    print(allWeatherData.length);
-    print(allWeatherData[0].id);
-    print(allFutureWeather[0].city?.name);
-    print(allAirPollution[0].coord);
-    print(allFutureWeather.length);
-  }
-
   void _updateWeather() {
-    allWeatherData.clear();
     allFutureWeather.clear();
     allAirPollution.clear();
 
     _getAllData();
 
-    allWeatherData.refresh();
     allFutureWeather.refresh();
     allAirPollution.refresh();
   }
@@ -106,12 +86,10 @@ class HomeController extends GetxController {
 
   Future<void> _getAllData() async {
     _determinePosition();
-    allWeatherData.refresh();
     allFutureWeather.refresh();
     allAirPollution.refresh();
 
     _getAllWeatherInFavorite();
-    allWeatherData.refresh();
     allFutureWeather.refresh();
     allAirPollution.refresh();
   }
@@ -163,19 +141,17 @@ class HomeController extends GetxController {
     }
     final location = await Geolocator.getCurrentPosition();
 
-    await _getCurrentWeatherLatLon(
+    _getCurrentWeatherLatLon(
       lat: location.latitude,
       lon: location.longitude,
     );
 
-    allWeatherData.add(currentLocation.value);
-
-    await _getFutureWeather(
+    _getFutureWeather(
       lat: location.latitude,
       lon: location.longitude,
     );
 
-    await _getAirPollution(
+    _getAirPollution(
       lat: location.latitude,
       lon: location.longitude,
     );
@@ -213,7 +189,10 @@ class HomeController extends GetxController {
         lon: lon,
       );
       isLoadingGetWeather(false);
-      allWeatherData.add(result);
+
+      int index = dataFavoriteLocations
+          .indexWhere((element) => element.id == result.id);
+      dataFavoriteLocations[index] = result;
     } catch (error) {
       isLoadingGetWeather(false);
       showAlert(

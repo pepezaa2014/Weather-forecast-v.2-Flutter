@@ -51,7 +51,7 @@ class ShowDetailView extends GetView<ShowDetailController> {
           () {
             return Container(
               child: controller.getWeatherInfo.value.id ==
-                          controller.currentLocation.value.id ||
+                          controller.currentLocation.value?.id ||
                       controller.dataFavoriteLocations.any((element) =>
                           element.id == controller.getWeatherInfo.value.id)
                   ? const SizedBox()

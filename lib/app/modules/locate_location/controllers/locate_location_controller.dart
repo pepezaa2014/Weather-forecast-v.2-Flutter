@@ -21,11 +21,9 @@ class LocateLocationController extends GetxController {
       TextEditingController();
   final RxString searchCityText = ''.obs;
 
-  late final Rx<Weather> currentLocation;
+  late final Rxn<Weather> currentLocation;
   late final Rx<Setting> dataSetting;
   late final RxList<Weather> dataFavoriteLocations;
-
-  late final RxList<Weather> allWeatherData;
 
   final RxList<Geocoding> geocoding = RxList();
   final Rx<Weather> selectedCountry = Rx<Weather>(Weather());
@@ -44,17 +42,13 @@ class LocateLocationController extends GetxController {
     dataSetting = _sessionManager.dataSetting;
     dataFavoriteLocations = _sessionManager.dataFavoriteLocations;
     currentLocation = _sessionManager.currentLocation;
-
-    allWeatherData = _sessionManager.allWeatherData;
   }
 
   void _updateWeather() {
-    allWeatherData.clear();
-
     if (currentLocation != null) {
-      _getWeatherLatLon(
-        lat: currentLocation.value.coord?.lat ?? 0.0,
-        lon: currentLocation.value.coord?.lon ?? 0.0,
+      _getCurrentWeatherLatLon(
+        lat: currentLocation.value?.coord?.lat ?? 0.0,
+        lon: currentLocation.value?.coord?.lon ?? 0.0,
       );
     }
 
@@ -64,7 +58,8 @@ class LocateLocationController extends GetxController {
         lon: dataFavoriteLocations[index].coord?.lon ?? 0.0,
       );
     }
-    allWeatherData.refresh();
+
+    dataFavoriteLocations.refresh();
   }
 
   @override
@@ -88,6 +83,27 @@ class LocateLocationController extends GetxController {
     super.onClose();
   }
 
+  Future<void> _getCurrentWeatherLatLon({
+    required double lat,
+    required double lon,
+  }) async {
+    try {
+      isLoadingGetWeather(true);
+      final result = await _weatherAPI.getWeatherLatLon(
+        lat: lat,
+        lon: lon,
+      );
+      isLoadingGetWeather(false);
+      currentLocation.value = result;
+    } catch (error) {
+      isLoadingGetWeather(false);
+      showAlert(
+        title: 'Error',
+        message: (error as AppError).message,
+      );
+    }
+  }
+
   Future<void> _getWeatherLatLon({
     required double lat,
     required double lon,
@@ -99,7 +115,10 @@ class LocateLocationController extends GetxController {
         lon: lon,
       );
       isLoadingGetWeather(false);
-      allWeatherData.add(result);
+
+      int index = dataFavoriteLocations
+          .indexWhere((element) => element.id == result.id);
+      dataFavoriteLocations[index] = result;
     } catch (error) {
       isLoadingGetWeather(false);
       showAlert(
@@ -123,6 +142,22 @@ class LocateLocationController extends GetxController {
       selectedCountry.value = result;
     } catch (error) {
       isLoadingGetWeather(false);
+      showAlert(
+        title: 'Error',
+        message: (error as AppError).message,
+      );
+    }
+  }
+
+  void _getGeocoding({
+    required String cityName,
+  }) async {
+    try {
+      final result = await _geocodingAPI.getWeatherCity(
+        city: cityName,
+      );
+      geocoding(result);
+    } catch (error) {
       showAlert(
         title: 'Error',
         message: (error as AppError).message,
@@ -160,25 +195,5 @@ class LocateLocationController extends GetxController {
       Routes.SHOW_DETAIL,
       arguments: item,
     );
-  }
-
-  void clearTextField() {
-    searchCityText.value = '';
-  }
-
-  void _getGeocoding({
-    required String cityName,
-  }) async {
-    try {
-      final result = await _geocodingAPI.getWeatherCity(
-        city: cityName,
-      );
-      geocoding(result);
-    } catch (error) {
-      showAlert(
-        title: 'Error',
-        message: (error as AppError).message,
-      );
-    }
   }
 }

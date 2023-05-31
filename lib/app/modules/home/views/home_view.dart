@@ -37,12 +37,6 @@ class HomeView extends GetView<HomeController> {
 
   _appbar() {
     return AppBar(
-      leading: IconButton(
-        onPressed: controller.printData,
-        icon: const Icon(
-          Icons.face_2,
-        ),
-      ),
       automaticallyImplyLeading: false,
       title: Text(
         LocaleKeys.home_title.tr,
@@ -62,18 +56,19 @@ class HomeView extends GetView<HomeController> {
   _body() {
     return Obx(
       () {
-        final allDataWeather = controller.allWeatherData;
+        final currentLocation = controller.currentLocation.value;
+
+        final dataFavoriteLocations = controller.dataFavoriteLocations.value;
         final allFutureWeather = controller.allFutureWeather.value;
         final allAirPollution = controller.allAirPollution.value;
-
-        final currentLocation = controller.currentLocation.value;
 
         final setting = controller.dataSetting.value;
 
         return Container(
           child: allFutureWeather.isEmpty &&
                   allAirPollution.isEmpty &&
-                  allDataWeather.isEmpty
+                  dataFavoriteLocations.isEmpty &&
+                  currentLocation == null
               ? Container(
                   color: AppColors.backgroundColor,
                 )
@@ -81,36 +76,59 @@ class HomeView extends GetView<HomeController> {
                   children: [
                     PageView.builder(
                       controller: controller.pageController,
-                      itemCount: allDataWeather.length,
+                      itemCount: currentLocation != null
+                          ? dataFavoriteLocations.length + 1
+                          : dataFavoriteLocations.length,
                       itemBuilder: (context, index) {
                         return Container(
                           color: AppColors.backgroundColor,
                           height: double.infinity,
                           child: _detail(
-                            weatherData: index == 0 && currentLocation != null
-                                ? allDataWeather.firstWhereOrNull((element) =>
-                                    element.id == currentLocation.id)
-                                : allDataWeather.firstWhereOrNull((element) =>
-                                    element.id ==
-                                    controller
-                                        .dataFavoriteLocations[index - 1].id),
-                            futureWeatherData: index == 0 &&
-                                    currentLocation != null
-                                ? allFutureWeather.firstWhereOrNull((element) =>
-                                    element.city?.id == currentLocation.id)
+                            weatherData: currentLocation != null
+                                ? index == 0
+                                    ? currentLocation
+                                    : dataFavoriteLocations[index - 1]
+                                : dataFavoriteLocations[index],
+                            futureWeatherData: currentLocation != null
+                                ? index == 0
+                                    ? allFutureWeather.firstWhereOrNull(
+                                        (element) =>
+                                            element.city?.id ==
+                                            currentLocation.id)
+                                    : allFutureWeather.firstWhereOrNull(
+                                        (element) =>
+                                            element.city?.id ==
+                                            dataFavoriteLocations[index - 1].id)
                                 : allFutureWeather.firstWhereOrNull((element) =>
                                     element.city?.id ==
-                                    allDataWeather[index - 1].id),
-                            allAirPollution: index == 0 &&
-                                    currentLocation != null
-                                ? allAirPollution.firstWhereOrNull((element) =>
-                                    element.coord?.lon ==
-                                    currentLocation.coord?.lon)
+                                    dataFavoriteLocations[index].id),
+                            allAirPollution: currentLocation != null
+                                ? index == 0
+                                    ? allAirPollution.firstWhereOrNull(
+                                        (element) =>
+                                            element.coord?.lat ==
+                                                currentLocation.coord?.lat &&
+                                            element.coord?.lon ==
+                                                currentLocation.coord?.lon)
+                                    : allAirPollution.firstWhereOrNull(
+                                        (element) =>
+                                            element.coord?.lat ==
+                                                dataFavoriteLocations[index - 1]
+                                                    .coord
+                                                    ?.lat &&
+                                            element.coord?.lon ==
+                                                dataFavoriteLocations[index - 1]
+                                                    .coord
+                                                    ?.lon)
                                 : allAirPollution.firstWhereOrNull((element) =>
                                     element.coord?.lat ==
-                                        allDataWeather[index].coord?.lat &&
+                                        dataFavoriteLocations[index]
+                                            .coord
+                                            ?.lat &&
                                     element.coord?.lon ==
-                                        allDataWeather[index].coord?.lon),
+                                        dataFavoriteLocations[index]
+                                            .coord
+                                            ?.lon),
                             setting: setting,
                           ),
                         );
@@ -126,7 +144,9 @@ class HomeView extends GetView<HomeController> {
                           padding: const EdgeInsets.only(bottom: 16),
                           child: SmoothPageIndicator(
                             controller: controller.pageController,
-                            count: allDataWeather.length,
+                            count: currentLocation != null
+                                ? dataFavoriteLocations.length + 1
+                                : dataFavoriteLocations.length,
                             effect: const WormEffect(
                               dotHeight: 16,
                               dotWidth: 16,
@@ -159,7 +179,7 @@ class HomeView extends GetView<HomeController> {
             TopView(
               weatherInfo: weatherData,
               locationNow:
-                  controller.currentLocation.value.id == weatherData?.id
+                  controller.currentLocation.value?.id == weatherData?.id
                       ? LocaleKeys.home_location.tr
                       : setting.timeFormat.convertTimeWithTimeZone(
                           (weatherData?.dt ?? 0), weatherData?.timezone ?? 0),
