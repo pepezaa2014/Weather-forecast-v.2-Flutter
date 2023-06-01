@@ -28,7 +28,7 @@ class HomeView extends GetView<HomeController> {
         ),
         Obx(
           () => LoadingIndicator(
-            isLoading: controller.isLoadingGetWeather.value,
+            isLoading: controller.isLoading.value,
           ),
         ),
       ],
@@ -171,7 +171,7 @@ class HomeView extends GetView<HomeController> {
     required Setting setting,
   }) {
     return RefreshIndicator(
-      onRefresh: controller.refresh,
+      onRefresh: () => controller.refresh(),
       child: SingleChildScrollView(
         physics: const ClampingScrollPhysics(),
         child: Column(

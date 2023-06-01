@@ -6,7 +6,6 @@ import 'package:weather_v2_pepe/app/data/models/app_error_model.dart';
 import 'package:weather_v2_pepe/app/data/models/future_weather_model.dart';
 import 'package:weather_v2_pepe/app/data/models/setting_model.dart';
 import 'package:weather_v2_pepe/app/data/models/weather_model.dart';
-import 'package:weather_v2_pepe/app/extensions/bool_extension.dart';
 import 'package:weather_v2_pepe/app/managers/session_manager.dart';
 import 'package:weather_v2_pepe/app/utils/show_alert.dart';
 
@@ -26,17 +25,16 @@ class ShowDetailController extends GetxController {
   late final RxList<FutureWeather> allFutureWeather;
   late final RxList<AirPollution> allAirpollution;
 
-  final isLoadingGetWeather = false.obs;
-  RxBool get isLoading {
-    return [
-      isLoadingGetWeather.value,
-    ].atLeastOneTrue.obs;
-  }
+  late final RxBool isLoading;
+  late final isLoadingGetWeather;
 
   @override
   void onInit() {
     super.onInit();
     getWeatherInfo.value = Get.arguments;
+
+    isLoading = _sessionManager.isLoading;
+    isLoadingGetWeather = _sessionManager.isLoadingGetWeather;
 
     currentLocation = _sessionManager.currentLocation;
     dataSetting = _sessionManager.dataSetting;
@@ -49,7 +47,7 @@ class ShowDetailController extends GetxController {
   @override
   void onReady() {
     super.onReady();
-    _getLoadingAllData();
+    getLoadingAllData();
   }
 
   @override
@@ -57,25 +55,18 @@ class ShowDetailController extends GetxController {
     super.onClose();
   }
 
-  Future<void> _getLoadingAllData() async {
-    await _getFutureWeather(
+  Future<void> getLoadingAllData() async {
+    _getFutureWeatherInPage(
       lat: getWeatherInfo.value.coord?.lat ?? 0.0,
       lon: getWeatherInfo.value.coord?.lon ?? 0.0,
     );
-    await _getAirPollution(
+    _getAirPollutionInPage(
       lat: getWeatherInfo.value.coord?.lat ?? 0.0,
       lon: getWeatherInfo.value.coord?.lon ?? 0.0,
     );
   }
 
-  void addFavorite() {
-    dataFavoriteLocations.add(getWeatherInfo.value);
-    allFutureWeather.add(futureWeather.value);
-    allAirpollution.add(airPollution.value);
-    Get.back();
-  }
-
-  Future<void> _getFutureWeather({
+  Future<void> _getFutureWeatherInPage({
     required double lat,
     required double lon,
   }) async {
@@ -96,7 +87,7 @@ class ShowDetailController extends GetxController {
     }
   }
 
-  Future<void> _getAirPollution({
+  Future<void> _getAirPollutionInPage({
     required double lat,
     required double lon,
   }) async {
@@ -115,5 +106,12 @@ class ShowDetailController extends GetxController {
         message: (error as AppError).message,
       );
     }
+  }
+
+  void addFavorite() {
+    dataFavoriteLocations.add(getWeatherInfo.value);
+    allFutureWeather.add(futureWeather.value);
+    allAirpollution.add(airPollution.value);
+    Get.back();
   }
 }

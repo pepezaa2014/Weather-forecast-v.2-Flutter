@@ -36,24 +36,19 @@ void main() async {
 
 Future<void> _setupInstance() async {
   await GetStorage.init();
-  Get.put(GetStorage());
-
-  final GetStorage getStorage = Get.find();
-  Get.put(SessionManager(getStorage));
 
   Get.put(Dio());
-
   final Dio dio = Get.find();
-  Get.put(
-    DioClient(
-      dio,
-    ),
-  );
+  Get.put(DioClient(dio));
 
   final DioClient dioClient = Get.find();
   Get.put(WeatherAPI(dioClient));
   Get.put(FutureWeatherAPI(dioClient));
   Get.put(AirPollutionAPI(dioClient));
   Get.put(GeocodingAPI(dioClient));
+
+  Get.put(GetStorage());
+  final GetStorage getStorage = Get.find();
+  Get.put(SessionManager(getStorage));
   return;
 }

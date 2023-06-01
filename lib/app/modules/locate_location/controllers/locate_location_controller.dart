@@ -6,7 +6,6 @@ import 'package:weather_v2_pepe/app/data/models/app_error_model.dart';
 import 'package:weather_v2_pepe/app/data/models/geocoding_model.dart';
 import 'package:weather_v2_pepe/app/data/models/setting_model.dart';
 import 'package:weather_v2_pepe/app/data/models/weather_model.dart';
-import 'package:weather_v2_pepe/app/extensions/bool_extension.dart';
 import 'package:weather_v2_pepe/app/managers/session_manager.dart';
 import 'package:weather_v2_pepe/app/routes/app_pages.dart';
 import 'package:weather_v2_pepe/app/utils/show_alert.dart';
@@ -28,38 +27,20 @@ class LocateLocationController extends GetxController {
   final RxList<Geocoding> geocoding = RxList();
   final Rx<Weather> selectedCountry = Rx<Weather>(Weather());
 
-  final isLoadingGetWeather = false.obs;
-  RxBool get isLoading {
-    return [
-      isLoadingGetWeather.value,
-    ].atLeastOneTrue.obs;
-  }
+  late final RxBool isLoading;
 
   @override
   void onInit() {
     super.onInit();
+    isLoading = _sessionManager.isLoading;
 
     dataSetting = _sessionManager.dataSetting;
     dataFavoriteLocations = _sessionManager.dataFavoriteLocations;
     currentLocation = _sessionManager.currentLocation;
   }
 
-  void _updateWeather() {
-    if (currentLocation != null) {
-      _getCurrentWeatherLatLon(
-        lat: currentLocation.value?.coord?.lat ?? 0.0,
-        lon: currentLocation.value?.coord?.lon ?? 0.0,
-      );
-    }
-
-    for (int index = 0; index < dataFavoriteLocations.length; index++) {
-      _getWeatherLatLon(
-        lat: dataFavoriteLocations[index].coord?.lat ?? 0.0,
-        lon: dataFavoriteLocations[index].coord?.lon ?? 0.0,
-      );
-    }
-
-    dataFavoriteLocations.refresh();
+  Future<void> updateWeather() async {
+    _sessionManager.updateWeather();
   }
 
   @override
@@ -75,7 +56,7 @@ class LocateLocationController extends GetxController {
         }
       },
     );
-    _updateWeather();
+    updateWeather();
   }
 
   @override
@@ -83,65 +64,20 @@ class LocateLocationController extends GetxController {
     super.onClose();
   }
 
-  Future<void> _getCurrentWeatherLatLon({
-    required double lat,
-    required double lon,
-  }) async {
-    try {
-      isLoadingGetWeather(true);
-      final result = await _weatherAPI.getWeatherLatLon(
-        lat: lat,
-        lon: lon,
-      );
-      isLoadingGetWeather(false);
-      currentLocation.value = result;
-    } catch (error) {
-      isLoadingGetWeather(false);
-      showAlert(
-        title: 'Error',
-        message: (error as AppError).message,
-      );
-    }
-  }
-
-  Future<void> _getWeatherLatLon({
-    required double lat,
-    required double lon,
-  }) async {
-    try {
-      isLoadingGetWeather(true);
-      final result = await _weatherAPI.getWeatherLatLon(
-        lat: lat,
-        lon: lon,
-      );
-      isLoadingGetWeather(false);
-
-      int index = dataFavoriteLocations
-          .indexWhere((element) => element.id == result.id);
-      dataFavoriteLocations[index] = result;
-    } catch (error) {
-      isLoadingGetWeather(false);
-      showAlert(
-        title: 'Error',
-        message: (error as AppError).message,
-      );
-    }
-  }
-
   Future<void> _findSelectedCountryByLatLon({
     required double lat,
     required double lon,
   }) async {
     try {
-      isLoadingGetWeather(true);
+      isLoading(true);
       final result = await _weatherAPI.getWeatherLatLon(
         lat: lat,
         lon: lon,
       );
-      isLoadingGetWeather(false);
+      isLoading(false);
       selectedCountry.value = result;
     } catch (error) {
-      isLoadingGetWeather(false);
+      isLoading(false);
       showAlert(
         title: 'Error',
         message: (error as AppError).message,
@@ -185,7 +121,7 @@ class LocateLocationController extends GetxController {
 
   void deleteFavoriteIndex(int index) {
     dataFavoriteLocations.removeAt(index - 1);
-    _updateWeather();
+    updateWeather();
   }
 
   void goShowDetail(Weather? item) {

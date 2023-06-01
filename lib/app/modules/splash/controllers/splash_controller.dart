@@ -8,6 +8,7 @@ import 'package:weather_v2_pepe/resources/resources.dart';
 class SplashController extends GetxController {
   final SessionManager _sessionManager = Get.find();
   final logoName = ImageName.weather04n;
+
   @override
   void onInit() {
     super.onInit();
@@ -25,12 +26,13 @@ class SplashController extends GetxController {
   }
 
   void _goFirstScreen() {
-    _sessionManager.loadSession();
     Get.updateLocale(const Locale('th'));
     initializeDateFormatting(Get.locale?.languageCode);
 
+    _sessionManager.loadSession();
+
     Future.delayed(
-      const Duration(milliseconds: 400),
+      const Duration(milliseconds: 1000),
       () {
         Get.offAllNamed(Routes.HOME);
       },

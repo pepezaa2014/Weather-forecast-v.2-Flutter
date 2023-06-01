@@ -25,7 +25,7 @@ class ShowDetailView extends GetView<ShowDetailController> {
         ),
         Obx(
           () => LoadingIndicator(
-            isLoading: controller.isLoadingGetWeather.value,
+            isLoading: controller.isLoading.value,
           ),
         ),
       ],
@@ -69,20 +69,23 @@ class ShowDetailView extends GetView<ShowDetailController> {
   }
 
   _body() {
-    return Container(
-      color: AppColors.backgroundColor,
-      height: double.infinity,
-      child: Obx(
-        () {
-          final currentWeather = controller.getWeatherInfo;
-          final futureWeather = controller.futureWeather;
-          final airPollution = controller.airPollution;
-          return _detail(
-            currentWeather: currentWeather.value,
-            futureWeather: futureWeather.value,
-            airPollution: airPollution.value,
-          );
-        },
+    return RefreshIndicator(
+      onRefresh: () => controller.getLoadingAllData(),
+      child: Container(
+        color: AppColors.backgroundColor,
+        height: double.infinity,
+        child: Obx(
+          () {
+            final currentWeather = controller.getWeatherInfo;
+            final futureWeather = controller.futureWeather;
+            final airPollution = controller.airPollution;
+            return _detail(
+              currentWeather: currentWeather.value,
+              futureWeather: futureWeather.value,
+              airPollution: airPollution.value,
+            );
+          },
+        ),
       ),
     );
   }
