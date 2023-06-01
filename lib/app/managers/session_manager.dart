@@ -74,7 +74,7 @@ class SessionManager {
     }
   }
 
-  Future<void> getCurrentWeatherLatLon({
+  Future<void> _getCurrentWeatherLatLon({
     required double lat,
     required double lon,
   }) async {
@@ -95,7 +95,7 @@ class SessionManager {
     }
   }
 
-  Future<void> getWeatherLatLon({
+  Future<void> _getWeatherLatLon({
     required double lat,
     required double lon,
   }) async {
@@ -109,7 +109,10 @@ class SessionManager {
 
       int index = dataFavoriteLocations
           .indexWhere((element) => element.id == result.id);
-      dataFavoriteLocations[index] = result;
+      if (index != -1) {
+        dataFavoriteLocations[index] = result;
+        dataFavoriteLocations.refresh();
+      }
     } catch (error) {
       isLoadingGetWeather(false);
       showAlert(
@@ -119,7 +122,7 @@ class SessionManager {
     }
   }
 
-  Future<void> getFutureWeather({
+  Future<void> _getFutureWeather({
     required double lat,
     required double lon,
   }) async {
@@ -131,6 +134,7 @@ class SessionManager {
       );
       isLoadingGetWeather(false);
       allFutureWeather.add(result);
+      allFutureWeather.refresh();
     } catch (error) {
       isLoadingGetWeather(false);
       showAlert(
@@ -140,7 +144,7 @@ class SessionManager {
     }
   }
 
-  Future<void> getAirPollution({
+  Future<void> _getAirPollution({
     required double lat,
     required double lon,
   }) async {
@@ -152,6 +156,7 @@ class SessionManager {
       );
       isLoadingGetWeather(false);
       allAirPollution.add(result);
+      allAirPollution.refresh();
     } catch (error) {
       isLoadingGetWeather(false);
       showAlert(
@@ -172,6 +177,7 @@ class SessionManager {
         message: 'Location services are disabled.',
       );
     }
+
     permission = await Geolocator.checkPermission();
     if (permission == LocationPermission.denied) {
       permission = await Geolocator.requestPermission();
@@ -191,17 +197,17 @@ class SessionManager {
     }
     final location = await Geolocator.getCurrentPosition();
 
-    getCurrentWeatherLatLon(
+    _getCurrentWeatherLatLon(
       lat: location.latitude,
       lon: location.longitude,
     );
 
-    getFutureWeather(
+    _getFutureWeather(
       lat: location.latitude,
       lon: location.longitude,
     );
 
-    getAirPollution(
+    _getAirPollution(
       lat: location.latitude,
       lon: location.longitude,
     );
@@ -213,22 +219,19 @@ class SessionManager {
 
     _determinePosition();
 
-    for (int index = 0; index < dataFavoriteLocations.length; index++) {
-      getWeatherLatLon(
-        lat: dataFavoriteLocations[index].coord?.lat ?? 0.0,
-        lon: dataFavoriteLocations[index].coord?.lon ?? 0.0,
+    dataFavoriteLocations.forEach((element) {
+      _getWeatherLatLon(
+        lat: element.coord?.lat ?? 0.0,
+        lon: element.coord?.lon ?? 0.0,
       );
-      getFutureWeather(
-        lat: dataFavoriteLocations[index].coord?.lat ?? 0.0,
-        lon: dataFavoriteLocations[index].coord?.lon ?? 0.0,
+      _getFutureWeather(
+        lat: element.coord?.lat ?? 0.0,
+        lon: element.coord?.lon ?? 0.0,
       );
-      getAirPollution(
-        lat: dataFavoriteLocations[index].coord?.lat ?? 0.0,
-        lon: dataFavoriteLocations[index].coord?.lon ?? 0.0,
+      _getAirPollution(
+        lat: element.coord?.lat ?? 0.0,
+        lon: element.coord?.lon ?? 0.0,
       );
-    }
-
-    allFutureWeather.refresh();
-    allAirPollution.refresh();
+    });
   }
 }
