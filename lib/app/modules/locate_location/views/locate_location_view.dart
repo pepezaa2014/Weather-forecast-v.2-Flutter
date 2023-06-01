@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 
 import 'package:get/get.dart';
 import 'package:weather_v2_pepe/app/const/app_colors.dart';
+import 'package:weather_v2_pepe/app/data/models/setting_model.dart';
+import 'package:weather_v2_pepe/app/data/models/weather_model.dart';
 import 'package:weather_v2_pepe/app/utils/loading_indicator.dart';
 import 'package:weather_v2_pepe/app/modules/locate_location/widgets/show_list.dart';
 import 'package:weather_v2_pepe/app/modules/locate_location/widgets/weather_card.dart';
@@ -61,10 +63,10 @@ class LocateLocationView extends GetView<LocateLocationController> {
         final dataFavorite = controller.dataFavoriteLocations.value;
         final setting = controller.dataSetting.value;
 
-        final serchText = controller.searchTextCityController;
+        final searchText = controller.searchTextCityController;
 
-        return Container(
-          height: double.infinity,
+        return SingleChildScrollView(
+          physics: const AlwaysScrollableScrollPhysics(),
           child: Column(
             children: [
               Padding(
@@ -81,114 +83,145 @@ class LocateLocationView extends GetView<LocateLocationController> {
                         controller.goOpenMap();
                       },
                     ),
-                    Expanded(
-                      child: SizedBox(
-                        child: TextField(
-                          cursorColor: AppColors.primaryNight,
-                          controller: serchText,
-                          style: const TextStyle(
-                            color: AppColors.primaryNight,
-                          ),
-                          decoration: InputDecoration(
-                            filled: true,
-                            fillColor: AppColors.secondaryBox,
-                            prefixIcon: const Icon(Icons.search),
-                            suffixIcon: IconButton(
-                              icon: const Icon(Icons.close),
-                              onPressed: () {
-                                serchText.clear();
-                              },
-                            ),
-                            contentPadding: const EdgeInsets.symmetric(
-                              horizontal: 16,
-                              vertical: 12,
-                            ),
-                            border: OutlineInputBorder(
-                              borderRadius: BorderRadius.circular(8),
-                              borderSide: const BorderSide(
-                                color: AppColors.primaryNight,
-                              ),
-                            ),
-                          ),
-                        ),
-                      ),
+                    _textField(
+                      searchText: searchText,
                     ),
                   ],
                 ),
               ),
-              Padding(
-                padding: const EdgeInsets.all(16),
-                child: controller.searchCityText.value != ''
-                    ? SizedBox(
-                        width: double.infinity,
-                        height: 600,
-                        child: ListView.builder(
-                          itemCount: geocoding.length,
-                          itemBuilder: (context, index) {
-                            return GestureDetector(
-                              onTap: () {
-                                FocusScope.of(context).unfocus();
-                                serchText.clear();
-                                controller.changeDataAndGoShowDetail(
-                                    geocoding[index]);
-                              },
-                              child: Container(
-                                color: AppColors.backgroundColor,
-                                child: ShowList(
-                                  item: geocoding[index],
-                                ),
-                              ),
-                            );
-                          },
-                        ),
-                      )
-                    : SizedBox(
-                        width: double.infinity,
-                        height: 600,
-                        child: dataFavorite.isNotEmpty ||
-                                currentLocation != null
-                            ? ListView.builder(
-                                itemCount: currentLocation != null
-                                    ? dataFavorite.length + 1
-                                    : dataFavorite.length,
-                                itemBuilder: (context, index) {
-                                  return Padding(
-                                    padding: const EdgeInsets.only(
-                                      top: 4,
-                                      bottom: 4,
-                                    ),
-                                    child: WeatherCard(
-                                      currentLocation: currentLocation,
-                                      weatherInfo: currentLocation != null
-                                          ? index == 0
-                                              ? currentLocation
-                                              : dataFavorite[index - 1]
-                                          : dataFavorite[index],
-                                      setting: setting,
-                                      onTap: () {
-                                        FocusScope.of(context).unfocus();
-
-                                        controller.goShowDetail(
-                                          currentLocation != null
-                                              ? index == 0
-                                                  ? currentLocation
-                                                  : dataFavorite[index - 1]
-                                              : dataFavorite[index],
-                                        );
-                                      },
-                                      onTapDel: () =>
-                                          controller.deleteFavoriteIndex(index),
-                                    ),
-                                  );
-                                },
-                              )
-                            : const SizedBox(),
-                      ),
-              ),
+              controller.searchCityText.value != ''
+                  ? _geocoding(
+                      geocoding: geocoding,
+                      searchText: searchText,
+                    )
+                  : _weatherCard(
+                      currentLocation: currentLocation,
+                      dataFavorite: dataFavorite,
+                      setting: setting,
+                    )
             ],
           ),
         );
       },
+    );
+  }
+
+  _textField({
+    required TextEditingController searchText,
+  }) {
+    return Expanded(
+      child: SizedBox(
+        child: TextField(
+          cursorColor: AppColors.primaryNight,
+          controller: searchText,
+          style: const TextStyle(
+            color: AppColors.primaryNight,
+          ),
+          decoration: InputDecoration(
+            filled: true,
+            fillColor: AppColors.secondaryBox,
+            prefixIcon: const Icon(Icons.search),
+            suffixIcon: IconButton(
+              icon: const Icon(Icons.close),
+              onPressed: () {
+                searchText.clear();
+              },
+            ),
+            contentPadding: const EdgeInsets.symmetric(
+              horizontal: 16,
+              vertical: 12,
+            ),
+            border: OutlineInputBorder(
+              borderRadius: BorderRadius.circular(8),
+              borderSide: const BorderSide(
+                color: AppColors.primaryNight,
+              ),
+            ),
+          ),
+        ),
+      ),
+    );
+  }
+
+  _geocoding({
+    required RxList geocoding,
+    required TextEditingController searchText,
+  }) {
+    return SizedBox(
+      width: double.infinity,
+      height: 600,
+      child: ListView.builder(
+        itemCount: geocoding.length,
+        itemBuilder: (context, index) {
+          return GestureDetector(
+            onTap: () {
+              FocusScope.of(context).unfocus();
+              searchText.clear();
+              controller.changeDataAndGoShowDetail(geocoding[index]);
+            },
+            child: Container(
+              color: AppColors.backgroundColor,
+              child: ShowList(
+                item: geocoding[index],
+              ),
+            ),
+          );
+        },
+      ),
+    );
+  }
+
+  _weatherCard({
+    required Weather? currentLocation,
+    required List<Weather> dataFavorite,
+    required Setting setting,
+  }) {
+    return SizedBox(
+      width: double.infinity,
+      height: 600,
+      child: dataFavorite.isNotEmpty || currentLocation != null
+          ? ListView.builder(
+              itemCount: currentLocation != null
+                  ? dataFavorite.length + 1
+                  : dataFavorite.length,
+              itemBuilder: (context, index) {
+                return Padding(
+                  padding: const EdgeInsets.only(
+                    top: 4,
+                    bottom: 4,
+                  ),
+                  child: Padding(
+                    padding: const EdgeInsets.only(
+                      left: 16,
+                      right: 16,
+                      bottom: 16,
+                    ),
+                    child: WeatherCard(
+                      currentLocation: currentLocation,
+                      weatherInfo: currentLocation != null
+                          ? index == 0
+                              ? currentLocation
+                              : dataFavorite[index - 1]
+                          : dataFavorite[index],
+                      setting: setting,
+                      onTap: () {
+                        FocusScope.of(context).unfocus();
+
+                        controller.goShowDetail(
+                          currentLocation != null
+                              ? index == 0
+                                  ? currentLocation
+                                  : dataFavorite[index - 1]
+                              : dataFavorite[index],
+                        );
+                      },
+                      onTapDel: () => controller.deleteFavoriteIndex(index),
+                    ),
+                  ),
+                );
+              },
+            )
+          : const SizedBox(),
     );
   }
 }

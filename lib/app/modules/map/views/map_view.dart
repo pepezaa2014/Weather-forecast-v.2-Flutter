@@ -59,20 +59,17 @@ class MapView extends GetView<MapController> {
   }
 
   _map() {
-    return Padding(
-      padding: const EdgeInsets.only(bottom: 48),
-      child: Obx(
-        () => GoogleMap(
-          onMapCreated: (item) {
-            controller.setMapController(item);
-          },
-          onCameraMove: (cameraPosition) {
-            controller.setCenterLatLng(cameraPosition.target);
-          },
-          initialCameraPosition: CameraPosition(
-            target: controller.centerLatLng.value,
-            zoom: 14,
-          ),
+    return Obx(
+      () => GoogleMap(
+        onMapCreated: (item) {
+          controller.setMapController(item);
+        },
+        onCameraMove: (cameraPosition) {
+          controller.setCenterLatLng(cameraPosition.target);
+        },
+        initialCameraPosition: CameraPosition(
+          target: controller.centerLatLng.value,
+          zoom: 14,
         ),
       ),
     );

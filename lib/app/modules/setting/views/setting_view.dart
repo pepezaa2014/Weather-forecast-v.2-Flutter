@@ -36,7 +36,7 @@ class SettingView extends GetView<SettingController> {
     return Container(
       color: AppColors.backgroundColor,
       child: Padding(
-        padding: const EdgeInsets.all(8),
+        padding: const EdgeInsets.all(16),
         child: Container(
           decoration: BoxDecoration(
             color: AppColors.primaryBox,

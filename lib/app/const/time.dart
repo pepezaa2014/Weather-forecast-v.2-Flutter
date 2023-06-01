@@ -20,8 +20,8 @@ extension TimeExtension on Time {
 
   String convertTimeWithTimeZone(int time, int timeZone) {
     final timeNow = DateTime.fromMillisecondsSinceEpoch((time) * 1000);
-    final offsetTimeZone = 25200 - (timeZone);
-    DateTime convertedDateTime = timeNow.add(Duration(seconds: offsetTimeZone));
+    // final offsetTimeZone = 25200 - ();
+    DateTime convertedDateTime = timeNow.add(Duration(seconds: timeZone));
 
     switch (this) {
       case Time.h24:
@@ -35,8 +35,8 @@ extension TimeExtension on Time {
 
   String convertTimeWithTimeZoneSun(int time, int timeZone) {
     final timeNow = DateTime.fromMillisecondsSinceEpoch((time) * 1000);
-    final offsetTimeZone = 25200 - (timeZone);
-    DateTime convertedDateTime = timeNow.add(Duration(seconds: offsetTimeZone));
+    // final offsetTimeZone = 25200 - (timeZone);
+    DateTime convertedDateTime = timeNow.add(Duration(seconds: timeZone));
 
     switch (this) {
       case Time.h24:
@@ -47,4 +47,12 @@ extension TimeExtension on Time {
             .format(convertedDateTime);
     }
   }
+
+  //  DateTime? get locationTime {
+  //   final current = DateTime.now().toUtc().millisecondsSinceEpoch;
+  //   return DateTime.fromMillisecondsSinceEpoch(
+  //     (current + ((timezone ?? 0) * 1000)),
+  //     isUtc: true,
+  //   );
+  // }
 }

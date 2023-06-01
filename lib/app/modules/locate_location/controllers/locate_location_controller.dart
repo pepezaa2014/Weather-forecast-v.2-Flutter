@@ -25,7 +25,6 @@ class LocateLocationController extends GetxController {
   late final RxList<Weather> dataFavoriteLocations;
 
   final RxList<Geocoding> geocoding = RxList();
-  final Rx<Weather> selectedCountry = Rx<Weather>(Weather());
 
   late final RxBool isLoading;
 
@@ -65,7 +64,7 @@ class LocateLocationController extends GetxController {
     super.onClose();
   }
 
-  Future<void> _findSelectedCountryByLatLon({
+  Future<Weather?> _findSelectedCountryByLatLon({
     required double lat,
     required double lon,
   }) async {
@@ -76,13 +75,15 @@ class LocateLocationController extends GetxController {
         lon: lon,
       );
       isLoading(false);
-      selectedCountry.value = result;
+
+      return result;
     } catch (error) {
       isLoading(false);
       showAlert(
         title: 'Error',
         message: (error as AppError).message,
       );
+      return null;
     }
   }
 
@@ -103,11 +104,12 @@ class LocateLocationController extends GetxController {
   }
 
   Future<void> changeDataAndGoShowDetail(Geocoding? item) async {
-    await _findSelectedCountryByLatLon(
-      lat: item?.lat ?? 0.0,
-      lon: item?.lon ?? 0.0,
+    goShowDetail(
+      await _findSelectedCountryByLatLon(
+        lat: item?.lat ?? 0.0,
+        lon: item?.lon ?? 0.0,
+      ),
     );
-    goShowDetail(selectedCountry.value);
   }
 
   void goOpenMap() {

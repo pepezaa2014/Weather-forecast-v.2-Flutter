@@ -110,7 +110,7 @@ class SessionManager {
       int index = dataFavoriteLocations
           .indexWhere((element) => element.id == result.id);
       if (index != -1) {
-        dataFavoriteLocations[index] = result;
+        dataFavoriteLocations.value[index] = result;
         dataFavoriteLocations.refresh();
       }
     } catch (error) {
