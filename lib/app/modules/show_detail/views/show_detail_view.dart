@@ -96,25 +96,28 @@ class ShowDetailView extends GetView<ShowDetailController> {
     required AirPollution? airPollution,
   }) {
     final setting = controller.dataSetting.value;
-    return Column(
-      children: [
-        TopView(
-          weatherInfo: currentWeather,
-          locationNow: controller.dataSetting.value.timeFormat
-              .convertTimeWithTimeZone(
-                  (currentWeather?.dt ?? 0), (currentWeather?.timezone ?? 0)),
-          setting: setting,
-        ),
-        FutureWeatherWidget(
-          futureWeather: futureWeather,
-          setting: setting,
-        ),
-        Details(
-          weatherInfo: currentWeather,
-          pollutionInfo: airPollution,
-          setting: setting,
-        ),
-      ],
+    return SingleChildScrollView(
+      physics: const AlwaysScrollableScrollPhysics(),
+      child: Column(
+        children: [
+          TopView(
+            weatherInfo: currentWeather,
+            locationNow: controller.dataSetting.value.timeFormat
+                .convertTimeWithTimeZone(
+                    (currentWeather?.dt ?? 0), (currentWeather?.timezone ?? 0)),
+            setting: setting,
+          ),
+          FutureWeatherWidget(
+            futureWeather: futureWeather,
+            setting: setting,
+          ),
+          Details(
+            weatherInfo: currentWeather,
+            pollutionInfo: airPollution,
+            setting: setting,
+          ),
+        ],
+      ),
     );
   }
 }

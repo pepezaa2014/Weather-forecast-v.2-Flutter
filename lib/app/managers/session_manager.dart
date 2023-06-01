@@ -195,6 +195,7 @@ class SessionManager {
             'Location permissions are permanently denied, we cannot request permissions.',
       );
     }
+
     final location = await Geolocator.getCurrentPosition();
 
     _getCurrentWeatherLatLon(

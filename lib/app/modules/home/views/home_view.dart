@@ -173,7 +173,7 @@ class HomeView extends GetView<HomeController> {
     return RefreshIndicator(
       onRefresh: () => controller.refresh(),
       child: SingleChildScrollView(
-        physics: const ClampingScrollPhysics(),
+        physics: const AlwaysScrollableScrollPhysics(),
         child: Column(
           children: [
             TopView(
