@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 
 import 'package:get/get.dart';
 import 'package:weather_v2_pepe/app/const/app_colors.dart';
-import 'package:weather_v2_pepe/app/const/time_extension.dart';
+import 'package:weather_v2_pepe/app/const/time.dart';
 import 'package:weather_v2_pepe/app/data/models/air_pollution_model.dart';
 import 'package:weather_v2_pepe/app/data/models/future_weather_model.dart';
 import 'package:weather_v2_pepe/app/data/models/weather_model.dart';
@@ -38,8 +38,9 @@ class ShowDetailView extends GetView<ShowDetailController> {
         children: [
           Obx(
             () {
+              final wetherInfo = controller.getWeatherInfo.value;
               return Text(
-                controller.getWeatherInfo.value.name.toString(),
+                wetherInfo?.name.toString() ?? '',
               );
             },
           ),
@@ -49,11 +50,11 @@ class ShowDetailView extends GetView<ShowDetailController> {
       actions: [
         Obx(
           () {
+            final wetherInfo = controller.getWeatherInfo.value;
             return Container(
-              child: controller.getWeatherInfo.value.id ==
-                          controller.currentLocation.value?.id ||
-                      controller.dataFavoriteLocations.any((element) =>
-                          element.id == controller.getWeatherInfo.value.id)
+              child: wetherInfo?.id == controller.currentLocation.value?.id ||
+                      controller.dataFavoriteLocations
+                          .any((element) => element.id == wetherInfo?.id)
                   ? const SizedBox()
                   : IconButton(
                       onPressed: controller.addFavorite,
@@ -102,9 +103,8 @@ class ShowDetailView extends GetView<ShowDetailController> {
         children: [
           TopView(
             weatherInfo: currentWeather,
-            locationNow: controller.dataSetting.value.timeFormat
-                .convertTimeWithTimeZone(
-                    (currentWeather?.dt ?? 0), (currentWeather?.timezone ?? 0)),
+            locationNow: setting.timeFormat.convertTimeWithTimeZone(
+                (currentWeather?.dt ?? 0), (currentWeather?.timezone ?? 0)),
             setting: setting,
           ),
           FutureWeatherWidget(

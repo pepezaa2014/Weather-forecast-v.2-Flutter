@@ -41,6 +41,7 @@ class LocateLocationController extends GetxController {
 
   Future<void> updateWeather() async {
     _sessionManager.updateWeather();
+    return;
   }
 
   @override

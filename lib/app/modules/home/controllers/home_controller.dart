@@ -50,6 +50,7 @@ class HomeController extends GetxController {
   @override
   Future<void> refresh() async {
     _updateWeather();
+    return;
   }
 
   void _updateWeather() {

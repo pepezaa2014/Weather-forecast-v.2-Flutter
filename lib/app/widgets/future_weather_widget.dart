@@ -3,9 +3,9 @@ import 'package:flutter/widgets.dart';
 import 'package:get/get.dart';
 import 'package:intl/intl.dart';
 import 'package:weather_v2_pepe/app/const/app_colors.dart';
-import 'package:weather_v2_pepe/app/const/time_extension.dart';
+import 'package:weather_v2_pepe/app/const/time.dart';
 import 'package:weather_v2_pepe/app/data/models/future_weather_model.dart';
-import 'package:weather_v2_pepe/app/const/weather_icon_extension.dart';
+import 'package:weather_v2_pepe/app/const/weather_icon.dart';
 import 'package:weather_v2_pepe/app/data/models/setting_model.dart';
 
 class FutureWeatherWidget extends StatelessWidget {

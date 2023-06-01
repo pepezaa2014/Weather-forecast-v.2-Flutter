@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:weather_v2_pepe/app/const/app_colors.dart';
-import 'package:weather_v2_pepe/app/const/temperature_extension.dart';
-import 'package:weather_v2_pepe/app/const/weather_icon_extension.dart';
+import 'package:weather_v2_pepe/app/const/temperature.dart';
+import 'package:weather_v2_pepe/app/const/weather_icon.dart';
 import 'package:weather_v2_pepe/app/data/models/setting_model.dart';
 import 'package:weather_v2_pepe/app/data/models/weather_model.dart';
 import 'package:collection/collection.dart';

@@ -18,6 +18,7 @@ class LocateLocationView extends GetView<LocateLocationController> {
         GestureDetector(
           onTap: () => FocusScope.of(context).unfocus(),
           child: Scaffold(
+            backgroundColor: AppColors.backgroundColor,
             appBar: _appbar(context),
             body: _body(context),
           ),
@@ -63,134 +64,128 @@ class LocateLocationView extends GetView<LocateLocationController> {
         final serchText = controller.searchTextCityController;
 
         return Container(
-          color: AppColors.backgroundColor,
           height: double.infinity,
-          child: RefreshIndicator(
-            onRefresh: () => controller.updateWeather(),
-            child: SingleChildScrollView(
-              physics: const ClampingScrollPhysics(),
-              child: Column(
-                children: [
-                  Padding(
-                    padding: const EdgeInsets.all(16),
-                    child: Row(
-                      children: [
-                        IconButton(
-                          icon: const Icon(
-                            Icons.map,
-                            size: 24,
-                          ),
-                          onPressed: () {
-                            FocusScope.of(context).unfocus();
-                            controller.goOpenMap();
-                          },
-                        ),
-                        SizedBox(
-                          width: 300,
-                          child: TextField(
-                            cursorColor: AppColors.primaryNight,
-                            controller: serchText,
-                            style: const TextStyle(
-                              color: AppColors.primaryNight,
-                            ),
-                            decoration: InputDecoration(
-                              filled: true,
-                              fillColor: AppColors.secondaryBox,
-                              prefixIcon: const Icon(Icons.search),
-                              suffixIcon: IconButton(
-                                icon: const Icon(Icons.close),
-                                onPressed: () {
-                                  serchText.clear();
-                                },
-                              ),
-                              contentPadding: const EdgeInsets.symmetric(
-                                horizontal: 16,
-                                vertical: 12,
-                              ),
-                              border: OutlineInputBorder(
-                                borderRadius: BorderRadius.circular(8),
-                                borderSide: const BorderSide(
-                                  color: AppColors.primaryNight,
-                                ),
-                              ),
-                            ),
-                          ),
-                        ),
-                      ],
+          child: Column(
+            children: [
+              Padding(
+                padding: const EdgeInsets.all(16),
+                child: Row(
+                  children: [
+                    IconButton(
+                      icon: const Icon(
+                        Icons.map,
+                        size: 24,
+                      ),
+                      onPressed: () {
+                        FocusScope.of(context).unfocus();
+                        controller.goOpenMap();
+                      },
                     ),
-                  ),
-                  Padding(
-                    padding: const EdgeInsets.all(16),
-                    child: controller.searchCityText.value != ''
-                        ? SizedBox(
-                            width: double.infinity,
-                            height: 600,
-                            child: ListView.builder(
-                              itemCount: geocoding.length,
-                              itemBuilder: (context, index) {
-                                return GestureDetector(
-                                  onTap: () {
-                                    FocusScope.of(context).unfocus();
-                                    serchText.clear();
-                                    controller.changeDataAndGoShowDetail(
-                                        geocoding[index]);
-                                  },
-                                  child: Container(
-                                    color: AppColors.backgroundColor,
-                                    child: ShowList(
-                                      item: geocoding[index],
-                                    ),
-                                  ),
-                                );
+                    Expanded(
+                      child: SizedBox(
+                        child: TextField(
+                          cursorColor: AppColors.primaryNight,
+                          controller: serchText,
+                          style: const TextStyle(
+                            color: AppColors.primaryNight,
+                          ),
+                          decoration: InputDecoration(
+                            filled: true,
+                            fillColor: AppColors.secondaryBox,
+                            prefixIcon: const Icon(Icons.search),
+                            suffixIcon: IconButton(
+                              icon: const Icon(Icons.close),
+                              onPressed: () {
+                                serchText.clear();
                               },
                             ),
-                          )
-                        : SizedBox(
-                            width: double.infinity,
-                            height: 600,
-                            child: dataFavorite.isNotEmpty ||
-                                    currentLocation != null
-                                ? ListView.builder(
-                                    itemCount: currentLocation != null
-                                        ? dataFavorite.length + 1
-                                        : dataFavorite.length,
-                                    itemBuilder: (context, index) {
-                                      return Padding(
-                                        padding: const EdgeInsets.only(
-                                          top: 4,
-                                          bottom: 4,
-                                        ),
-                                        child: WeatherCard(
-                                          currentLocation: currentLocation,
-                                          weatherInfo: currentLocation != null
+                            contentPadding: const EdgeInsets.symmetric(
+                              horizontal: 16,
+                              vertical: 12,
+                            ),
+                            border: OutlineInputBorder(
+                              borderRadius: BorderRadius.circular(8),
+                              borderSide: const BorderSide(
+                                color: AppColors.primaryNight,
+                              ),
+                            ),
+                          ),
+                        ),
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+              Padding(
+                padding: const EdgeInsets.all(16),
+                child: controller.searchCityText.value != ''
+                    ? SizedBox(
+                        width: double.infinity,
+                        height: 600,
+                        child: ListView.builder(
+                          itemCount: geocoding.length,
+                          itemBuilder: (context, index) {
+                            return GestureDetector(
+                              onTap: () {
+                                FocusScope.of(context).unfocus();
+                                serchText.clear();
+                                controller.changeDataAndGoShowDetail(
+                                    geocoding[index]);
+                              },
+                              child: Container(
+                                color: AppColors.backgroundColor,
+                                child: ShowList(
+                                  item: geocoding[index],
+                                ),
+                              ),
+                            );
+                          },
+                        ),
+                      )
+                    : SizedBox(
+                        width: double.infinity,
+                        height: 600,
+                        child: dataFavorite.isNotEmpty ||
+                                currentLocation != null
+                            ? ListView.builder(
+                                itemCount: currentLocation != null
+                                    ? dataFavorite.length + 1
+                                    : dataFavorite.length,
+                                itemBuilder: (context, index) {
+                                  return Padding(
+                                    padding: const EdgeInsets.only(
+                                      top: 4,
+                                      bottom: 4,
+                                    ),
+                                    child: WeatherCard(
+                                      currentLocation: currentLocation,
+                                      weatherInfo: currentLocation != null
+                                          ? index == 0
+                                              ? currentLocation
+                                              : dataFavorite[index - 1]
+                                          : dataFavorite[index],
+                                      setting: setting,
+                                      onTap: () {
+                                        FocusScope.of(context).unfocus();
+
+                                        controller.goShowDetail(
+                                          currentLocation != null
                                               ? index == 0
                                                   ? currentLocation
                                                   : dataFavorite[index - 1]
                                               : dataFavorite[index],
-                                          setting: setting,
-                                          onTap: () {
-                                            FocusScope.of(context).unfocus();
-
-                                            controller.goShowDetail(
-                                              currentLocation != null
-                                                  ? index == 0
-                                                      ? currentLocation
-                                                      : dataFavorite[index - 1]
-                                                  : dataFavorite[index],
-                                            );
-                                          },
-                                          onTapDel: () => controller
-                                              .deleteFavoriteIndex(index),
-                                        ),
-                                      );
-                                    },
-                                  )
-                                : const SizedBox(),
-                          ),
-                  ),
-                ],
+                                        );
+                                      },
+                                      onTapDel: () =>
+                                          controller.deleteFavoriteIndex(index),
+                                    ),
+                                  );
+                                },
+                              )
+                            : const SizedBox(),
+                      ),
               ),
-            ),
+            ],
           ),
         );
       },

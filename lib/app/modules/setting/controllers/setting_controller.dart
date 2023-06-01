@@ -1,10 +1,10 @@
 import 'package:get/get.dart';
-import 'package:weather_v2_pepe/app/const/distance_extension.dart';
-import 'package:weather_v2_pepe/app/const/precipitation_extension.dart';
-import 'package:weather_v2_pepe/app/const/pressure_extension.dart';
-import 'package:weather_v2_pepe/app/const/temperature_extension.dart';
-import 'package:weather_v2_pepe/app/const/time_extension.dart';
-import 'package:weather_v2_pepe/app/const/wind_speed_extension.dart';
+import 'package:weather_v2_pepe/app/const/distance.dart';
+import 'package:weather_v2_pepe/app/const/precipitation.dart';
+import 'package:weather_v2_pepe/app/const/pressure.dart';
+import 'package:weather_v2_pepe/app/const/temperature.dart';
+import 'package:weather_v2_pepe/app/const/time.dart';
+import 'package:weather_v2_pepe/app/const/wind_speed.dart';
 import 'package:weather_v2_pepe/app/data/models/setting_model.dart';
 import 'package:weather_v2_pepe/app/managers/session_manager.dart';
 
