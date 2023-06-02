@@ -56,12 +56,4 @@ extension TimeExtension on Time {
             .format(convertedDateTime);
     }
   }
-
-  //  DateTime? get locationTime {
-  //   final current = DateTime.now().toUtc().millisecondsSinceEpoch;
-  //   return DateTime.fromMillisecondsSinceEpoch(
-  //     (current + ((timezone ?? 0) * 1000)),
-  //     isUtc: true,
-  //   );
-  // }
 }

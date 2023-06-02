@@ -58,11 +58,9 @@ class HomeView extends GetView<HomeController> {
     return Obx(
       () {
         final currentLocation = controller.currentLocation.value;
-
         final dataFavoriteLocations = controller.dataFavoriteLocations.value;
         final allFutureWeather = controller.allFutureWeather.value;
         final allAirPollution = controller.allAirPollution.value;
-
         final setting = controller.dataSetting.value;
         final dataLength = dataFavoriteLocations.length;
 
@@ -79,48 +77,50 @@ class HomeView extends GetView<HomeController> {
                       itemCount:
                           currentLocation != null ? dataLength + 1 : dataLength,
                       itemBuilder: (context, index) {
+                        final checkedCurrentLocation = currentLocation != null;
+                        final weatherData = checkedCurrentLocation
+                            ? (index == 0
+                                ? currentLocation
+                                : dataFavoriteLocations[index - 1])
+                            : dataFavoriteLocations[index];
+
+                        final futureWeatherData = checkedCurrentLocation
+                            ? (index == 0
+                                ? allFutureWeather.firstWhereOrNull((element) =>
+                                    element.city?.id == currentLocation.id)
+                                : allFutureWeather.firstWhereOrNull((element) =>
+                                    element.city?.id ==
+                                    dataFavoriteLocations[index - 1].id))
+                            : allFutureWeather.firstWhereOrNull((element) =>
+                                element.city?.id ==
+                                dataFavoriteLocations[index].id);
+
+                        final allAirPollutionData = checkedCurrentLocation
+                            ? (index == 0
+                                ? allAirPollution.firstWhereOrNull((element) =>
+                                    element.coord?.lat ==
+                                        currentLocation.coord?.lat &&
+                                    element.coord?.lon ==
+                                        currentLocation.coord?.lon)
+                                : allAirPollution.firstWhereOrNull((element) =>
+                                    element.coord?.lat ==
+                                        dataFavoriteLocations[index - 1]
+                                            .coord
+                                            ?.lat &&
+                                    element.coord?.lon ==
+                                        dataFavoriteLocations[index - 1]
+                                            .coord
+                                            ?.lon))
+                            : allAirPollution.firstWhereOrNull((element) =>
+                                element.coord?.lat ==
+                                    dataFavoriteLocations[index].coord?.lat &&
+                                element.coord?.lon ==
+                                    dataFavoriteLocations[index].coord?.lon);
+
                         return _detail(
-                          weatherData: currentLocation != null
-                              ? index == 0
-                                  ? currentLocation
-                                  : dataFavoriteLocations[index - 1]
-                              : dataFavoriteLocations[index],
-                          futureWeatherData: currentLocation != null
-                              ? index == 0
-                                  ? allFutureWeather.firstWhereOrNull(
-                                      (element) =>
-                                          element.city?.id ==
-                                          currentLocation.id)
-                                  : allFutureWeather.firstWhereOrNull(
-                                      (element) =>
-                                          element.city?.id ==
-                                          dataFavoriteLocations[index - 1].id)
-                              : allFutureWeather.firstWhereOrNull((element) =>
-                                  element.city?.id ==
-                                  dataFavoriteLocations[index].id),
-                          allAirPollution: currentLocation != null
-                              ? index == 0
-                                  ? allAirPollution.firstWhereOrNull(
-                                      (element) =>
-                                          element.coord?.lat ==
-                                              currentLocation.coord?.lat &&
-                                          element.coord?.lon ==
-                                              currentLocation.coord?.lon)
-                                  : allAirPollution.firstWhereOrNull(
-                                      (element) =>
-                                          element.coord?.lat ==
-                                              dataFavoriteLocations[index - 1]
-                                                  .coord
-                                                  ?.lat &&
-                                          element.coord?.lon ==
-                                              dataFavoriteLocations[index - 1]
-                                                  .coord
-                                                  ?.lon)
-                              : allAirPollution.firstWhereOrNull((element) =>
-                                  element.coord?.lat ==
-                                      dataFavoriteLocations[index].coord?.lat &&
-                                  element.coord?.lon ==
-                                      dataFavoriteLocations[index].coord?.lon),
+                          weatherData: weatherData,
+                          futureWeatherData: futureWeatherData,
+                          allAirPollution: allAirPollutionData,
                           setting: setting,
                         );
                       },

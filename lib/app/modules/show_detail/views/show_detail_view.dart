@@ -104,7 +104,9 @@ class ShowDetailView extends GetView<ShowDetailController> {
           TopView(
             weatherInfo: currentWeather,
             locationNow: setting.timeFormat.convertTimeWithTimeZone(
-                (currentWeather?.dt ?? 0), (currentWeather?.timezone ?? 0)),
+              (currentWeather?.dt ?? 0),
+              (currentWeather?.timezone ?? 0),
+            ),
             setting: setting,
           ),
           FutureWeatherWidget(

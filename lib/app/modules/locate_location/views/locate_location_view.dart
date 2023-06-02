@@ -102,6 +102,7 @@ class LocateLocationView extends GetView<LocateLocationController> {
             icon: const Icon(
               Icons.map,
               size: 24,
+              color: AppColors.primaryBox,
             ),
             onPressed: () {
               FocusScope.of(context).unfocus();
@@ -181,6 +182,8 @@ class LocateLocationView extends GetView<LocateLocationController> {
     required List<Weather> dataFavorite,
     required Setting setting,
   }) {
+    final showResultLength =
+        currentLocation != null ? dataFavorite.length + 1 : dataFavorite.length;
     return RefreshIndicator(
       onRefresh: () => controller.updateWeather(),
       child: SizedBox(
@@ -188,10 +191,14 @@ class LocateLocationView extends GetView<LocateLocationController> {
         height: 600,
         child: dataFavorite.isNotEmpty || currentLocation != null
             ? ListView.builder(
-                itemCount: currentLocation != null
-                    ? dataFavorite.length + 1
-                    : dataFavorite.length,
+                itemCount: showResultLength,
                 itemBuilder: (context, index) {
+                  final weatherInfo = currentLocation != null
+                      ? index == 0
+                          ? currentLocation
+                          : dataFavorite[index - 1]
+                      : dataFavorite[index];
+
                   return Padding(
                     padding: const EdgeInsets.only(
                       top: 4,
@@ -205,22 +212,11 @@ class LocateLocationView extends GetView<LocateLocationController> {
                       ),
                       child: WeatherCard(
                         currentLocation: currentLocation,
-                        weatherInfo: currentLocation != null
-                            ? index == 0
-                                ? currentLocation
-                                : dataFavorite[index - 1]
-                            : dataFavorite[index],
+                        weatherInfo: weatherInfo,
                         setting: setting,
                         onTap: () {
                           FocusScope.of(context).unfocus();
-
-                          controller.goShowDetail(
-                            currentLocation != null
-                                ? index == 0
-                                    ? currentLocation
-                                    : dataFavorite[index - 1]
-                                : dataFavorite[index],
-                          );
+                          controller.goShowDetail(weatherInfo);
                         },
                         onTapDel: () => controller.deleteFavoriteIndex(index),
                       ),

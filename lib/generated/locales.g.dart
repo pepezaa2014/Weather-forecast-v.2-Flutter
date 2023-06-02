@@ -87,7 +87,7 @@ class Locales {
     'setting_pressure': 'ความกดอากาศ',
     'setting_precipitation': 'ปริมาณฝน/หิมะ',
     'setting_distance': 'ระยะทาง',
-    'setting_timeFormat': 'รูปแบบเวลา่',
+    'setting_timeFormat': 'รูปแบบเวลา',
     'setting_h12': '12 ชั่วโมง',
     'setting_h24': '24 ชั่วโมง',
     'map_title': 'แผนที่',
