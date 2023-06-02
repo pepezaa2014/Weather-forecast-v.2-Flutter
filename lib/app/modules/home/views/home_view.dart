@@ -64,8 +64,8 @@ class HomeView extends GetView<HomeController> {
         final allAirPollution = controller.allAirPollution.value;
 
         final setting = controller.dataSetting.value;
-
         final dataLength = dataFavoriteLocations.length;
+
         return Container(
           child: allFutureWeather.isEmpty &&
                   allAirPollution.isEmpty &&

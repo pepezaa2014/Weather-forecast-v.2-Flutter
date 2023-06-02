@@ -69,25 +69,9 @@ class LocateLocationView extends GetView<LocateLocationController> {
           physics: const AlwaysScrollableScrollPhysics(),
           child: Column(
             children: [
-              Padding(
-                padding: const EdgeInsets.all(16),
-                child: Row(
-                  children: [
-                    IconButton(
-                      icon: const Icon(
-                        Icons.map,
-                        size: 24,
-                      ),
-                      onPressed: () {
-                        FocusScope.of(context).unfocus();
-                        controller.goOpenMap();
-                      },
-                    ),
-                    _textField(
-                      searchText: searchText,
-                    ),
-                  ],
-                ),
+              _textField(
+                context: context,
+                searchText: searchText,
               ),
               controller.searchCityText.value != ''
                   ? _geocoding(
@@ -108,37 +92,55 @@ class LocateLocationView extends GetView<LocateLocationController> {
 
   _textField({
     required TextEditingController searchText,
+    required BuildContext context,
   }) {
-    return Expanded(
-      child: SizedBox(
-        child: TextField(
-          cursorColor: AppColors.primaryNight,
-          controller: searchText,
-          style: const TextStyle(
-            color: AppColors.primaryNight,
+    return Padding(
+      padding: const EdgeInsets.all(16),
+      child: Row(
+        children: [
+          IconButton(
+            icon: const Icon(
+              Icons.map,
+              size: 24,
+            ),
+            onPressed: () {
+              FocusScope.of(context).unfocus();
+              controller.goOpenMap();
+            },
           ),
-          decoration: InputDecoration(
-            filled: true,
-            fillColor: AppColors.secondaryBox,
-            prefixIcon: const Icon(Icons.search),
-            suffixIcon: IconButton(
-              icon: const Icon(Icons.close),
-              onPressed: () {
-                searchText.clear();
-              },
-            ),
-            contentPadding: const EdgeInsets.symmetric(
-              horizontal: 16,
-              vertical: 12,
-            ),
-            border: OutlineInputBorder(
-              borderRadius: BorderRadius.circular(8),
-              borderSide: const BorderSide(
-                color: AppColors.primaryNight,
+          Expanded(
+            child: SizedBox(
+              child: TextField(
+                cursorColor: AppColors.primaryNight,
+                controller: searchText,
+                style: const TextStyle(
+                  color: AppColors.primaryNight,
+                ),
+                decoration: InputDecoration(
+                  filled: true,
+                  fillColor: AppColors.secondaryBox,
+                  prefixIcon: const Icon(Icons.search),
+                  suffixIcon: IconButton(
+                    icon: const Icon(Icons.close),
+                    onPressed: () {
+                      searchText.clear();
+                    },
+                  ),
+                  contentPadding: const EdgeInsets.symmetric(
+                    horizontal: 16,
+                    vertical: 12,
+                  ),
+                  border: OutlineInputBorder(
+                    borderRadius: BorderRadius.circular(8),
+                    borderSide: const BorderSide(
+                      color: AppColors.primaryNight,
+                    ),
+                  ),
+                ),
               ),
             ),
           ),
-        ),
+        ],
       ),
     );
   }
@@ -147,26 +149,29 @@ class LocateLocationView extends GetView<LocateLocationController> {
     required RxList geocoding,
     required TextEditingController searchText,
   }) {
-    return SizedBox(
-      width: double.infinity,
-      height: 600,
-      child: ListView.builder(
-        itemCount: geocoding.length,
-        itemBuilder: (context, index) {
-          return GestureDetector(
-            onTap: () {
-              FocusScope.of(context).unfocus();
-              searchText.clear();
-              controller.changeDataAndGoShowDetail(geocoding[index]);
-            },
-            child: Container(
-              color: AppColors.backgroundColor,
-              child: ShowList(
-                item: geocoding[index],
+    return RefreshIndicator(
+      onRefresh: () => controller.updateWeather(),
+      child: SizedBox(
+        width: double.infinity,
+        height: 600,
+        child: ListView.builder(
+          itemCount: geocoding.length,
+          itemBuilder: (context, index) {
+            return GestureDetector(
+              onTap: () {
+                FocusScope.of(context).unfocus();
+                searchText.clear();
+                controller.changeDataAndGoShowDetail(geocoding[index]);
+              },
+              child: Container(
+                color: AppColors.backgroundColor,
+                child: ShowList(
+                  item: geocoding[index],
+                ),
               ),
-            ),
-          );
-        },
+            );
+          },
+        ),
       ),
     );
   }
@@ -176,52 +181,55 @@ class LocateLocationView extends GetView<LocateLocationController> {
     required List<Weather> dataFavorite,
     required Setting setting,
   }) {
-    return SizedBox(
-      width: double.infinity,
-      height: 600,
-      child: dataFavorite.isNotEmpty || currentLocation != null
-          ? ListView.builder(
-              itemCount: currentLocation != null
-                  ? dataFavorite.length + 1
-                  : dataFavorite.length,
-              itemBuilder: (context, index) {
-                return Padding(
-                  padding: const EdgeInsets.only(
-                    top: 4,
-                    bottom: 4,
-                  ),
-                  child: Padding(
+    return RefreshIndicator(
+      onRefresh: () => controller.updateWeather(),
+      child: SizedBox(
+        width: double.infinity,
+        height: 600,
+        child: dataFavorite.isNotEmpty || currentLocation != null
+            ? ListView.builder(
+                itemCount: currentLocation != null
+                    ? dataFavorite.length + 1
+                    : dataFavorite.length,
+                itemBuilder: (context, index) {
+                  return Padding(
                     padding: const EdgeInsets.only(
-                      left: 16,
-                      right: 16,
-                      bottom: 16,
+                      top: 4,
+                      bottom: 4,
                     ),
-                    child: WeatherCard(
-                      currentLocation: currentLocation,
-                      weatherInfo: currentLocation != null
-                          ? index == 0
-                              ? currentLocation
-                              : dataFavorite[index - 1]
-                          : dataFavorite[index],
-                      setting: setting,
-                      onTap: () {
-                        FocusScope.of(context).unfocus();
+                    child: Padding(
+                      padding: const EdgeInsets.only(
+                        left: 16,
+                        right: 16,
+                        bottom: 16,
+                      ),
+                      child: WeatherCard(
+                        currentLocation: currentLocation,
+                        weatherInfo: currentLocation != null
+                            ? index == 0
+                                ? currentLocation
+                                : dataFavorite[index - 1]
+                            : dataFavorite[index],
+                        setting: setting,
+                        onTap: () {
+                          FocusScope.of(context).unfocus();
 
-                        controller.goShowDetail(
-                          currentLocation != null
-                              ? index == 0
-                                  ? currentLocation
-                                  : dataFavorite[index - 1]
-                              : dataFavorite[index],
-                        );
-                      },
-                      onTapDel: () => controller.deleteFavoriteIndex(index),
+                          controller.goShowDetail(
+                            currentLocation != null
+                                ? index == 0
+                                    ? currentLocation
+                                    : dataFavorite[index - 1]
+                                : dataFavorite[index],
+                          );
+                        },
+                        onTapDel: () => controller.deleteFavoriteIndex(index),
+                      ),
                     ),
-                  ),
-                );
-              },
-            )
-          : const SizedBox(),
+                  );
+                },
+              )
+            : const SizedBox(),
+      ),
     );
   }
 }

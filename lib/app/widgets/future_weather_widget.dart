@@ -66,7 +66,7 @@ class FutureWeatherWidget extends StatelessWidget {
 
       int unixTimestamp = dateTime.millisecondsSinceEpoch ~/ 1000;
       String formattedTime =
-          setting?.timeFormat.convertTime(unixTimestamp) ?? '';
+          setting?.timeFormat.convertTimeInFutureWidget(unixTimestamp) ?? '';
 
       return Center(
         child: Padding(

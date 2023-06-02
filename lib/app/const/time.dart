@@ -7,21 +7,25 @@ enum Time {
 }
 
 extension TimeExtension on Time {
-  String convertTime(int time) {
-    final afterTime =
-        DateTime.fromMillisecondsSinceEpoch((time.toInt()) * 1000);
+  String convertTimeInFutureWidget(int time) {
+    final getTime = DateTime.fromMillisecondsSinceEpoch((time.toInt()) * 1000);
     switch (this) {
       case Time.h24:
-        return DateFormat('H:mm', Get.locale?.languageCode).format(afterTime);
+        return DateFormat('H:mm', Get.locale?.languageCode).format(getTime);
       case Time.h12:
-        return DateFormat('h:mm a', Get.locale?.languageCode).format(afterTime);
+        return DateFormat('h:mm a', Get.locale?.languageCode).format(getTime);
     }
   }
 
-  String convertTimeWithTimeZone(int time, int timeZone) {
+  String convertTimeWithTimeZone(
+    int time,
+    int timeZone,
+  ) {
+    final localTimeZone =
+        (DateTime.now().timeZoneOffset.inMilliseconds / 1000).round().toInt();
     final timeNow = DateTime.fromMillisecondsSinceEpoch((time) * 1000);
-    // final offsetTimeZone = 25200 - ();
-    DateTime convertedDateTime = timeNow.add(Duration(seconds: timeZone));
+    final offsetTimeZone = timeZone - localTimeZone;
+    DateTime convertedDateTime = timeNow.add(Duration(seconds: offsetTimeZone));
 
     switch (this) {
       case Time.h24:
@@ -33,10 +37,15 @@ extension TimeExtension on Time {
     }
   }
 
-  String convertTimeWithTimeZoneSun(int time, int timeZone) {
+  String convertTimeWithTimeZoneSun(
+    int time,
+    int timeZone,
+  ) {
+    final localTimeZone =
+        (DateTime.now().timeZoneOffset.inMilliseconds / 1000).round().toInt();
     final timeNow = DateTime.fromMillisecondsSinceEpoch((time) * 1000);
-    // final offsetTimeZone = 25200 - (timeZone);
-    DateTime convertedDateTime = timeNow.add(Duration(seconds: timeZone));
+    final offsetTimeZone = timeZone - localTimeZone;
+    DateTime convertedDateTime = timeNow.add(Duration(seconds: offsetTimeZone));
 
     switch (this) {
       case Time.h24:

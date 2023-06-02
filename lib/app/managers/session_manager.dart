@@ -57,9 +57,7 @@ class SessionManager {
   }
 
   void loadSession() {
-    // _getStorage.remove(AppConstants.keyValueFavoriteLocation);
-
-    var checkedSetting = _getStorage.read(AppConstants.keyValueSetting);
+    final checkedSetting = _getStorage.read(AppConstants.keyValueSetting);
     if (checkedSetting != null) {
       dataSetting.value = Setting.fromJson(jsonDecode(checkedSetting));
     }

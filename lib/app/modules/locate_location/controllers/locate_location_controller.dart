@@ -56,7 +56,7 @@ class LocateLocationController extends GetxController {
         }
       },
     );
-    updateWeather();
+    // updateWeather();
   }
 
   @override
