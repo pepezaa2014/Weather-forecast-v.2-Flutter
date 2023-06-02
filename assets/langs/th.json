@@ -1,0 +1,36 @@
+{
+    "home": {
+        "title":"สภาพอากาศ",
+        "home_location": "ตำแหน่งที่ตั้งของฉัน",
+        "home_high": "สูงสุด:",
+        "home_low": "ต่ำสุด:",
+        "home_feelLike": "รู้สึกเหมือน",
+        "home_sunrise": "พระอาทิตย์ขึ้น",
+        "home_sunset": "พระอาทิตย์ตก",
+        "home_wind": "อุณหภูมิ",
+        "home_pressure": "ความกดอากาศ",
+        "home_humidity": "ความชื้น",
+        "home_precipitation": "ปริมาณฝน/หิมะ",
+        "home_visibility": "ระยะการมองเห็น"
+    },
+    "setting": {
+        "title": "ตั้งค่า",
+        "temperature": "อุณหภูมิ",
+        "windSpeed": "ความเร็วลม",
+        "pressure": "ความกดอากาศ",
+        "precipitation": "ปริมาณฝน/หิมะ",
+        "distance": "ระยะทาง",
+        "timeFormat": "รูปแบบเวลา่",
+        "h12": "12 ชั่วโมง",
+        "h24": "24 ชั่วโมง"
+    },
+    "map":{
+        "title": "แผนที่",
+        "select": "เลือก"
+    },
+    "locate":{
+        "title": "สภาพอากาศ",
+        "high": "สูงสุด",
+        "low": "ต่ำสุด"
+    }
+}

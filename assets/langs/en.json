@@ -1,0 +1,36 @@
+{
+    "home": {
+        "title":"Weather",
+        "home_location": "Current Location",
+        "home_high": "H:",
+        "home_low": "L:",
+        "home_feelLike": "Feels like",
+        "home_sunrise": "Sunrise",
+        "home_sunset": "Sunset",
+        "home_wind": "Wind",
+        "home_pressure": "Pressure",
+        "home_humidity": "Humidity",
+        "home_precipitation": "Precipitation",
+        "home_visibility": "Visibility"
+    },
+    "setting": {
+        "title": "Setting",
+        "temperature": "Temperature",
+        "windSpeed": "Wind Speed",
+        "pressure": "Pressure",
+        "precipitation": "Precipitation",
+        "distance": "Distance",
+        "timeFormat": "Time Format",
+        "h12": "12-hour",
+        "h24": "24-hour"
+    },
+    "map":{
+        "title": "Map",
+        "select": "Select"
+    },
+    "locate":{
+        "title": "Weather",
+        "high": "H",
+        "low": "L"
+    }
+}
