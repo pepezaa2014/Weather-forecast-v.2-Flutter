@@ -60,4 +60,10 @@ class HomeController extends GetxController {
   void goLocate() {
     Get.toNamed(Routes.LOCATE_LOCATION);
   }
+
+  void printText() {
+    // print(dataFavoriteLocations[0].dt);
+    final localTimeZone = DateTime.now().toUtc().millisecondsSinceEpoch;
+    print(localTimeZone);
+  }
 }

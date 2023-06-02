@@ -17,15 +17,15 @@ extension TimeExtension on Time {
     }
   }
 
-  String convertTimeWithTimeZone(
+  String currentTime(
     int time,
     int timeZone,
   ) {
-    final localTimeZone =
-        (DateTime.now().timeZoneOffset.inMilliseconds / 1000).round().toInt();
-    final timeNow = DateTime.fromMillisecondsSinceEpoch((time) * 1000);
-    final offsetTimeZone = timeZone - localTimeZone;
-    DateTime convertedDateTime = timeNow.add(Duration(seconds: offsetTimeZone));
+    final current = DateTime.now().toUtc().millisecondsSinceEpoch;
+    DateTime convertedDateTime = DateTime.fromMillisecondsSinceEpoch(
+      (current + (timeZone * 1000)),
+      isUtc: true,
+    );
 
     switch (this) {
       case Time.h24:
@@ -41,11 +41,10 @@ extension TimeExtension on Time {
     int time,
     int timeZone,
   ) {
-    final localTimeZone =
-        (DateTime.now().timeZoneOffset.inMilliseconds / 1000).round().toInt();
-    final timeNow = DateTime.fromMillisecondsSinceEpoch((time) * 1000);
-    final offsetTimeZone = timeZone - localTimeZone;
-    DateTime convertedDateTime = timeNow.add(Duration(seconds: offsetTimeZone));
+    DateTime convertedDateTime = DateTime.fromMillisecondsSinceEpoch(
+      (time + timeZone) * 1000,
+      isUtc: true,
+    );
 
     switch (this) {
       case Time.h24:

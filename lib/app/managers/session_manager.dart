@@ -1,3 +1,4 @@
+import 'dart:async';
 import 'dart:convert';
 
 import 'package:geolocator/geolocator.dart';
@@ -70,6 +71,16 @@ class SessionManager {
             .add(Weather.fromJson(jsonDecode(checkedFavorite[i])));
       }
     }
+    // _timerGetData();
+  }
+
+  void _timerGetData() {
+    Timer.periodic(
+      const Duration(minutes: 1),
+      (Timer t) {
+        updateWeather();
+      },
+    );
   }
 
   Future<void> _getCurrentWeatherLatLon({
@@ -107,6 +118,7 @@ class SessionManager {
 
       int index = dataFavoriteLocations
           .indexWhere((element) => element.id == result.id);
+
       if (index != -1) {
         dataFavoriteLocations.value[index] = result;
         dataFavoriteLocations.refresh();

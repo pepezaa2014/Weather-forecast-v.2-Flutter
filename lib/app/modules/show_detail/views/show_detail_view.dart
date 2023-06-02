@@ -10,6 +10,7 @@ import 'package:weather_v2_pepe/app/utils/loading_indicator.dart';
 import 'package:weather_v2_pepe/app/widgets/details.dart';
 import 'package:weather_v2_pepe/app/widgets/future_weather_widget.dart';
 import 'package:weather_v2_pepe/app/widgets/top_view.dart';
+import 'package:weather_v2_pepe/generated/locales.g.dart';
 
 import '../controllers/show_detail_controller.dart';
 
@@ -71,7 +72,7 @@ class ShowDetailView extends GetView<ShowDetailController> {
 
   _body() {
     return RefreshIndicator(
-      onRefresh: () => controller.getLoadingAllData(),
+      onRefresh: controller.refresh,
       child: Container(
         color: AppColors.backgroundColor,
         height: double.infinity,
@@ -103,10 +104,11 @@ class ShowDetailView extends GetView<ShowDetailController> {
         children: [
           TopView(
             weatherInfo: currentWeather,
-            locationNow: setting.timeFormat.convertTimeWithTimeZone(
-              (currentWeather?.dt ?? 0),
-              (currentWeather?.timezone ?? 0),
-            ),
+            locationNow: controller.currentLocation.value?.id ==
+                    currentWeather?.id
+                ? LocaleKeys.home_location.tr
+                : setting.timeFormat.currentTime(
+                    (currentWeather?.dt ?? 0), currentWeather?.timezone ?? 0),
             setting: setting,
           ),
           FutureWeatherWidget(

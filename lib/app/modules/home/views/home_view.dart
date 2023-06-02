@@ -39,6 +39,12 @@ class HomeView extends GetView<HomeController> {
   _appbar() {
     return AppBar(
       automaticallyImplyLeading: false,
+      leading: IconButton(
+        onPressed: controller.printText,
+        icon: const Icon(
+          Icons.safety_check,
+        ),
+      ),
       title: Text(
         LocaleKeys.home_title.tr,
       ),
@@ -172,7 +178,7 @@ class HomeView extends GetView<HomeController> {
               locationNow:
                   controller.currentLocation.value?.id == weatherData?.id
                       ? LocaleKeys.home_location.tr
-                      : setting.timeFormat.convertTimeWithTimeZone(
+                      : setting.timeFormat.currentTime(
                           (weatherData?.dt ?? 0), weatherData?.timezone ?? 0),
               setting: setting,
             ),

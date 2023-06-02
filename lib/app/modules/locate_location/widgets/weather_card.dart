@@ -60,7 +60,7 @@ class WeatherCard extends StatelessWidget {
                           child: Text(
                             currentLocation?.id == weatherInfo?.id
                                 ? LocaleKeys.home_location.tr
-                                : setting?.timeFormat.convertTimeWithTimeZone(
+                                : setting?.timeFormat.currentTime(
                                         (weatherInfo?.dt ?? 0),
                                         (weatherInfo?.timezone ?? 0)) ??
                                     '',

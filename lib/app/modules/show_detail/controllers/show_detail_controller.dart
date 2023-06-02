@@ -1,6 +1,7 @@
 import 'package:get/get.dart';
 import 'package:weather_v2_pepe/app/core/api/air_pollution_api.dart';
 import 'package:weather_v2_pepe/app/core/api/future_weather_api.dart';
+import 'package:weather_v2_pepe/app/core/api/weather_api.dart';
 import 'package:weather_v2_pepe/app/data/models/air_pollution_model.dart';
 import 'package:weather_v2_pepe/app/data/models/app_error_model.dart';
 import 'package:weather_v2_pepe/app/data/models/future_weather_model.dart';
@@ -12,6 +13,7 @@ import 'package:weather_v2_pepe/app/utils/show_alert.dart';
 class ShowDetailController extends GetxController {
   final SessionManager _sessionManager = Get.find();
 
+  final WeatherAPI _weatherAPI = Get.find();
   final FutureWeatherAPI _futureWeatherAPI = Get.find();
   final AirPollutionAPI _airPollutionAPI = Get.find();
 
@@ -27,7 +29,7 @@ class ShowDetailController extends GetxController {
   late final RxList<AirPollution> allAirpollution;
 
   late final RxBool isLoading;
-  late final isLoadingGetWeather;
+  late final RxBool isLoadingGetWeather;
 
   @override
   void onInit() {
@@ -56,7 +58,17 @@ class ShowDetailController extends GetxController {
     super.onClose();
   }
 
+  @override
+  Future<void> refresh() async {
+    getLoadingAllData();
+    return;
+  }
+
   Future<void> getLoadingAllData() async {
+    _getWeatherLatLonInPage(
+      lat: getWeatherInfo.value.coord?.lat ?? 0.0,
+      lon: getWeatherInfo.value.coord?.lon ?? 0.0,
+    );
     _getFutureWeatherInPage(
       lat: getWeatherInfo.value.coord?.lat ?? 0.0,
       lon: getWeatherInfo.value.coord?.lon ?? 0.0,
@@ -65,6 +77,28 @@ class ShowDetailController extends GetxController {
       lat: getWeatherInfo.value.coord?.lat ?? 0.0,
       lon: getWeatherInfo.value.coord?.lon ?? 0.0,
     );
+  }
+
+  Future<void> _getWeatherLatLonInPage({
+    required double lat,
+    required double lon,
+  }) async {
+    try {
+      isLoadingGetWeather(true);
+      final result = await _weatherAPI.getWeatherLatLon(
+        lat: lat,
+        lon: lon,
+      );
+      isLoadingGetWeather(false);
+
+      getWeatherInfo.value = result;
+    } catch (error) {
+      isLoadingGetWeather(false);
+      showAlert(
+        title: 'Error',
+        message: (error as AppError).message,
+      );
+    }
   }
 
   Future<void> _getFutureWeatherInPage({
