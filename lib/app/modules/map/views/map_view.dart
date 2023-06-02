@@ -18,42 +18,15 @@ class MapView extends GetView<MapController> {
         ),
         centerTitle: true,
       ),
-      body: Stack(
-        children: [
-          _map(),
-          const Padding(
-            padding: EdgeInsets.only(bottom: 48),
-            child: Center(
-              child: Icon(
-                Icons.location_on,
-                color: AppColors.marker,
-                size: 56,
-              ),
+      body: SafeArea(
+        child: Column(
+          children: [
+            Expanded(
+              child: _map(),
             ),
-          ),
-          Positioned(
-            left: 0,
-            right: 0,
-            bottom: 0,
-            child: TextButton(
-              onPressed: () {
-                controller.goShowDetail();
-              },
-              style: TextButton.styleFrom(
-                padding: const EdgeInsets.symmetric(vertical: 16),
-                backgroundColor: AppColors.thirdaryBox,
-              ),
-              child: Text(
-                LocaleKeys.map_select.tr,
-                style: const TextStyle(
-                  fontSize: 18,
-                  fontWeight: FontWeight.bold,
-                  color: AppColors.primaryNight,
-                ),
-              ),
-            ),
-          ),
-        ],
+            _button(),
+          ],
+        ),
       ),
     );
   }
@@ -61,6 +34,8 @@ class MapView extends GetView<MapController> {
   _map() {
     return Obx(
       () => GoogleMap(
+        myLocationEnabled: true,
+        myLocationButtonEnabled: true,
         onMapCreated: (item) {
           controller.setMapController(item);
         },
@@ -70,6 +45,36 @@ class MapView extends GetView<MapController> {
         initialCameraPosition: CameraPosition(
           target: controller.centerLatLng.value,
           zoom: 14,
+        ),
+        markers: {
+          Marker(
+            markerId: const MarkerId("selectedLocation"),
+            position: controller.centerLatLng.value,
+          ),
+        },
+      ),
+    );
+  }
+
+  _button() {
+    return SizedBox(
+      height: 64,
+      width: double.infinity,
+      child: TextButton(
+        onPressed: () {
+          controller.goShowDetail();
+        },
+        style: TextButton.styleFrom(
+          padding: const EdgeInsets.symmetric(vertical: 16),
+          backgroundColor: AppColors.thirdaryBox,
+        ),
+        child: Text(
+          LocaleKeys.map_select.tr,
+          style: const TextStyle(
+            fontSize: 18,
+            fontWeight: FontWeight.bold,
+            color: AppColors.primaryNight,
+          ),
         ),
       ),
     );

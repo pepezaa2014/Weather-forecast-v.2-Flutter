@@ -26,6 +26,7 @@ class MapController extends GetxController {
 
     selectLatLon = Rx<LatLng>(LatLng(currentLocation.value?.coord?.lat ?? 0,
         currentLocation.value?.coord?.lon ?? 0));
+
     centerLatLng.value = LatLng(
       currentLocation.value?.coord?.lat ?? 0,
       currentLocation.value?.coord?.lon ?? 0,
@@ -50,7 +51,7 @@ class MapController extends GetxController {
     centerLatLng.value = latLng;
   }
 
-  Future<void> _getWeatherLatLon({
+  Future<Weather?> _getWeatherLatLon({
     required double lat,
     required double lon,
   }) async {
@@ -66,6 +67,7 @@ class MapController extends GetxController {
         message: (error as AppError).message,
       );
     }
+    return null;
   }
 
   Future<void> goShowDetail() async {
@@ -74,9 +76,6 @@ class MapController extends GetxController {
       lon: centerLatLng.value.longitude,
     );
 
-    Get.toNamed(
-      Routes.SHOW_DETAIL,
-      arguments: weather.value,
-    );
+    Get.toNamed(Routes.SHOW_DETAIL, arguments: weather.value);
   }
 }
