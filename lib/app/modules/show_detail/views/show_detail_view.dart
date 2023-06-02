@@ -40,7 +40,7 @@ class ShowDetailView extends GetView<ShowDetailController> {
             () {
               final wetherInfo = controller.getWeatherInfo.value;
               return Text(
-                wetherInfo?.name.toString() ?? '',
+                wetherInfo.name.toString(),
               );
             },
           ),
@@ -52,9 +52,9 @@ class ShowDetailView extends GetView<ShowDetailController> {
           () {
             final wetherInfo = controller.getWeatherInfo.value;
             return Container(
-              child: wetherInfo?.id == controller.currentLocation.value?.id ||
+              child: wetherInfo.id == controller.currentLocation.value?.id ||
                       controller.dataFavoriteLocations
-                          .any((element) => element.id == wetherInfo?.id)
+                          .any((element) => element.id == wetherInfo.id)
                   ? const SizedBox()
                   : IconButton(
                       onPressed: controller.addFavorite,

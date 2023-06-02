@@ -15,12 +15,13 @@ class ShowDetailController extends GetxController {
   final FutureWeatherAPI _futureWeatherAPI = Get.find();
   final AirPollutionAPI _airPollutionAPI = Get.find();
 
-  final Rxn<Weather> getWeatherInfo = Rxn();
-  final Rxn<AirPollution> airPollution = Rxn();
-  final Rxn<FutureWeather> futureWeather = Rxn();
+  final Rx<Weather> getWeatherInfo = Rx<Weather>(Weather());
+  final Rx<AirPollution> airPollution = Rx<AirPollution>(AirPollution());
+  final Rx<FutureWeather> futureWeather = Rx<FutureWeather>(FutureWeather());
 
   late final Rxn<Weather> currentLocation;
   late final Rx<Setting> dataSetting;
+
   late final RxList<Weather> dataFavoriteLocations;
   late final RxList<FutureWeather> allFutureWeather;
   late final RxList<AirPollution> allAirpollution;
@@ -57,12 +58,12 @@ class ShowDetailController extends GetxController {
 
   Future<void> getLoadingAllData() async {
     _getFutureWeatherInPage(
-      lat: getWeatherInfo.value?.coord?.lat ?? 0.0,
-      lon: getWeatherInfo.value?.coord?.lon ?? 0.0,
+      lat: getWeatherInfo.value.coord?.lat ?? 0.0,
+      lon: getWeatherInfo.value.coord?.lon ?? 0.0,
     );
     _getAirPollutionInPage(
-      lat: getWeatherInfo.value?.coord?.lat ?? 0.0,
-      lon: getWeatherInfo.value?.coord?.lon ?? 0.0,
+      lat: getWeatherInfo.value.coord?.lat ?? 0.0,
+      lon: getWeatherInfo.value.coord?.lon ?? 0.0,
     );
   }
 
@@ -109,9 +110,12 @@ class ShowDetailController extends GetxController {
   }
 
   void addFavorite() {
-    // dataFavoriteLocations.add(getWeatherInfo.value);
-    // allFutureWeather.add(futureWeather.value);
-    // allAirpollution.add(airPollution.value);
+    dataFavoriteLocations.add(getWeatherInfo.value);
+    allFutureWeather.add(futureWeather.value);
+    allAirpollution.add(airPollution.value);
+    dataFavoriteLocations.refresh();
+    allFutureWeather.refresh();
+    allAirpollution.refresh();
     Get.back();
   }
 }

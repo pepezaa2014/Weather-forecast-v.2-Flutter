@@ -51,7 +51,7 @@ class MapController extends GetxController {
     centerLatLng.value = latLng;
   }
 
-  Future<Weather?> _getWeatherLatLon({
+  Future<void> _getWeatherLatLon({
     required double lat,
     required double lon,
   }) async {
