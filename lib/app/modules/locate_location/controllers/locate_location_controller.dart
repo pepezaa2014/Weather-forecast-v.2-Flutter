@@ -1,5 +1,6 @@
 import 'package:flutter/cupertino.dart';
 import 'package:get/get.dart';
+
 import 'package:weather_v2_pepe/app/core/api/geocoding_api.dart';
 import 'package:weather_v2_pepe/app/core/api/weather_api.dart';
 import 'package:weather_v2_pepe/app/data/models/app_error_model.dart';
@@ -10,7 +11,8 @@ import 'package:weather_v2_pepe/app/managers/session_manager.dart';
 import 'package:weather_v2_pepe/app/routes/app_pages.dart';
 import 'package:weather_v2_pepe/app/utils/show_alert.dart';
 
-class LocateLocationController extends GetxController {
+class LocateLocationController extends GetxController
+    with WidgetsBindingObserver {
   final SessionManager _sessionManager = Get.find();
 
   final GeocodingAPI _geocodingAPI = Get.find();
@@ -27,15 +29,29 @@ class LocateLocationController extends GetxController {
   final RxList<Geocoding> geocoding = RxList();
 
   late final RxBool isLoading;
+  late final RxBool tick;
 
   @override
   void onInit() {
     super.onInit();
+    WidgetsBinding.instance.addObserver(this);
+    tick = _sessionManager.tick;
     isLoading = _sessionManager.isLoading;
 
     dataSetting = _sessionManager.dataSetting;
     dataFavoriteLocations = _sessionManager.dataFavoriteLocations;
     currentLocation = _sessionManager.currentLocation;
+  }
+
+  @override
+  void didChangeAppLifecycleState(AppLifecycleState state) {
+    super.didChangeAppLifecycleState(state);
+
+    if (state == AppLifecycleState.resumed) {
+      _sessionManager.active.value = true;
+    } else if (state == AppLifecycleState.paused) {
+      _sessionManager.active.value = false;
+    }
   }
 
   Future<void> updateWeather() async {
@@ -56,12 +72,18 @@ class LocateLocationController extends GetxController {
         }
       },
     );
-    // updateWeather();
   }
 
   @override
   void onClose() {
     super.onClose();
+  }
+
+  @override
+  void dispose() {
+    super.dispose();
+    _sessionManager.timerData.cancel();
+    WidgetsBinding.instance.removeObserver(this);
   }
 
   Future<Weather?> _findSelectedCountryByLatLon({

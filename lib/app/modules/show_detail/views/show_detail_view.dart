@@ -78,6 +78,7 @@ class ShowDetailView extends GetView<ShowDetailController> {
         height: double.infinity,
         child: Obx(
           () {
+            final tick = controller.tick.value;
             final currentWeather = controller.getWeatherInfo;
             final futureWeather = controller.futureWeather;
             final airPollution = controller.airPollution;

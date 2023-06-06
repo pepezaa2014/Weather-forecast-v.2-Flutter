@@ -39,12 +39,6 @@ class HomeView extends GetView<HomeController> {
   _appbar() {
     return AppBar(
       automaticallyImplyLeading: false,
-      leading: IconButton(
-        onPressed: controller.printText,
-        icon: const Icon(
-          Icons.safety_check,
-        ),
-      ),
       title: Text(
         LocaleKeys.home_title.tr,
       ),
@@ -63,6 +57,7 @@ class HomeView extends GetView<HomeController> {
   _body() {
     return Obx(
       () {
+        final tick = controller.tick.value;
         final currentLocation = controller.currentLocation.value;
         final dataFavoriteLocations = controller.dataFavoriteLocations.value;
         final allFutureWeather = controller.allFutureWeather.value;

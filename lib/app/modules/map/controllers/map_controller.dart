@@ -1,3 +1,4 @@
+import 'package:flutter/cupertino.dart';
 import 'package:get/get.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:weather_v2_pepe/app/core/api/weather_api.dart';
@@ -7,7 +8,7 @@ import 'package:weather_v2_pepe/app/managers/session_manager.dart';
 import 'package:weather_v2_pepe/app/routes/app_pages.dart';
 import 'package:weather_v2_pepe/app/utils/show_alert.dart';
 
-class MapController extends GetxController {
+class MapController extends GetxController with WidgetsBindingObserver {
   final SessionManager _sessionManager = Get.find();
 
   late final GoogleMapController mapController;
@@ -22,6 +23,8 @@ class MapController extends GetxController {
   @override
   void onInit() {
     super.onInit();
+    WidgetsBinding.instance.addObserver(this);
+
     currentLocation = _sessionManager.currentLocation;
 
     selectLatLon = Rx<LatLng>(LatLng(currentLocation.value?.coord?.lat ?? 0,
@@ -77,5 +80,23 @@ class MapController extends GetxController {
     );
 
     Get.toNamed(Routes.SHOW_DETAIL, arguments: weather.value);
+  }
+
+  @override
+  void didChangeAppLifecycleState(AppLifecycleState state) {
+    super.didChangeAppLifecycleState(state);
+
+    if (state == AppLifecycleState.resumed) {
+      _sessionManager.active.value = true;
+    } else if (state == AppLifecycleState.paused) {
+      _sessionManager.active.value = false;
+    }
+  }
+
+  @override
+  void dispose() {
+    super.dispose();
+    _sessionManager.timerData.cancel();
+    WidgetsBinding.instance.removeObserver(this);
   }
 }

@@ -58,6 +58,7 @@ class LocateLocationView extends GetView<LocateLocationController> {
     return Obx(
       () {
         final geocoding = controller.geocoding;
+        final tick = controller.tick.value;
 
         final currentLocation = controller.currentLocation.value;
         final dataFavorite = controller.dataFavoriteLocations.value;

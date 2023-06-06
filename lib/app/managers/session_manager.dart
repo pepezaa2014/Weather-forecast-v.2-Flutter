@@ -32,6 +32,10 @@ class SessionManager {
   final RxList<FutureWeather> allFutureWeather = RxList();
   final RxList<AirPollution> allAirPollution = RxList();
 
+  final RxBool tick = false.obs;
+  late final Timer timerData;
+  final RxBool active = true.obs;
+
   final isLoadingGetWeather = false.obs;
   RxBool get isLoading {
     return [
@@ -55,6 +59,8 @@ class SessionManager {
             AppConstants.keyValueFavoriteLocation, weatherListString);
       },
     );
+
+    _timerGetData();
   }
 
   void loadSession() {
@@ -71,14 +77,15 @@ class SessionManager {
             .add(Weather.fromJson(jsonDecode(checkedFavorite[i])));
       }
     }
-    // _timerGetData();
   }
 
   void _timerGetData() {
-    Timer.periodic(
-      const Duration(minutes: 1),
+    timerData = Timer.periodic(
+      const Duration(seconds: 1),
       (Timer t) {
-        updateWeather();
+        if (active.value) {
+          tick.toggle();
+        }
       },
     );
   }

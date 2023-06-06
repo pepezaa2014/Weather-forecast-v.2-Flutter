@@ -8,7 +8,7 @@ import 'package:weather_v2_pepe/app/data/models/weather_model.dart';
 import 'package:weather_v2_pepe/app/managers/session_manager.dart';
 import 'package:weather_v2_pepe/app/routes/app_pages.dart';
 
-class HomeController extends GetxController {
+class HomeController extends GetxController with WidgetsBindingObserver {
   final SessionManager _sessionManager = Get.find();
 
   late final Rx<Setting> dataSetting;
@@ -18,15 +18,22 @@ class HomeController extends GetxController {
   late final RxList<FutureWeather> allFutureWeather;
   late final RxList<AirPollution> allAirPollution;
 
+  late final RxBool active;
+
   late final RxBool isLoading;
   final pageController = PageController(
     viewportFraction: 1.0,
     keepPage: true,
   );
 
+  late final RxBool tick;
+
   @override
   void onInit() {
     super.onInit();
+    WidgetsBinding.instance.addObserver(this);
+    active = _sessionManager.active;
+    tick = _sessionManager.tick;
     isLoading = _sessionManager.isLoading;
     dataSetting = _sessionManager.dataSetting;
     dataFavoriteLocations = _sessionManager.dataFavoriteLocations;
@@ -34,6 +41,17 @@ class HomeController extends GetxController {
     currentLocation = _sessionManager.currentLocation;
     allFutureWeather = _sessionManager.allFutureWeather;
     allAirPollution = _sessionManager.allAirPollution;
+  }
+
+  @override
+  void didChangeAppLifecycleState(AppLifecycleState state) {
+    super.didChangeAppLifecycleState(state);
+
+    if (state == AppLifecycleState.resumed) {
+      active.value = true;
+    } else if (state == AppLifecycleState.paused) {
+      active.value = false;
+    }
   }
 
   @override
@@ -61,9 +79,10 @@ class HomeController extends GetxController {
     Get.toNamed(Routes.LOCATE_LOCATION);
   }
 
-  void printText() {
-    // print(dataFavoriteLocations[0].dt);
-    final localTimeZone = DateTime.now().toUtc().millisecondsSinceEpoch;
-    print(localTimeZone);
+  @override
+  void dispose() {
+    super.dispose();
+    _sessionManager.timerData.cancel();
+    WidgetsBinding.instance.removeObserver(this);
   }
 }

@@ -1,3 +1,4 @@
+import 'package:flutter/cupertino.dart';
 import 'package:get/get.dart';
 import 'package:weather_v2_pepe/app/const/distance.dart';
 import 'package:weather_v2_pepe/app/const/precipitation.dart';
@@ -8,7 +9,7 @@ import 'package:weather_v2_pepe/app/const/wind_speed.dart';
 import 'package:weather_v2_pepe/app/data/models/setting_model.dart';
 import 'package:weather_v2_pepe/app/managers/session_manager.dart';
 
-class SettingController extends GetxController {
+class SettingController extends GetxController with WidgetsBindingObserver {
   final SessionManager _sessionManager = Get.find();
 
   final Rx<Temperature> temperatureUnit = Temperature.celcius.obs;
@@ -23,9 +24,22 @@ class SettingController extends GetxController {
   @override
   void onInit() {
     super.onInit();
+    WidgetsBinding.instance.addObserver(this);
+
     dataSetting = _sessionManager.dataSetting;
 
     updateData();
+  }
+
+  @override
+  void didChangeAppLifecycleState(AppLifecycleState state) {
+    super.didChangeAppLifecycleState(state);
+
+    if (state == AppLifecycleState.resumed) {
+      _sessionManager.active.value = true;
+    } else if (state == AppLifecycleState.paused) {
+      _sessionManager.active.value = false;
+    }
   }
 
   @override
@@ -81,5 +95,12 @@ class SettingController extends GetxController {
     timeUnit.value = value;
     dataSetting.value.timeFormat = value;
     _sessionManager.dataSetting.refresh();
+  }
+
+  @override
+  void dispose() {
+    super.dispose();
+    _sessionManager.timerData.cancel();
+    WidgetsBinding.instance.removeObserver(this);
   }
 }

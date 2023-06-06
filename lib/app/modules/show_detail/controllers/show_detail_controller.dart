@@ -1,4 +1,6 @@
+import 'package:flutter/cupertino.dart';
 import 'package:get/get.dart';
+
 import 'package:weather_v2_pepe/app/core/api/air_pollution_api.dart';
 import 'package:weather_v2_pepe/app/core/api/future_weather_api.dart';
 import 'package:weather_v2_pepe/app/core/api/weather_api.dart';
@@ -10,7 +12,7 @@ import 'package:weather_v2_pepe/app/data/models/weather_model.dart';
 import 'package:weather_v2_pepe/app/managers/session_manager.dart';
 import 'package:weather_v2_pepe/app/utils/show_alert.dart';
 
-class ShowDetailController extends GetxController {
+class ShowDetailController extends GetxController with WidgetsBindingObserver {
   final SessionManager _sessionManager = Get.find();
 
   final WeatherAPI _weatherAPI = Get.find();
@@ -30,12 +32,16 @@ class ShowDetailController extends GetxController {
 
   late final RxBool isLoading;
   late final RxBool isLoadingGetWeather;
+  late final RxBool tick;
 
   @override
   void onInit() {
     super.onInit();
+    WidgetsBinding.instance.addObserver(this);
+
     getWeatherInfo.value = Get.arguments;
 
+    tick = _sessionManager.tick;
     isLoading = _sessionManager.isLoading;
     isLoadingGetWeather = _sessionManager.isLoadingGetWeather;
 
@@ -45,6 +51,24 @@ class ShowDetailController extends GetxController {
 
     allFutureWeather = _sessionManager.allFutureWeather;
     allAirpollution = _sessionManager.allAirPollution;
+  }
+
+  @override
+  void didChangeAppLifecycleState(AppLifecycleState state) {
+    super.didChangeAppLifecycleState(state);
+
+    if (state == AppLifecycleState.resumed) {
+      _sessionManager.active.value = true;
+    } else if (state == AppLifecycleState.paused) {
+      _sessionManager.active.value = false;
+    }
+  }
+
+  @override
+  void dispose() {
+    super.dispose();
+    _sessionManager.timerData.cancel();
+    WidgetsBinding.instance.removeObserver(this);
   }
 
   @override
